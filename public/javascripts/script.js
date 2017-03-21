@@ -248,7 +248,8 @@ function create_chart(project, skills, months) {
                 depth: 40,
                 stacking: true,
                 grouping: false,
-                groupZPadding: 30
+                groupZPadding: 30,
+                borderWidth: 0
             }
         },
         series: series_list,
@@ -262,7 +263,12 @@ function create_chart(project, skills, months) {
         },
         credits: {
             enabled: false
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+            shared: true
         }
+
     });
 
     chart.yAxis[0].axisTitle.attr({
