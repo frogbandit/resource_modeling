@@ -1,3 +1,7 @@
+// Initial values
+var projects = ["Merck", "Amex"];
+var skills = ['Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
+var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
 
 var req_overall_dict = {};
 var prov_overall_dict = {};
@@ -72,18 +76,6 @@ function handleSignoutClick(event) {
 }
 
 /**
- * Append a pre element to the body containing the given message
- * as its text node. Used to display the results of the API call.
- *
- * @param {string} message Text to be placed in pre element.
- */
-function appendPre(message) {
-    var pre = document.getElementById('content');
-    var textContent = document.createTextNode(message + '\n');
-    pre.appendChild(textContent);
-}
-
-/**
  * Print the names and majors of students in a sample spreadsheet:
  * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  */
@@ -98,10 +90,9 @@ function listMajors() {
     }).then(function(response) {
         console.log(response);
         var range = response.result;
+
+        // Get the spreadsheet data into required and provided dictionaries
         if (range.values.length > 0) {
-
-            appendPre('Real, Month, Project, Skill, Staffing Status, Required FTE, Provided FTE');
-
             for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
                 var real = row[0]
@@ -112,32 +103,24 @@ function listMajors() {
                 var required_FTE = parseFloat(row[5])
                 var provided_FTE = parseFloat(row[6])
 
-                appendPre(row[0] + ', ' + row[1] + ', ' + row[2] + ', ' + row[3] + ', ' + row[4] + ', ' + row[5] + ', ' + row[6]);
-                
-                
-                // required dictionary
 
+                // required dictionary
                 if (project in req_overall_dict) {
                     var skill_dict = req_overall_dict[project];
 
                     if (skill in skill_dict) {
                         skill_dict[skill].push(required_FTE);
-                    }
-
-                    else{
+                    } else {
                         skill_dict[skill] = [required_FTE];
                     }
 
                     req_overall_dict[project] = skill_dict;
-                }
-
-                else {
+                } else {
                     var skill_dict = {};
 
                     if (skill in skill_dict) {
                         skill_dict[skill].push(required_FTE);
-                    }
-                    else{
+                    } else {
                         skill_dict[skill] = [required_FTE];
                     }
 
@@ -145,28 +128,22 @@ function listMajors() {
                 }
 
                 // provided dictionary
-
                 if (project in prov_overall_dict) {
                     var skill_dict = prov_overall_dict[project];
 
                     if (skill in skill_dict) {
                         skill_dict[skill].push(provided_FTE);
-                    }
-
-                    else{
+                    } else {
                         skill_dict[skill] = [provided_FTE];
                     }
 
                     prov_overall_dict[project] = skill_dict;
-                }
-
-                else {
+                } else {
                     var skill_dict = {};
 
                     if (skill in skill_dict) {
                         skill_dict[skill].push(provided_FTE);
-                    }
-                    else{
+                    } else {
                         skill_dict[skill] = [provided_FTE];
                     }
 
@@ -174,44 +151,95 @@ function listMajors() {
                 }
 
             }
+            console.log(prov_overall_dict)
+            console.log(req_overall_dict)
 
-            console.log(req_overall_dict);
-            console.log(prov_overall_dict);
         } else {
-            appendPre('No data found.');
+            alert('No data found.');
         }
 
-        create_chart()
+        console.log(projects);
+        console.log(skills);
+        console.log(months);
 
-
+        // For each project, create a chart
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
 
     }, function(response) {
-        appendPre('Error: ' + response.result.error.message);
+        alert('Error: ' + response.result.error.message);
     });
 }
 
 
 
-
-
-
-function create_chart() {
-
+function create_chart(project, skills, months) {
     // Example:
     // create List for Merck Senior Client Mgmt
     // stack is 0, data is [1.10, 0.00, ...] 
-    console.log(req_overall_dict['Merck']['Backend'])   
-    console.log(prov_overall_dict['Merck']['Backend'])
 
+    // Testing: 
+    // console.log(req_overall_dict[project]['Backend'])   
+    // console.log(prov_overall_dict[project]['Backend'])
 
-    chart = Highcharts.chart('container', {
+    // Colors are tol-rainbow
+    var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
+        'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
+        'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
+    ]
+
+    var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
+        'September 2017', 'October 2017'
+    ]
+
+    $('#container').append('<div style="height: 800px" id="' + project + '"></div>');
+
+    Highcharts.setOptions({
+        colors: colors_list.slice(0, skills.length)
+    })
+
+    series_list = []
+
+    month_indices = []
+
+    for (var i = 0; i < months.length; i++) {
+        month_indices.push(months_list.indexOf(months[i]))
+    }
+
+    // Prepare provided column data
+    for (var i = 0; i < skills.length; i++) {
+        data_list = []
+        for (var j = 0; j < month_indices.length; j++) {
+            data_list.push(prov_overall_dict[project][skills[i]][month_indices[j]])
+        }
+        series_list.push({
+            data: data_list,
+            name: 'Provided ' + skills[i],
+            stack: 0
+        });
+    }
+
+    // Prepare required column data
+    for (var i = 0; i < skills.length; i++) {
+        data_list = []
+        for (var j = 0; j < month_indices.length; j++) {
+            data_list.push(req_overall_dict[project][skills[i]][month_indices[j]])
+        }
+        series_list.push({
+            data: data_list,
+            name: 'Required ' + skills[i],
+            stack: 1
+        });
+    }
+
+    chart = Highcharts.chart(project, {
         chart: {
             type: 'column',
-            margin: 75,
             options3d: {
-				enabled: true,
-                alpha: 15,
-                beta: 15,
+                enabled: true,
+                alpha: 30,
+                beta: 40,
                 depth: 110
             }
         },
@@ -220,65 +248,116 @@ function create_chart() {
                 depth: 40,
                 stacking: true,
                 grouping: false,
-                groupZPadding: 30            
+                groupZPadding: 30
             }
         },
-        series: [{
-            data: prov_overall_dict['Merck']['Senior Client Mgmt'],
-            stack: 0,
-            name: 'Provided Senior Client Mgmt'
-        }, {
-            data: prov_overall_dict['Merck']['Data Science'],
-            stack: 0,
-            name: 'Provided Data Science'
-        }, {
-            data: prov_overall_dict['Merck']['Backend'],
-            stack: 0,
-            name: 'Provided Backend'
-        }, {
-            data: prov_overall_dict['Merck']['Engineering Mgmt'],
-            stack: 0,
-            name: 'Provided Engineering Mgmt'
-        }, {
-            data: req_overall_dict['Merck']['Senior Client Mgmt'],
-            stack: 1,
-            name: 'Required Senior Client Mgmt'
-        }, {
-            data: req_overall_dict['Merck']['Data Science'],
-            stack: 1,
-            name: 'Required Data Science'
-        }, {
-            data: req_overall_dict['Merck']['Backend'],
-            stack: 1,
-            name: 'Required Backend'
-        }, {
-            data: req_overall_dict['Merck']['Engineering Mgmt'],
-            stack: 1,
-            name: 'Required Engineering Mgmt'
-        }],
+        series: series_list,
         xAxis: {
-            categories: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
+            categories: months
         },
         zAxis: {
-            offset: 30
+            min: 0,
+            max: 1,
+            categories: ['Provided', 'Required'],
         },
         credits: {
             enabled: false
         }
-
-
     });
 
     chart.yAxis[0].axisTitle.attr({
         text: 'FTE'
     });
 
-    chart.setTitle({text: "Enigma Resource Modeling"});
-
-
-
+    chart.setTitle({ text: project });
 };
 
 
+// Dropdown for Projects
+$('#projects-dropdown-menu a').on('click', function(event) {
+
+    var $target = $(event.currentTarget),
+        val = $target.attr('data-value'),
+        $inp = $target.find('input'),
+        idx;
+
+    if ((idx = projects.indexOf(val)) > -1) {
+        projects.splice(idx, 1);
+        setTimeout(function() { $inp.prop('checked', false) }, 0);
+    } else {
+        projects.push(val);
+        setTimeout(function() { $inp.prop('checked', true) }, 0);
+    }
+
+    $(event.target).blur();
+
+    console.log(projects);
+
+    $('#container').html('');
+
+    for (var i = 0; i < projects.length; i++) {
+        create_chart(projects[i], skills, months);
+    }
+
+    return false;
+});
 
 
+// Dropdown for Skills
+$('#skills-dropdown-menu a').on('click', function(event) {
+
+    var $target = $(event.currentTarget),
+        val = $target.attr('data-value'),
+        $inp = $target.find('input'),
+        idx;
+
+    if ((idx = skills.indexOf(val)) > -1) {
+        skills.splice(idx, 1);
+        setTimeout(function() { $inp.prop('checked', false) }, 0);
+    } else {
+        skills.push(val);
+        setTimeout(function() { $inp.prop('checked', true) }, 0);
+    }
+
+    $(event.target).blur();
+
+    console.log(skills);
+
+    $('#container').html('');
+
+    for (var i = 0; i < projects.length; i++) {
+        create_chart(projects[i], skills, months);
+    }
+
+    return false;
+});
+
+
+// Dropdown for Months
+$('#months-dropdown-menu a').on('click', function(event) {
+
+    var $target = $(event.currentTarget),
+        val = $target.attr('data-value'),
+        $inp = $target.find('input'),
+        idx;
+
+    if ((idx = months.indexOf(val)) > -1) {
+        months.splice(idx, 1);
+        setTimeout(function() { $inp.prop('checked', false) }, 0);
+    } else {
+        months.push(val);
+        setTimeout(function() { $inp.prop('checked', true) }, 0);
+    }
+
+    $(event.target).blur();
+
+    console.log(months);
+
+    $('#container').html('');
+
+    for (var i = 0; i < projects.length; i++) {
+        create_chart(projects[i], skills, months);
+    }
+
+    return false;
+});

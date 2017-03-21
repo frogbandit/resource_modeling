@@ -6,28 +6,195 @@
     <meta http-equiv="Content-Type" context="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Enigma Resource Modeling</title>
-    <meta name="description" content="James Xue -- software engineer, student, photographer">
-    <link rel="canonical" href="https://www.columbia.edu/~jx2218/">
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description" content="Enigma Resource Modeling">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-    
 </head>
 
 <body>
-    <div id="container" style="height: 400px"></div>
-    <p>Google Sheets API Quickstart</p>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Enigma Resource Modeling</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects
+            <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="projects-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="Merck" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Merck</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Amex" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Amex</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Celgene" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Celgene</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Citadel" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Citadel</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="EMD" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;EMD</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Two Sigma" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Two Sigma</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="BB&T" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;BB&T</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="PayPal" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;PayPal</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Credit Suisse" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Credit Suisse</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="GIC" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;GIC</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Point72" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Point72</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="WorldQuant" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;WorldQuant</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="ADP" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;ADP</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Travelers" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Travelers</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Hartford" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Hartford</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Skills
+            <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="skills-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="Senior Client Mgmt" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Senior Client Mgmt</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Project Mgmt / L1 Support" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Project Mgmt / L1 Support</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Engineering Mgmt" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Engineering Mgmt</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Product Mgmt" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Product Mgmt</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Data Science" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Data Science</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Machine Learning Eng." tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Machine Learning Eng.</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Data Engineering" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Data Engineering</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Design" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Design</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Front End" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Front End</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Backend" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;Backend</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Support Engineer" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Support Engineer</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Quality Engineer" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Quality Engineer</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Solutions Architect" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;Solutions Architect</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Months
+            <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="months-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="March 2017" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;March 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="April 2017" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;April 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="May 2017" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;May 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="June 2017" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;June 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="July 2017" tabIndex="-1">
+                                <input type="checkbox" checked/>&nbsp;July 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="August 2017" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;August 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="September 2017" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;September 2017</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="October 2017" tabIndex="-1">
+                                <input type="checkbox" />&nbsp;October 2017</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="container" style="height: 100%"></div>
+    <p>Google Sheets API: Sign In Below</p>
     <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize-button" style="display: none;">Authorize</button>
     <button id="signout-button" style="display: none;">Sign Out</button>
-    <pre id="content"></pre>
-    
     <script type="text/javascript" src="javascripts/script.js"></script>
-
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
 </body>
