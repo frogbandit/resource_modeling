@@ -2,6 +2,22 @@
 var projects = ["Merck", "Amex"];
 var skills = ['Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
 var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
+var num_employees = 73
+
+var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
+    "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
+    "KNUPP, JEFFREY C", "LEONE, MICHAEL A", "VARSHAVSKY, PETER", "PARKER, JARROD R", "WARDY, JASON I",
+    "DANTON, CRAIG A", "LEV, IGOR", "BOMAN, BLAINE", "KEITER, KENNETH S", "KIRCHER, ASHLEY W", "PRATER, RICHARD T",
+    "WELLS, THOMAS F", "WHITING, OWEN S", "YANG, YANG", "RUBENSTEIN, ABRAHAM E", "ATTAHRI, MOHAMED", "BERNARDIN, JAMES P",
+    "CREIGHTON, JENNIFER L", "GELB, BENJAMIN E", "HAMMER, MELODY A", "ROTH, ALEXANDER I", "MONK, CLINTON D",
+    "KREMLER, GREGORY J", "AHEARN, EVE G", "KERLE, INDIA H", "TEYSSIER, MAUREEN E", "ULMAN, JEREMY W", "WATT, CECILIA I",
+    "KRINSLEY, JEREMY A", "EDGAR, JAMES H", "OUDGHIRI, HICHAM", "PRICE, REBECCA L", "SESSER, BENJAMIN C", "CHAN, KELVIN K",
+    "HALLOCK, SAMANTHA L", "LI, ANN L", "NORTHINGTON, ALEXANDRA E", "SULLAM, JULIANA M", "ESTES, STEPHEN B", "FLOWERS, MICHAEL P",
+    "LEVIN, JONATHAN T", "HORAN, MATTHEW T", "KHALIFA, DONIA A", "SPIEGEL, STEPHANIE B", "AFROOZE, JALEH", "GUTMAN, LEE E",
+    "WHALEN, CAITLIN M", "BENOIT, MICHAEL G", "GONZALEZ, JUAN", "WILSON, JOSHUA B", "IANIUK, OLGA", "PARIKH, URVISH",
+    "WEBB, WILLIAM A", "MADDALA, BHASKAR", "CASAMONA, CARLA", "CHOLAS-WOOD, ALEX", "HENDERSON, PETER", "SHAO, BRYAN",
+    "STANLEY, MICHAEL", "PRAINITO, JOE", "MUKHERJEE, ISHANI", "MIKAELIAN, ALEXIS", "GAO, DAVID", "BECKER, NICK"
+]
 
 var req_overall_dict = {};
 var prov_overall_dict = {};
@@ -110,11 +126,13 @@ function listMajors() {
 
                     if (skill in skill_dict) {
                         skill_dict[skill].push(required_FTE);
+
                     } else {
                         skill_dict[skill] = [required_FTE];
                     }
 
                     req_overall_dict[project] = skill_dict;
+
                 } else {
                     var skill_dict = {};
 
@@ -132,9 +150,27 @@ function listMajors() {
                     var skill_dict = prov_overall_dict[project];
 
                     if (skill in skill_dict) {
-                        skill_dict[skill].push(provided_FTE);
+                        employee_FTE_list = []
+
+                        for (var j = 7; j < row.length; j++) {
+                            var employee_FTE = row[j]
+                            var employee_name = people[j - 7]
+                            employee_FTE_list.push([employee_name, employee_FTE])
+                        }
+                        skill_dict[skill][0].push(employee_FTE_list);
+                        skill_dict[skill][1].push(provided_FTE);
                     } else {
-                        skill_dict[skill] = [provided_FTE];
+                        employee_FTE_list = []
+
+                        for (var j = 7; j < row.length; j++) {
+                            var employee_FTE = row[j]
+                            var employee_name = people[j - 7]
+                            employee_FTE_list.push([employee_name, employee_FTE])
+                        }
+                        skill_dict[skill] = [
+                            [employee_FTE_list],
+                            [provided_FTE]
+                        ];
                     }
 
                     prov_overall_dict[project] = skill_dict;
@@ -142,9 +178,28 @@ function listMajors() {
                     var skill_dict = {};
 
                     if (skill in skill_dict) {
-                        skill_dict[skill].push(provided_FTE);
+                        employee_FTE_list = []
+
+                        for (var j = 7; j < row.length; j++) {
+                            var employee_FTE = row[j]
+                            var employee_name = people[j - 7]
+                            employee_FTE_list.push([employee_name, employee_FTE])
+                        }
+                        skill_dict[skill][0].push(employee_FTE_list);
+                        skill_dict[skill][1].push(provided_FTE);
+
                     } else {
-                        skill_dict[skill] = [provided_FTE];
+                        employee_FTE_list = []
+
+                        for (var j = 7; j < row.length; j++) {
+                            var employee_FTE = row[j]
+                            var employee_name = people[j - 7]
+                            employee_FTE_list.push([employee_name, employee_FTE])
+                        }
+                        skill_dict[skill] = [
+                            [employee_FTE_list],
+                            [provided_FTE]
+                        ];
                     }
 
                     prov_overall_dict[project] = skill_dict;
@@ -179,10 +234,6 @@ function create_chart(project, skills, months) {
     // create List for Merck Senior Client Mgmt
     // stack is 0, data is [1.10, 0.00, ...] 
 
-    // Testing: 
-    // console.log(req_overall_dict[project]['Backend'])   
-    // console.log(prov_overall_dict[project]['Backend'])
-
     // Colors are tol-rainbow
     var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
         'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
@@ -211,7 +262,7 @@ function create_chart(project, skills, months) {
     for (var i = 0; i < skills.length; i++) {
         data_list = []
         for (var j = 0; j < month_indices.length; j++) {
-            data_list.push(prov_overall_dict[project][skills[i]][month_indices[j]])
+            data_list.push(prov_overall_dict[project][skills[i]][1][month_indices[j]])
         }
         series_list.push({
             data: data_list,
@@ -265,8 +316,30 @@ function create_chart(project, skills, months) {
             enabled: false
         },
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
-            shared: true
+            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.series}</b> ({point.percentage:.0f}%)<br/>',
+
+            formatter: function() {
+
+                req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
+                skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
+                month_index = months_list.indexOf(this.point.category)
+                if (req_or_prov == 'Provided') {
+
+                    listed_employees = []
+                    employee_FTEs = prov_overall_dict[project][skill][0][month_index]
+                    for (var i = 0; i < employee_FTEs.length; i++) {
+                        employee_FTE = employee_FTEs[i][1]
+                        employee_name = employee_FTEs[i][0]
+                        if (employee_FTE > 0) {
+                            listed_employees.push('<br/>' + '<b>' + employee_name + '</b>: ' + employee_FTE)
+                        }
+                    }
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y + listed_employees;
+                } else {
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y;
+                }
+
+            }
         }
 
     });
