@@ -4,16 +4,6 @@ var skills = ['Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
 var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
 var num_employees = 73
 
-// Colors are tol-rainbow
-var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
-    'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
-    'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
-]
-
-var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
-    'September 2017', 'October 2017'
-]
-
 var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
     "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
     "KNUPP, JEFFREY C", "LEONE, MICHAEL A", "VARSHAVSKY, PETER", "PARKER, JARROD R", "WARDY, JASON I",
@@ -27,6 +17,16 @@ var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHR
     "WHALEN, CAITLIN M", "BENOIT, MICHAEL G", "GONZALEZ, JUAN", "WILSON, JOSHUA B", "IANIUK, OLGA", "PARIKH, URVISH",
     "WEBB, WILLIAM A", "MADDALA, BHASKAR", "CASAMONA, CARLA", "CHOLAS-WOOD, ALEX", "HENDERSON, PETER", "SHAO, BRYAN",
     "STANLEY, MICHAEL", "PRAINITO, JOE", "MUKHERJEE, ISHANI", "MIKAELIAN, ALEXIS", "GAO, DAVID", "BECKER, NICK"
+]
+
+// Colors are tol-rainbow
+var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
+    'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
+    'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
+]
+
+var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
+    'September 2017', 'October 2017'
 ]
 
 var req_overall_dict = {};
@@ -116,7 +116,6 @@ function listMajors() {
     }).then(function(response) {
         console.log(response);
         var range = response.result;
-
         // Get the spreadsheet data into required and provided dictionaries
         if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
@@ -128,7 +127,6 @@ function listMajors() {
                 var staffing_status = parseFloat(row[4])
                 var required_FTE = parseFloat(row[5])
                 var provided_FTE = parseFloat(row[6])
-
 
                 // required dictionary
                 if (project in req_overall_dict) {
@@ -214,7 +212,6 @@ function listMajors() {
 
                     prov_overall_dict[project] = skill_dict;
                 }
-
             }
             console.log(prov_overall_dict)
             console.log(req_overall_dict)
@@ -231,143 +228,12 @@ function listMajors() {
         for (var i = 0; i < projects.length; i++) {
             create_chart(projects[i], skills, months);
         }
-        create_total_chart(projects, skills, months);
 
     }, function(response) {
         alert('Error: ' + response.result.error.message);
     });
 }
 
-function create_total_chart(projects, skills, months) {
-    $('#container').append('<div style="height: 800px" id="total_chart"></div>');
-
-    Highcharts.setOptions({
-        colors: colors_list.slice(0, skills.length)
-    })
-
-    series_list = []
-
-    month_indices = []
-
-    for (var i = 0; i < months.length; i++) {
-        month_indices.push(months_list.indexOf(months[i]))
-    }
-
-    // Prepare total provided column data
-    for (var i = 0; i < skills.length; i++) {
-        data_list = []
-        
-        for (var j = 0; j < month_indices.length; j++) {
-            sum_projects = 0
-            for (var k = 0; k < projects.length; k++){
-                sum_projects += prov_overall_dict[projects[k]][skills[i]][1][month_indices[j]]
-            }
-            data_list.push(sum_projects)
-        }
-
-        series_list.push({
-            data: data_list,
-            name: 'Provided ' + skills[i],
-            stack: 0
-        });
-    }
-
-    // Prepare total required column data
-    for (var i = 0; i < skills.length; i++) {
-        data_list = []
-        
-        for (var j = 0; j < month_indices.length; j++) {
-            sum_projects = 0
-            for (var k = 0; k < projects.length; k++){
-                sum_projects += req_overall_dict[projects[k]][skills[i]][month_indices[j]]
-            }
-            data_list.push(sum_projects)
-        }
-
-        series_list.push({
-            data: data_list,
-            name: 'Required ' + skills[i],
-            stack: 1
-        });
-    }
-
-    chart = Highcharts.chart("total_chart", {
-        chart: {
-            type: 'column',
-            options3d: {
-                enabled: true,
-                alpha: 30,
-                beta: 40,
-                depth: 110
-            }
-        },
-        plotOptions: {
-            column: {
-                depth: 40,
-                stacking: true,
-                grouping: false,
-                groupZPadding: 30,
-                borderWidth: 0
-            }
-        },
-        series: series_list,
-        xAxis: {
-            categories: months
-        },
-        zAxis: {
-            min: 0,
-            max: 1,
-            categories: ['Provided', 'Required'],
-        },
-        credits: {
-            enabled: false
-        },
-        tooltip: {
-            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.series}</b> ({point.percentage:.0f}%)<br/>',
-
-            formatter: function() {
-
-                req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
-                skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
-                month_index = months_list.indexOf(this.point.category)
-                if (req_or_prov == 'Provided') {
-                    listed_employees_dict = {}
-                    for (var i = 0; i < projects.length; i++){
-                        employee_FTEs = prov_overall_dict[projects[i]][skill][0][month_index]
-                        for (var j = 0; j < employee_FTEs.length; j++) {
-                            employee_FTE = parseFloat(employee_FTEs[j][1])
-                            employee_name = employee_FTEs[j][0]
-                            if (employee_FTE > 0) {
-                                if (employee_name in listed_employees_dict){
-                                    listed_employees_dict[employee_name] += employee_FTE;
-                                }
-                                else{
-                                    listed_employees_dict[employee_name] = employee_FTE;
-                                }
-                            }
-                        }
-                    }
-
-                    listed_employees = []
-                    for (key in listed_employees_dict){
-                        listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2))
-                    }
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + listed_employees;
-                } else {
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2);
-                }
-
-            }
-        }
-
-    });
-
-    chart.yAxis[0].axisTitle.attr({
-        text: 'FTE'
-    });
-
-    chart.setTitle({ text: "Total Projects" });
-}
 
 
 function create_chart(project, skills, months) {
@@ -509,8 +375,6 @@ $('#projects-dropdown-menu a').on('click', function(event) {
         create_chart(projects[i], skills, months);
     }
 
-    create_total_chart(projects, skills, months);
-
     return false;
 });
 
@@ -541,8 +405,6 @@ $('#skills-dropdown-menu a').on('click', function(event) {
         create_chart(projects[i], skills, months);
     }
 
-    create_total_chart(projects, skills, months);
-
     return false;
 });
 
@@ -572,8 +434,6 @@ $('#months-dropdown-menu a').on('click', function(event) {
     for (var i = 0; i < projects.length; i++) {
         create_chart(projects[i], skills, months);
     }
-
-    create_total_chart(projects, skills, months);
 
     return false;
 });
