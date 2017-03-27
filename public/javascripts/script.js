@@ -4,7 +4,11 @@ var client_projects = ["Merck", "Amex", "Celgene"]
 var internal_projects = ["Marketing Core", "General Admin Core"]
 var product_projects = ["Concourse Core", "Assembly Core", "Foundations Core"]
 
-var skills = ['Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
+var skills = ['Engineering Mgmt', 'Data Science'];
+var commercial_skills = ["Project Mgmt / L1 Support", "Senior Client Mgmt"]
+var analytics_skills = ["Data Science"]
+var operations_skills = ["Engineering Mgmt"]
+
 var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
 var num_employees = 73
 
@@ -260,10 +264,10 @@ function create_total_chart(projects, skills, months) {
     // Prepare total provided column data
     for (var i = 0; i < skills.length; i++) {
         data_list = []
-        
+
         for (var j = 0; j < month_indices.length; j++) {
             sum_projects = 0
-            for (var k = 0; k < projects.length; k++){
+            for (var k = 0; k < projects.length; k++) {
                 sum_projects += prov_overall_dict[projects[k]][skills[i]][1][month_indices[j]]
             }
             data_list.push(sum_projects)
@@ -279,10 +283,10 @@ function create_total_chart(projects, skills, months) {
     // Prepare total required column data
     for (var i = 0; i < skills.length; i++) {
         data_list = []
-        
+
         for (var j = 0; j < month_indices.length; j++) {
             sum_projects = 0
-            for (var k = 0; k < projects.length; k++){
+            for (var k = 0; k < projects.length; k++) {
                 sum_projects += req_overall_dict[projects[k]][skills[i]][month_indices[j]]
             }
             data_list.push(sum_projects)
@@ -336,16 +340,15 @@ function create_total_chart(projects, skills, months) {
                 month_index = months_list.indexOf(this.point.category)
                 if (req_or_prov == 'Provided') {
                     listed_employees_dict = {}
-                    for (var i = 0; i < projects.length; i++){
+                    for (var i = 0; i < projects.length; i++) {
                         employee_FTEs = prov_overall_dict[projects[i]][skill][0][month_index]
                         for (var j = 0; j < employee_FTEs.length; j++) {
                             employee_FTE = parseFloat(employee_FTEs[j][1])
                             employee_name = employee_FTEs[j][0]
                             if (employee_FTE > 0) {
-                                if (employee_name in listed_employees_dict){
+                                if (employee_name in listed_employees_dict) {
                                     listed_employees_dict[employee_name] += employee_FTE;
-                                }
-                                else{
+                                } else {
                                     listed_employees_dict[employee_name] = employee_FTE;
                                 }
                             }
@@ -353,7 +356,7 @@ function create_total_chart(projects, skills, months) {
                     }
 
                     listed_employees = []
-                    for (key in listed_employees_dict){
+                    for (key in listed_employees_dict) {
                         listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2))
                     }
                     return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + listed_employees;
@@ -519,7 +522,7 @@ $('.client, .internal, .product').on('click', function(event) {
 
 
 // Dropdown for Skills
-$('#skills-dropdown-menu a').on('click', function(event) {
+$('.commercial, .analytics, .operations').on('click', function(event) {
 
     var $target = $(event.currentTarget),
         val = $target.attr('data-value'),
@@ -557,7 +560,6 @@ $('#months-dropdown-menu a').on('click', function(event) {
         val = $target.attr('data-value'),
         $inp = $target.find('input'),
         idx;
-    console.log($target);
 
     if ((idx = months.indexOf(val)) > -1) {
         months.splice(idx, 1);
@@ -582,14 +584,16 @@ $('#months-dropdown-menu a').on('click', function(event) {
     return false;
 });
 
-$("#checkAllClient").on('click', function (event) {
-    if ($('#checkAllClient:checked').length < 1){
+
+// Projects
+$("#checkAllClient").on('click', function(event) {
+    if ($('#checkAllClient:checked').length < 1) {
         setTimeout(function() { $('#checkAllClient').prop('checked', false) }, 0);
         setTimeout(function() { $('.client').prop('checked', false) }, 0);
 
         $('#container').html('');
 
-        for (var i = 0; i < client_projects.length; i++){
+        for (var i = 0; i < client_projects.length; i++) {
             if ((idx = projects.indexOf(client_projects[i])) > -1) {
                 projects.splice(idx, 1);
             }
@@ -600,8 +604,7 @@ $("#checkAllClient").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    }
-    else{
+    } else {
         setTimeout(function() { $('#checkAllClient').prop('checked', true) }, 0);
         setTimeout(function() { $('.client').prop('checked', true) }, 0);
 
@@ -615,18 +618,18 @@ $("#checkAllClient").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    }   
-    console.log(projects);        
+    }
+    console.log(projects);
 });
 
-$("#checkAllInternal").on('click', function (event) {
-    if ($('#checkAllInternal:checked').length < 1){
+$("#checkAllInternal").on('click', function(event) {
+    if ($('#checkAllInternal:checked').length < 1) {
         setTimeout(function() { $('#checkAllInternal').prop('checked', false) }, 0);
         setTimeout(function() { $('.internal').prop('checked', false) }, 0);
 
         $('#container').html('');
 
-        for (var i = 0; i < internal_projects.length; i++){
+        for (var i = 0; i < internal_projects.length; i++) {
             if ((idx = projects.indexOf(internal_projects[i])) > -1) {
                 projects.splice(idx, 1);
             }
@@ -637,8 +640,7 @@ $("#checkAllInternal").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    }
-    else{
+    } else {
         setTimeout(function() { $('#checkAllInternal').prop('checked', true) }, 0);
         setTimeout(function() { $('.internal').prop('checked', true) }, 0);
 
@@ -652,18 +654,18 @@ $("#checkAllInternal").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    } 
-    console.log(projects);       
+    }
+    console.log(projects);
 });
 
-$("#checkAllProduct").on('click', function (event) {
-    if ($('#checkAllProduct:checked').length < 1){
+$("#checkAllProduct").on('click', function(event) {
+    if ($('#checkAllProduct:checked').length < 1) {
         setTimeout(function() { $('#checkAllProduct').prop('checked', false) }, 0);
         setTimeout(function() { $('.product').prop('checked', false) }, 0);
 
         $('#container').html('');
 
-        for (var i = 0; i < product_projects.length; i++){
+        for (var i = 0; i < product_projects.length; i++) {
             if ((idx = projects.indexOf(product_projects[i])) > -1) {
                 projects.splice(idx, 1);
             }
@@ -674,8 +676,7 @@ $("#checkAllProduct").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    }
-    else{
+    } else {
         setTimeout(function() { $('#checkAllProduct').prop('checked', true) }, 0);
         setTimeout(function() { $('.product').prop('checked', true) }, 0);
 
@@ -689,16 +690,127 @@ $("#checkAllProduct").on('click', function (event) {
         }
 
         create_total_chart(projects, skills, months);
-    }        
-    console.log(projects);   
+    }
+    console.log(projects);
 });
+
+
+// Skills
+$("#checkAllCommercial").on('click', function(event) {
+    if ($('#checkAllCommercial:checked').length < 1) {
+        setTimeout(function() { $('#checkAllCommercial').prop('checked', false) }, 0);
+        setTimeout(function() { $('.commercial').prop('checked', false) }, 0);
+
+        $('#container').html('');
+
+        for (var i = 0; i < commercial_skills.length; i++) {
+            if ((idx = skills.indexOf(commercial_skills[i])) > -1) {
+                skills.splice(idx, 1);
+            }
+        }
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    } else {
+        setTimeout(function() { $('#checkAllCommercial').prop('checked', true) }, 0);
+        setTimeout(function() { $('.commercial').prop('checked', true) }, 0);
+
+
+        $('#container').html('');
+
+        skills = skills.concat(commercial_skills).unique();
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    }
+    console.log(skills);
+});
+
+$("#checkAllAnalytics").on('click', function(event) {
+    if ($('#checkAllAnalytics:checked').length < 1) {
+        setTimeout(function() { $('#checkAllAnalytics').prop('checked', false) }, 0);
+        setTimeout(function() { $('.analytics').prop('checked', false) }, 0);
+
+        $('#container').html('');
+
+        for (var i = 0; i < analytics_skills.length; i++) {
+            if ((idx = skills.indexOf(analytics_skills[i])) > -1) {
+                skills.splice(idx, 1);
+            }
+        }
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    } else {
+        setTimeout(function() { $('#checkAllAnalytics').prop('checked', true) }, 0);
+        setTimeout(function() { $('.analytics').prop('checked', true) }, 0);
+
+
+        $('#container').html('');
+
+        skills = skills.concat(analytics_skills).unique();
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    }
+    console.log(skills);
+});
+
+$("#checkAllOperations").on('click', function(event) {
+    if ($('#checkAllOperations:checked').length < 1) {
+        setTimeout(function() { $('#checkAllOperations').prop('checked', false) }, 0);
+        setTimeout(function() { $('.operations').prop('checked', false) }, 0);
+
+        $('#container').html('');
+
+        for (var i = 0; i < operations_skills.length; i++) {
+            if ((idx = skills.indexOf(operations_skills[i])) > -1) {
+                skills.splice(idx, 1);
+            }
+        }
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    } else {
+        setTimeout(function() { $('#checkAllOperations').prop('checked', true) }, 0);
+        setTimeout(function() { $('.operations').prop('checked', true) }, 0);
+
+
+        $('#container').html('');
+
+        skills = skills.concat(operations_skills).unique();
+
+        for (var i = 0; i < projects.length; i++) {
+            create_chart(projects[i], skills, months);
+        }
+
+        create_total_chart(projects, skills, months);
+    }
+    console.log(skills);
+});
+
 
 
 Array.prototype.unique = function() {
     var a = this.concat();
-    for(var i=0; i<a.length; ++i) {
-        for(var j=i+1; j<a.length; ++j) {
-            if(a[i] === a[j])
+    for (var i = 0; i < a.length; ++i) {
+        for (var j = i + 1; j < a.length; ++j) {
+            if (a[i] === a[j])
                 a.splice(j--, 1);
         }
     }
