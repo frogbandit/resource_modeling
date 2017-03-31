@@ -29,8 +29,7 @@ var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 20
     'September 2017', 'October 2017'
 ]
 
-var req_overall_dict = {};
-var prov_overall_dict = {};
+var overall_dict = {}
 
 // Client ID and API key from the Developer Console
 var CLIENT_ID = '258110252035-ue2704r46okci98s11hk890jbi2kbli2.apps.googleusercontent.com';
@@ -128,93 +127,34 @@ function listMajors() {
                 var required_FTE = parseFloat(row[5])
                 var provided_FTE = parseFloat(row[6])
 
-                // required dictionary
-                if (project in req_overall_dict) {
-                    var skill_dict = req_overall_dict[project];
 
-                    if (skill in skill_dict) {
-                        skill_dict[skill].push(required_FTE);
 
-                    } else {
-                        skill_dict[skill] = [required_FTE];
-                    }
-
-                    req_overall_dict[project] = skill_dict;
-
-                } else {
-                    var skill_dict = {};
-
-                    if (skill in skill_dict) {
-                        skill_dict[skill].push(required_FTE);
-                    } else {
-                        skill_dict[skill] = [required_FTE];
-                    }
-
-                    req_overall_dict[project] = skill_dict;
+                if (!(month in overall_dict)) {
+                    overall_dict[month] = {} 
                 }
 
-                // provided dictionary
-                if (project in prov_overall_dict) {
-                    var skill_dict = prov_overall_dict[project];
 
-                    if (skill in skill_dict) {
-                        employee_FTE_list = []
-
-                        for (var j = 7; j < row.length; j++) {
-                            var employee_FTE = row[j]
-                            var employee_name = people[j - 7]
-                            employee_FTE_list.push([employee_name, employee_FTE])
-                        }
-                        skill_dict[skill][0].push(employee_FTE_list);
-                        skill_dict[skill][1].push(provided_FTE);
-                    } else {
-                        employee_FTE_list = []
-
-                        for (var j = 7; j < row.length; j++) {
-                            var employee_FTE = row[j]
-                            var employee_name = people[j - 7]
-                            employee_FTE_list.push([employee_name, employee_FTE])
-                        }
-                        skill_dict[skill] = [
-                            [employee_FTE_list],
-                            [provided_FTE]
-                        ];
+                for (var j = 7; j < row.length; j++) {
+                    var employee_FTE = row[j]
+                    var employee_name = people[j - 7]
+                    
+                    if (!(employee_name in overall_dict[month])){
+                        overall_dict[month][employee_name] = {}
                     }
 
-                    prov_overall_dict[project] = skill_dict;
-                } else {
-                    var skill_dict = {};
+                    if (employee_FTE > 0){
 
-                    if (skill in skill_dict) {
-                        employee_FTE_list = []
-
-                        for (var j = 7; j < row.length; j++) {
-                            var employee_FTE = row[j]
-                            var employee_name = people[j - 7]
-                            employee_FTE_list.push([employee_name, employee_FTE])
+                        if (project in overall_dict[month][employee_name]){
+                            overall_dict[month][employee_name][project].push([skill, employee_FTE])
                         }
-                        skill_dict[skill][0].push(employee_FTE_list);
-                        skill_dict[skill][1].push(provided_FTE);
-
-                    } else {
-                        employee_FTE_list = []
-
-                        for (var j = 7; j < row.length; j++) {
-                            var employee_FTE = row[j]
-                            var employee_name = people[j - 7]
-                            employee_FTE_list.push([employee_name, employee_FTE])
+                        else{
+                            overall_dict[month][employee_name][project] = [[skill, employee_FTE]]
                         }
-                        skill_dict[skill] = [
-                            [employee_FTE_list],
-                            [provided_FTE]
-                        ];
+                        
                     }
-
-                    prov_overall_dict[project] = skill_dict;
                 }
             }
-            console.log(prov_overall_dict)
-            console.log(req_overall_dict)
+            console.log(overall_dict)
 
         } else {
             alert('No data found.');
@@ -224,11 +164,15 @@ function listMajors() {
         console.log(skills);
         console.log(months);
 
-        // For each project, create a chart
-        for (var i = 0; i < projects.length; i++) {
-            create_chart(projects[i], skills, months);
+        $('#container').append('<table class="table table-striped" id="table"> \
+        <thead><tr><th></th><th>Person</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
+        <tbody></tbody></table>');
+
+        for (person_index in people){
+            create_table(person_index, "April 2017")
         }
 
+        
     }, function(response) {
         alert('Error: ' + response.result.error.message);
     });
@@ -236,177 +180,41 @@ function listMajors() {
 
 
 
-function create_chart(project, skills, months) {
-    // Example:
-    // create List for Merck Senior Client Mgmt
-    // stack is 0, data is [1.10, 0.00, ...] 
+function create_table(person_index, month) {
 
-    $('#container').append('<div style="height: 800px" id="' + project + '"></div>');
+    
+    person = people[person_index]
 
-    Highcharts.setOptions({
-        colors: colors_list.slice(0, skills.length)
-    })
+    // $('#container').append('<table class="table table-striped" id="table_' + person_index + '"> \
 
-    series_list = []
+    
 
-    month_indices = []
 
-    for (var i = 0; i < months.length; i++) {
-        month_indices.push(months_list.indexOf(months[i]))
-    }
-
-    // Prepare provided column data
-    for (var i = 0; i < skills.length; i++) {
-        data_list = []
-        for (var j = 0; j < month_indices.length; j++) {
-            data_list.push(prov_overall_dict[project][skills[i]][1][month_indices[j]])
-        }
-        series_list.push({
-            data: data_list,
-            name: 'Provided ' + skills[i],
-            stack: 0
-        });
-    }
-
-    // Prepare required column data
-    for (var i = 0; i < skills.length; i++) {
-        data_list = []
-        for (var j = 0; j < month_indices.length; j++) {
-            data_list.push(req_overall_dict[project][skills[i]][month_indices[j]])
-        }
-        series_list.push({
-            data: data_list,
-            name: 'Required ' + skills[i],
-            stack: 1
-        });
-    }
-
-    chart = Highcharts.chart(project, {
-        chart: {
-            type: 'column',
-            options3d: {
-                enabled: true,
-                alpha: 30,
-                beta: 40,
-                depth: 110
-            }
-        },
-        plotOptions: {
-            column: {
-                depth: 40,
-                stacking: true,
-                grouping: false,
-                groupZPadding: 30,
-                borderWidth: 0
-            }
-        },
-        series: series_list,
-        xAxis: {
-            categories: months
-        },
-        zAxis: {
-            min: 0,
-            max: 1,
-            categories: ['Provided', 'Required'],
-        },
-        credits: {
-            enabled: false
-        },
-        tooltip: {
-            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.series}</b> ({point.percentage:.0f}%)<br/>',
-
-            formatter: function() {
-
-                req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
-                skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
-                month_index = months_list.indexOf(this.point.category)
-                if (req_or_prov == 'Provided') {
-
-                    listed_employees = []
-                    employee_FTEs = prov_overall_dict[project][skill][0][month_index]
-                    for (var i = 0; i < employee_FTEs.length; i++) {
-                        employee_FTE = employee_FTEs[i][1]
-                        employee_name = employee_FTEs[i][0]
-                        if (employee_FTE > 0) {
-                            listed_employees.push('<br/>' + '<b>' + employee_name + '</b>: ' + employee_FTE)
-                        }
-                    }
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y + listed_employees;
-                } else {
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y;
-                }
-
+    if (!(Object.keys(overall_dict[month][person]).length === 0 && overall_dict[month][person].constructor === Object)){
+        for (var i in overall_dict[month][person]){
+            length = Object.keys(overall_dict[month][person]).length
+            for (var j in overall_dict[month][person][i]){
+                skill = overall_dict[month][person][i][j][0];
+                FTE = overall_dict[month][person][i][j][1];
+                project = Object.keys(overall_dict[month][person])[j]
+                $('#table tr:last').after('<tr><td>' + month + '</td><td>' + person + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
             }
         }
+        $('#table tr:last').after('<tr><td></td><td></td><td></td><td></td><td></td></tr>')
+    }
+    else{
+        $('#table tr:last').after('<tr><td>' + month + '</td><td>' + person + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
+        $('#table tr:last').after('<tr><td></td><td></td><td></td><td></td><td></td></tr>')
+    }
+    // $.each(people, function(index, value){
+    //     console.log(value);
+        // $("#table_" + month + '_' + people[person_index]).append("<tr><td>" + )
+    // });
+    
 
-    });
-
-    chart.yAxis[0].axisTitle.attr({
-        text: 'FTE'
-    });
-
-    chart.setTitle({ text: project });
 };
 
 
-// Dropdown for Projects
-$('#projects-dropdown-menu a').on('click', function(event) {
-
-    var $target = $(event.currentTarget),
-        val = $target.attr('data-value'),
-        $inp = $target.find('input'),
-        idx;
-
-    if ((idx = projects.indexOf(val)) > -1) {
-        projects.splice(idx, 1);
-        setTimeout(function() { $inp.prop('checked', false) }, 0);
-    } else {
-        projects.push(val);
-        setTimeout(function() { $inp.prop('checked', true) }, 0);
-    }
-
-    $(event.target).blur();
-
-    console.log(projects);
-
-    $('#container').html('');
-
-    for (var i = 0; i < projects.length; i++) {
-        create_chart(projects[i], skills, months);
-    }
-
-    return false;
-});
-
-
-// Dropdown for Skills
-$('#skills-dropdown-menu a').on('click', function(event) {
-
-    var $target = $(event.currentTarget),
-        val = $target.attr('data-value'),
-        $inp = $target.find('input'),
-        idx;
-
-    if ((idx = skills.indexOf(val)) > -1) {
-        skills.splice(idx, 1);
-        setTimeout(function() { $inp.prop('checked', false) }, 0);
-    } else {
-        skills.push(val);
-        setTimeout(function() { $inp.prop('checked', true) }, 0);
-    }
-
-    $(event.target).blur();
-
-    console.log(skills);
-
-    $('#container').html('');
-
-    for (var i = 0; i < projects.length; i++) {
-        create_chart(projects[i], skills, months);
-    }
-
-    return false;
-});
 
 
 // Dropdown for Months
