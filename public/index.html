@@ -8,11 +8,18 @@
     <title>Enigma Resource Modeling</title>
     <meta name="description" content="Enigma Resource Modeling">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 </head>
@@ -25,6 +32,8 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href='/people'>People View</a> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects
             <span class="caret"></span></a>
@@ -32,7 +41,7 @@
                         <li class="dropdown-header">Client Projects</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllClient" />&nbsp;Client Projects (all)</a>
+                                <input type="checkbox" id="checkAllClient" checked/>&nbsp;Client Projects (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Merck" tabIndex="-1">
@@ -40,17 +49,17 @@
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Amex" tabIndex="-1">
-                                <input type="checkbox" class="client" />&nbsp;Amex</a>
+                                <input type="checkbox" class="client" checked/>&nbsp;Amex</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Celgene" tabIndex="-1">
-                                <input type="checkbox" class="client" />&nbsp;Celgene</a>
+                                <input type="checkbox" class="client" checked/>&nbsp;Celgene</a>
                         </li>
                         <li class="divider"></li>
                         <li class="dropdown-header">Internal Projects</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllInternal" />&nbsp;Internal Projects (all)</a>
+                                <input type="checkbox" id="checkAllInternal" checked/>&nbsp;Internal Projects (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Marketing Core" tabIndex="-1">
@@ -58,25 +67,25 @@
                         </li>
                         <li>
                             <a href="#" class="small" data-value="General Admin Core" tabIndex="-1">
-                                <input type="checkbox" class="internal" />&nbsp;General Admin Core</a>
+                                <input type="checkbox" class="internal" checked/>&nbsp;General Admin Core</a>
                         </li>
                         <li class="divider"></li>
                         <li class="dropdown-header">Product Development</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllProduct" />&nbsp;Product Development (all)</a>
+                                <input type="checkbox" id="checkAllProduct" checked/>&nbsp;Product Development (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Concourse Core" tabIndex="-1">
-                                <input type="checkbox" class="product" />&nbsp;Concourse Core</a>
+                                <input type="checkbox" class="product" checked/>&nbsp;Concourse Core</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Assembly Core" tabIndex="-1">
-                                <input type="checkbox" class="product" />&nbsp;Assembly Core</a>
+                                <input type="checkbox" class="product" checked/>&nbsp;Assembly Core</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Foundations Core" tabIndex="-1">
-                                <input type="checkbox" class="product" />&nbsp;Foundations Core</a>
+                                <input type="checkbox" class="product" checked/>&nbsp;Foundations Core</a>
                         </li>
                     </ul>
                 </li>
@@ -87,11 +96,11 @@
                         <li class="dropdown-header">Commercial Team</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllCommercial" />&nbsp;Commercial Team (all)</a>
+                                <input type="checkbox" id="checkAllCommercial" checked/>&nbsp;Commercial Team (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Project Mgmt / L1 Support" tabIndex="-1">
-                                <input type="checkbox" class="commercial" />&nbsp;Project Management / Analysis</a>
+                                <input type="checkbox" class="commercial" checked/>&nbsp;Project Management / Analysis</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Senior Client Mgmt" tabIndex="-1">
@@ -101,7 +110,7 @@
                         <li class="dropdown-header">Analytics Team</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllAnalytics" />&nbsp;Analytics Team (all)</a>
+                                <input type="checkbox" id="checkAllAnalytics" checked/>&nbsp;Analytics Team (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Data Science" tabIndex="-1">
@@ -111,7 +120,7 @@
                         <li class="dropdown-header">Operations Team</li>
                         <li>
                             <a href="#" class="small" tabIndex="-1">
-                                <input type="checkbox" id="checkAllOperations" />&nbsp;Operations Team (all)</a>
+                                <input type="checkbox" id="checkAllOperations" checked/>&nbsp;Operations Team (all)</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="Engineering Mgmt" tabIndex="-1">
@@ -145,30 +154,61 @@
                         </li>
                         <li>
                             <a href="#" class="small" data-value="August 2017" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;August 2017</a>
+                                <input type="checkbox" checked/>&nbsp;August 2017</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="September 2017" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;September 2017</a>
+                                <input type="checkbox" checked/>&nbsp;September 2017</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="October 2017" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;October 2017</a>
+                                <input type="checkbox" checked/>&nbsp;October 2017</a>
+                        </li>
+                    </ul>
+
+
+                </li>
+                <li class="dropdown" id="axes">
+                   <a class="dropdown-toggle" id="axes-selection" data-toggle="dropdown" href="#">Axes Selection
+            <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="axes-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="FTE" tabIndex="-1">
+                                &nbsp;FTE</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="Dollars" tabIndex="-1">
+                                &nbsp;Dollars</a>
                         </li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Axes Selection
+
+                <li class="dropdown" id="projectskill">
+                   <a class="dropdown-toggle" id="projectskill-selection" data-toggle="dropdown" href="#">Breakdown: Project/Skill
             <span class="caret"></span></a>
-                    <ul class="dropdown-menu" id="months-dropdown-menu">
-                        <li class="dropdown-header">Dollars or FTE</li>
-                        <li class="radio">
-                            <label>
-                                <input type="radio" name="optradio" checked>FTE</label>
+                    <ul class="dropdown-menu" id="axes-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="project" tabIndex="-1">
+                                &nbsp;Breakdown: Project</a>
                         </li>
-                        <li class="radio">
-                            <label>
-                                <input type="radio" name="optradio">Dollars</label>
+                        <li>
+                            <a href="#" class="small" data-value="skill" tabIndex="-1">
+                                &nbsp;Breakdown: Skill</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown" id="hypothetical">
+                   <a class="dropdown-toggle" id="hypothetical-selection" data-toggle="dropdown" href="#">Hypothetical Mode
+            <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="axes-dropdown-menu">
+                        <li>
+                            <a href="#" class="small" data-value="on" tabIndex="-1">
+                                &nbsp;Hypothetical On</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="off" tabIndex="-1">
+                                &nbsp;Hypotehtical Off</a>
                         </li>
                     </ul>
                 </li>
