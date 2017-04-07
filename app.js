@@ -60,7 +60,8 @@ io.on('connection', function(socket) {
     io.emit('people_query', req_id);
 });
 
-http.listen(process.env.PORT || 3000, function() {
+var port = process.env.PORT || 3000;
+http.listen(port, function() {
     console.log('listening on localhost:3000');
 });
 
