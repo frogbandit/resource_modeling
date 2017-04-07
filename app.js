@@ -5,8 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-
 var app = express();
 
 // view engine setup
@@ -20,29 +18,50 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', index);
-app.get('/people', function(req, res) {
-	res.sendFile(path.join(__dirname + '/public/people.html'));
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/index.html'));
 });
+
+var req_id;
+
+app.get('/people', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/people.html'));
+    // res.send("tagId is set to " + req.query.tagId);
+    req_id = req.query.people;
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
+
+
+var http = require('http').Server(app)
+var io = require('socket.io')(http);
+
+io.on('connection', function(socket) {
+    console.log(req_id);
+    io.emit('people_query', req_id);
+});
+
+http.listen(3000, function() {
+    console.log('listening on localhost:3000');
 });
 
 module.exports = app;

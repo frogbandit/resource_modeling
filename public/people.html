@@ -15,6 +15,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+
+
 </head>
 
 <body>
@@ -24,128 +27,307 @@
                 <a class="navbar-brand" href="/">Enigma Resource Modeling</a>
             </div>
             <ul class="nav navbar-nav">
+                <li><a href='/'>Main View</a> </li>
                 <li><a href='/people'>People View</a> </li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">People
             <span class="caret"></span></a>
-                    <ul class="dropdown-menu" id="projects-dropdown-menu">
+                    <ul class="dropdown-menu" id="people-dropdown-menu">
                         <li>
-                            <a href="#" class="small" data-value="Merck" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Merck</a>
+                            <a href="#" class="small" tabIndex="-1">
+                                <input type="checkbox" id="checkAllPeople" checked/>&nbsp;People Projects (all)</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Amex" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Amex</a>
+                            <a href="#" class="small" data-value="BARKER, JOHN E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;BARKER, JOHN E</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Celgene" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Celgene</a>
+                            <a href="#" class="small" data-value="DONATZ, MICHAEL G" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;DONATZ, MICHAEL G</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Citadel" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Citadel</a>
+                            <a href="#" class="small" data-value="JOHNSON, COURTNEY A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;JOHNSON, COURTNEY A</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="EMD" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;EMD</a>
+                            <a href="#" class="small" data-value="CHRISTENSEN, EMIL R" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;CHRISTENSEN, EMIL R</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Two Sigma" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Two Sigma</a>
+                            <a href="#" class="small" data-value="EASTBURN, BENJAMIN C" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;EASTBURN, BENJAMIN C</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="BB&T" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;BB&T</a>
+                            <a href="#" class="small" data-value="MORAN, THOMAS C" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;MORAN, THOMAS C</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="PayPal" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;PayPal</a>
+                            <a href="#" class="small" data-value="DELGADILLO, SUSANA C" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;DELGADILLO, SUSANA C</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Credit Suisse" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Credit Suisse</a>
+                            <a href="#" class="small" data-value="KELMANSKIY, YEFIM" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KELMANSKIY, YEFIM</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="GIC" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;GIC</a>
+                            <a href="#" class="small" data-value="OMI, ALISA" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;OMI, ALISA</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Point72" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Point72</a>
+                            <a href="#" class="small" data-value="KNUPP, JEFFREY C" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KNUPP, JEFFREY C</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="WorldQuant" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;WorldQuant</a>
+                            <a href="#" class="small" data-value="LEONE, MICHAEL A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;LEONE, MICHAEL A</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="ADP" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;ADP</a>
+                            <a href="#" class="small" data-value="VARSHAVSKY, PETER" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;VARSHAVSKY, PETER</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Travelers" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Travelers</a>
+                            <a href="#" class="small" data-value="PARKER, JARROD R" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;PARKER, JARROD R</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Hartford" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Hartford</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Skills
-            <span class="caret"></span></a>
-                    <ul class="dropdown-menu" id="skills-dropdown-menu">
-                        <li>
-                            <a href="#" class="small" data-value="Senior Client Mgmt" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Senior Client Mgmt</a>
+                            <a href="#" class="small" data-value="WARDY, JASON I" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WARDY, JASON I</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Project Mgmt / L1 Support" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Project Mgmt / L1 Support</a>
+                            <a href="#" class="small" data-value="DANTON, CRAIG A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;DANTON, CRAIG A</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Engineering Mgmt" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Engineering Mgmt</a>
+                            <a href="#" class="small" data-value="LEV, IGOR" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;LEV, IGOR</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Product Mgmt" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Product Mgmt</a>
+                            <a href="#" class="small" data-value="BOMAN, BLAINE" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;BOMAN, BLAINE</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Data Science" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Data Science</a>
+                            <a href="#" class="small" data-value="KEITER, KENNETH S" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KEITER, KENNETH S</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Machine Learning Eng." tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Machine Learning Eng.</a>
+                            <a href="#" class="small" data-value="KIRCHER, ASHLEY W" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KIRCHER, ASHLEY W</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Data Engineering" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Data Engineering</a>
+                            <a href="#" class="small" data-value="PRATER, RICHARD T" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;PRATER, RICHARD T</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Design" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Design</a>
+                            <a href="#" class="small" data-value="WELLS, THOMAS F" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WELLS, THOMAS F</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Front End" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Front End</a>
+                            <a href="#" class="small" data-value="WHITING, OWEN S" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WHITING, OWEN S</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Backend" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;Backend</a>
+                            <a href="#" class="small" data-value="YANG, YANG" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;YANG, YANG</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Support Engineer" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Support Engineer</a>
+                            <a href="#" class="small" data-value="RUBENSTEIN, ABRAHAM E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;RUBENSTEIN, ABRAHAM E</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Quality Engineer" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Quality Engineer</a>
+                            <a href="#" class="small" data-value="ATTAHRI, MOHAMED" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;ATTAHRI, MOHAMED</a>
                         </li>
                         <li>
-                            <a href="#" class="small" data-value="Solutions Architect" tabIndex="-1">
-                                <input type="checkbox" />&nbsp;Solutions Architect</a>
+                            <a href="#" class="small" data-value="BERNARDIN, JAMES P" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;BERNARDIN, JAMES P</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="CREIGHTON, JENNIFER L" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;CREIGHTON, JENNIFER L</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="GELB, BENJAMIN E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;GELB, BENJAMIN E</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="HAMMER, MELODY A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;HAMMER, MELODY A</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="ROTH, ALEXANDER I" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;ROTH, ALEXANDER I</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="MONK, CLINTON D" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;MONK, CLINTON D</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" ata-value="KREMLER, GREGORY J" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KREMLER, GREGORY J</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="AHEARN, EVE G" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;AHEARN, EVE G</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="KERLE, INDIA H" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KERLE, INDIA H</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="TEYSSIER, MAUREEN E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;TEYSSIER, MAUREEN E</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="ULMAN, JEREMY W" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;ULMAN, JEREMY W</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="WATT, CECILIA I" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WATT, CECILIA I</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="KRINSLEY, JEREMY A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KRINSLEY, JEREMY A</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="EDGAR, JAMES H" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;EDGAR, JAMES H</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="OUDGHIRI, HICHAM" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;OUDGHIRI, HICHAM</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="PRICE, REBECCA L" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;PRICE, REBECCA L</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="SESSER, BENJAMIN C" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;SESSER, BENJAMIN C</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="CHAN, KELVIN K" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;CHAN, KELVIN K</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="HALLOCK, SAMANTHA L" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;HALLOCK, SAMANTHA L</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="LI, ANN L" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;LI, ANN L</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="NORTHINGTON, ALEXANDRA E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;NORTHINGTON, ALEXANDRA E</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="SULLAM, JULIANA M" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;SULLAM, JULIANA M</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="ESTES, STEPHEN B" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;ESTES, STEPHEN B</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="FLOWERS, MICHAEL P" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;FLOWERS, MICHAEL P</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="LEVIN, JONATHAN T" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;LEVIN, JONATHAN T</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="HORAN, MATTHEW T" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;HORAN, MATTHEW T</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="KHALIFA, DONIA A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;KHALIFA, DONIA A</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="SPIEGEL, STEPHANIE B" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;SPIEGEL, STEPHANIE B</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="AFROOZE, JALEH" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;AFROOZE, JALEH</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="GUTMAN, LEE E" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;GUTMAN, LEE E</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="WHALEN, CAITLIN M" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WHALEN, CAITLIN M</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="BENOIT, MICHAEL G" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;BENOIT, MICHAEL G</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="GONZALEZ, JUAN" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;GONZALEZ, JUAN</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="WILSON, JOSHUA B" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WILSON, JOSHUA B</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="IANIUK, OLGA" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;IANIUK, OLGA</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="PARIKH, URVISH" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;PARIKH, URVISH</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="WEBB, WILLIAM A" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;WEBB, WILLIAM A</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="MADDALA, BHASKAR" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;MADDALA, BHASKAR</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="CASAMONA, CARLA" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;CASAMONA, CARLA</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="CHOLAS-WOOD, ALEX" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;CHOLAS-WOOD, ALEX</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="HENDERSON, PETER" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;HENDERSON, PETER</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="SHAO, BRYAN" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;SHAO, BRYAN</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="STANLEY, MICHAEL" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;STANLEY, MICHAEL</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="PRAINITO, JOE" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;PRAINITO, JOE</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="MUKHERJEE, ISHANI" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;MUKHERJEE, ISHANI</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="MIKAELIAN, ALEXIS" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;MIKAELIAN, ALEXIS</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="GAO, DAVID" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;GAO, DAVID</a>
+                        </li>
+                        <li>
+                            <a href="#" class="small" data-value="BECKER, NICK" tabIndex="-1">
+                                <input type="checkbox" class="people" checked/>&nbsp;BECKER, NICK</a>
                         </li>
                     </ul>
                 </li>
@@ -155,7 +337,7 @@
                     <ul class="dropdown-menu" id="months-dropdown-menu">
                         <li>
                             <a href="#" class="small" data-value="March 2017" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;March 2017</a>
+                                <input type="checkbox" />&nbsp;March 2017</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="April 2017" tabIndex="-1">
@@ -167,11 +349,11 @@
                         </li>
                         <li>
                             <a href="#" class="small" data-value="June 2017" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;June 2017</a>
+                                <input type="checkbox" />&nbsp;June 2017</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="July 2017" tabIndex="-1">
-                                <input type="checkbox" checked/>&nbsp;July 2017</a>
+                                <input type="checkbox" />&nbsp;July 2017</a>
                         </li>
                         <li>
                             <a href="#" class="small" data-value="August 2017" tabIndex="-1">
@@ -190,7 +372,7 @@
             </ul>
         </div>
     </nav>
-    <img src="/images/person.png"></img>
+    <!-- <img src="/images/person.png"></img> -->
     <div id="container" style="height: 100%">
         <!-- <table class="table table-striped" id="my-table"><tbody><tr></tr><tr></tr></tbody></table> -->
     </div>

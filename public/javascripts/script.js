@@ -143,7 +143,7 @@ function listMajors() {
                 var provided_FTE = parseFloat(row[6])
 
 
-                if (real == "1"){
+                if (real == "1") {
                     // required dictionary
                     if (project in real_req_overall_dict) {
                         var skill_dict = real_req_overall_dict[project];
@@ -349,16 +349,16 @@ function create_total_chart(projects, skills, months) {
         month_indices.push(months_list.indexOf(months[i]))
     }
 
-    
+
 
     // if skills is selected:     
-    if ($("#projectskill-selection").text().trim() == "Breakdown: Skill"){
+    if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
 
         Highcharts.setOptions({
             colors: colors_list.slice(0, skills.length)
         })
 
-        if ($("#hypothetical-selection").text().trim() == "Hypothetical On"){
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             console.log('Hypothetical On')
 
             // Prepare total provided column data
@@ -391,7 +391,6 @@ function create_total_chart(projects, skills, months) {
                     }
                     data_list.push(sum_projects)
                 }
-                console.log(data_list)
                 series_list.push({
                     data: data_list,
                     name: "Required " + skills[i],
@@ -399,11 +398,9 @@ function create_total_chart(projects, skills, months) {
                     showInLegend: false
                 });
             }
-        }
-
-        else{
+        } else {
             console.log('Hypothetical Off')
-            // Prepare total provided column data
+                // Prepare total provided column data
             for (var i = 0; i < skills.length; i++) {
                 data_list = []
 
@@ -433,7 +430,6 @@ function create_total_chart(projects, skills, months) {
                     }
                     data_list.push(sum_projects)
                 }
-                console.log(data_list)
                 series_list.push({
                     data: data_list,
                     name: "Required " + skills[i],
@@ -444,20 +440,20 @@ function create_total_chart(projects, skills, months) {
         }
     }
     // if breakdown projects is selected
-    else{        
-        if ($("#hypothetical-selection").text().trim() == "Hypothetical On"){
+    else {
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             console.log("Hypothetical On")
 
             Highcharts.setOptions({
-                colors: colors_list.slice(0, projects.length) 
+                colors: colors_list.slice(0, projects.length)
             })
 
             // Prepare total provided column data
-            for (var i = 0; i < projects.length; i++){
+            for (var i = 0; i < projects.length; i++) {
                 data_list = []
-                for (var j = 0; j < month_indices.length; j++){
+                for (var j = 0; j < month_indices.length; j++) {
                     sum_skills = 0
-                    for (var k  = 0; k < skills.length; k++){
+                    for (var k = 0; k < skills.length; k++) {
                         sum_skills += prov_overall_dict[projects[i]][skills[k]][1][month_indices[j]]
                     }
                     data_list.push(sum_skills)
@@ -470,11 +466,11 @@ function create_total_chart(projects, skills, months) {
             }
 
             // Prepare total required column data
-            for (var i = 0; i < projects.length; i++){
+            for (var i = 0; i < projects.length; i++) {
                 data_list = []
-                for (var j = 0; j < month_indices.length; j++){
+                for (var j = 0; j < month_indices.length; j++) {
                     sum_skills = 0
-                    for (var k  = 0; k < skills.length; k++){
+                    for (var k = 0; k < skills.length; k++) {
                         sum_skills += req_overall_dict[projects[i]][skills[k]][month_indices[j]]
                     }
                     data_list.push(sum_skills)
@@ -486,20 +482,18 @@ function create_total_chart(projects, skills, months) {
                     showInLegend: false
                 })
             }
-        }
-
-        else{
+        } else {
             console.log("Hypothetical Off")
 
             Highcharts.setOptions({
-                colors: colors_list.slice(0, real_projects.length) 
-            })
-            // Prepare total provided column data
-            for (var i = 0; i < real_projects.length; i++){
+                    colors: colors_list.slice(0, real_projects.length)
+                })
+                // Prepare total provided column data
+            for (var i = 0; i < real_projects.length; i++) {
                 data_list = []
-                for (var j = 0; j < month_indices.length; j++){
+                for (var j = 0; j < month_indices.length; j++) {
                     sum_skills = 0
-                    for (var k  = 0; k < skills.length; k++){
+                    for (var k = 0; k < skills.length; k++) {
                         sum_skills += real_prov_overall_dict[real_projects[i]][skills[k]][1][month_indices[j]]
                     }
                     data_list.push(sum_skills)
@@ -512,11 +506,11 @@ function create_total_chart(projects, skills, months) {
             }
 
             // Prepare total required column data
-            for (var i = 0; i < real_projects.length; i++){
+            for (var i = 0; i < real_projects.length; i++) {
                 data_list = []
-                for (var j = 0; j < month_indices.length; j++){
+                for (var j = 0; j < month_indices.length; j++) {
                     sum_skills = 0
-                    for (var k  = 0; k < skills.length; k++){
+                    for (var k = 0; k < skills.length; k++) {
                         sum_skills += real_req_overall_dict[real_projects[i]][skills[k]][month_indices[j]]
                     }
                     data_list.push(sum_skills)
@@ -539,6 +533,11 @@ function create_total_chart(projects, skills, months) {
                 alpha: 30,
                 beta: 40,
                 depth: 110
+            },
+            events: {
+                load: function() {
+                    this.myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                }
             }
         },
         plotOptions: {
@@ -551,11 +550,32 @@ function create_total_chart(projects, skills, months) {
                 pointPadding: 0.1,
                 borderWidth: 0,
                 events: {
-                    legendItemClick: function () {
-                        return false; 
+                    legendItemClick: function() {
+                        return false;
                     }
                 },
                 softThreshold: false
+            },
+            series: {
+                events: {
+                    click: function(evt) {
+                        tooltip_list = $('.highcharts-tooltip tspan').text().split(';');
+
+                        query_string = ''
+                        for (var i = 0; i < tooltip_list.length; i++) {
+                            if (tooltip_list[i].includes(',')) {
+                                name = tooltip_list[i].split(':').slice(0, 1)
+                                query_string += (name + ';');
+                            }
+                        }
+
+                        if (query_string != '') {
+                            location.href = '/people?people=' + query_string.substring(0, query_string.length - 1);
+                        }
+
+                    }
+                }
+
             }
         },
         series: series_list,
@@ -566,14 +586,14 @@ function create_total_chart(projects, skills, months) {
             }
         },
         yAxis: {
-            min: 0, 
+            min: 0,
             minRange: 0.1
 
         },
         zAxis: {
             min: 0,
             max: 1,
-            labels:{
+            labels: {
                 align: "center"
             },
             categories: ['Provided', 'Required'],
@@ -587,10 +607,10 @@ function create_total_chart(projects, skills, months) {
             formatter: function() {
 
                 // for skill breakdown
-                if ($("#projectskill-selection").text().trim() == "Breakdown: Skill"){
+                if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
                     req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
-                    
-                    var delta; 
+
+                    var delta;
                     listed_employees = []
 
                     if (req_or_prov != 'Required') {
@@ -615,7 +635,7 @@ function create_total_chart(projects, skills, months) {
                         }
 
                         for (key in listed_employees_dict) {
-                            listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2))
+                            listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2) + ';')
                         }
 
                         delta = this.point.y - required_total_FTE
@@ -631,15 +651,19 @@ function create_total_chart(projects, skills, months) {
 
                     }
 
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + 
-                        listed_employees + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2);
+                    listed_employees_string = ''
+                    for (var i = 0; i < listed_employees.length; i++) {
+                        listed_employees_string += listed_employees[i]
+                    }
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + ';' +
+                        listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2);
                 }
 
                 // for project
-                else{
+                else {
                     req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
-                    
-                    var delta; 
+
+                    var delta;
                     listed_employees = []
 
                     if (req_or_prov != 'Required') {
@@ -647,7 +671,7 @@ function create_total_chart(projects, skills, months) {
                         month_index = months_list.indexOf(this.point.category);
 
                         required_total_FTE = 0
-                        for (var i  = 0; i < skills.length; i++){
+                        for (var i = 0; i < skills.length; i++) {
                             required_total_FTE += req_overall_dict[project][skills[i]][month_index]
                         }
                         delta = this.point.y - required_total_FTE
@@ -656,13 +680,13 @@ function create_total_chart(projects, skills, months) {
                         month_index = months_list.indexOf(this.point.category)
 
                         provided_total_FTE = 0
-                        for (var i  = 0; i < skills.length; i++){
+                        for (var i = 0; i < skills.length; i++) {
                             provided_total_FTE += prov_overall_dict[project][skills[i]][1][month_index]
                         }
                         delta = provided_total_FTE - this.point.y
                     }
 
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + 
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) +
                         '<br/>' + '<b>Delta: </b>' + delta.toFixed(2);
                 }
             }
@@ -675,12 +699,11 @@ function create_total_chart(projects, skills, months) {
             text: 'FTE'
         });
     }
-    
-    if ($("#hypothetical-selection").text().trim() == "Hypothetical On"){
-        chart.setTitle({ text: "Total Projects: " +  projects.join(', ')});
-    }
-    else{
-        chart.setTitle({ text: "Total Projects: " +  real_projects.join(', ')});
+
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        chart.setTitle({ text: "Total Projects: " + projects.join(', ') });
+    } else {
+        chart.setTitle({ text: "Total Projects: " + real_projects.join(', ') });
     }
 }
 
@@ -691,6 +714,8 @@ $('.client, .internal, .product').on('click', function(event) {
         val = $target.attr('data-value'),
         $inp = $target.find('input'),
         idx;
+
+    console.log(projects);
 
     if ((idx = projects.indexOf(val)) > -1) {
         projects.splice(idx, 1);
@@ -953,20 +978,20 @@ Array.prototype.unique = function() {
     return a;
 };
 
-$("#axes li a").click(function(){
-      $("#axes-selection").html($(this).text() + '<span class="caret"></span>');
-      $("#axes-selection").val($(this).text());
-      create_total_chart(projects, skills, months);
+$("#axes li a").click(function() {
+    $("#axes-selection").html($(this).text() + '<span class="caret"></span>');
+    $("#axes-selection").val($(this).text());
+    create_total_chart(projects, skills, months);
 });
 
-$("#projectskill li a").click(function(){
-      $("#projectskill-selection").html($(this).text() + '<span class="caret"></span>');
-      $("#projectskill-selection").val($(this).text());
-      create_total_chart(projects, skills, months);
+$("#projectskill li a").click(function() {
+    $("#projectskill-selection").html($(this).text() + '<span class="caret"></span>');
+    $("#projectskill-selection").val($(this).text());
+    create_total_chart(projects, skills, months);
 });
 
-$("#hypothetical li a").click(function(){
-      $("#hypothetical-selection").html($(this).text() + '<span class="caret"></span>');
-      $("#hypothetical-selection").val($(this).text());
-      create_total_chart(projects, skills, months);
+$("#hypothetical li a").click(function() {
+    $("#hypothetical-selection").html($(this).text() + '<span class="caret"></span>');
+    $("#hypothetical-selection").val($(this).text());
+    create_total_chart(projects, skills, months);
 });

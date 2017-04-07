@@ -1,8 +1,10 @@
 // Initial values
 var projects = ["Merck", "Amex"];
 var skills = ['Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
-var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
+var months = ['April 2017', 'May 2017']
 var num_employees = 73
+var query = '?=';
+
 
 var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
     "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
@@ -27,6 +29,21 @@ var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(6
 
 var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
     'September 2017', 'October 2017'
+]
+
+var people_list = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
+    "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
+    "KNUPP, JEFFREY C", "LEONE, MICHAEL A", "VARSHAVSKY, PETER", "PARKER, JARROD R", "WARDY, JASON I",
+    "DANTON, CRAIG A", "LEV, IGOR", "BOMAN, BLAINE", "KEITER, KENNETH S", "KIRCHER, ASHLEY W", "PRATER, RICHARD T",
+    "WELLS, THOMAS F", "WHITING, OWEN S", "YANG, YANG", "RUBENSTEIN, ABRAHAM E", "ATTAHRI, MOHAMED", "BERNARDIN, JAMES P",
+    "CREIGHTON, JENNIFER L", "GELB, BENJAMIN E", "HAMMER, MELODY A", "ROTH, ALEXANDER I", "MONK, CLINTON D",
+    "KREMLER, GREGORY J", "AHEARN, EVE G", "KERLE, INDIA H", "TEYSSIER, MAUREEN E", "ULMAN, JEREMY W", "WATT, CECILIA I",
+    "KRINSLEY, JEREMY A", "EDGAR, JAMES H", "OUDGHIRI, HICHAM", "PRICE, REBECCA L", "SESSER, BENJAMIN C", "CHAN, KELVIN K",
+    "HALLOCK, SAMANTHA L", "LI, ANN L", "NORTHINGTON, ALEXANDRA E", "SULLAM, JULIANA M", "ESTES, STEPHEN B", "FLOWERS, MICHAEL P",
+    "LEVIN, JONATHAN T", "HORAN, MATTHEW T", "KHALIFA, DONIA A", "SPIEGEL, STEPHANIE B", "AFROOZE, JALEH", "GUTMAN, LEE E",
+    "WHALEN, CAITLIN M", "BENOIT, MICHAEL G", "GONZALEZ, JUAN", "WILSON, JOSHUA B", "IANIUK, OLGA", "PARIKH, URVISH",
+    "WEBB, WILLIAM A", "MADDALA, BHASKAR", "CASAMONA, CARLA", "CHOLAS-WOOD, ALEX", "HENDERSON, PETER", "SHAO, BRYAN",
+    "STANLEY, MICHAEL", "PRAINITO, JOE", "MUKHERJEE, ISHANI", "MIKAELIAN, ALEXIS", "GAO, DAVID", "BECKER, NICK"
 ]
 
 var overall_dict = {}
@@ -113,6 +130,12 @@ function listMajors() {
         spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
         range: 'Sample master data cojo!A2:CB',
     }).then(function(response) {
+
+
+
+
+        console.log(people);
+
         console.log(response);
         var range = response.result;
         // Get the spreadsheet data into required and provided dictionaries
@@ -130,27 +153,28 @@ function listMajors() {
 
 
                 if (!(month in overall_dict)) {
-                    overall_dict[month] = {} 
+                    overall_dict[month] = {}
                 }
 
 
                 for (var j = 7; j < row.length; j++) {
                     var employee_FTE = row[j]
-                    var employee_name = people[j - 7]
-                    
-                    if (!(employee_name in overall_dict[month])){
+                    var employee_name = people_list[j - 7]
+
+                    if (!(employee_name in overall_dict[month])) {
                         overall_dict[month][employee_name] = {}
                     }
 
-                    if (employee_FTE > 0){
+                    if (employee_FTE > 0) {
 
-                        if (project in overall_dict[month][employee_name]){
+                        if (project in overall_dict[month][employee_name]) {
                             overall_dict[month][employee_name][project].push([skill, employee_FTE])
+                        } else {
+                            overall_dict[month][employee_name][project] = [
+                                [skill, employee_FTE]
+                            ]
                         }
-                        else{
-                            overall_dict[month][employee_name][project] = [[skill, employee_FTE]]
-                        }
-                        
+
                     }
                 }
             }
@@ -164,15 +188,18 @@ function listMajors() {
         console.log(skills);
         console.log(months);
 
-        $('#container').append('<table class="table table-striped" id="table"> \
-        <thead><tr><th></th><th>Person</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
-        <tbody></tbody></table>');
 
-        for (person_index in people){
-            create_table(person_index, "April 2017")
-        }
+        var socket = io();
 
-        
+        socket.on('people_query', function(msg) {
+            if (msg != null) {
+                people = msg.split(';');
+            }
+            console.log(people);
+            create_table(people, months)
+        });
+
+
     }, function(response) {
         alert('Error: ' + response.result.error.message);
     });
@@ -180,41 +207,66 @@ function listMajors() {
 
 
 
-function create_table(person_index, month) {
+function create_table(people, months) {
+    for (month_index in months) {
+        month = months[month_index]
+        for (person_index in people) {
 
-    
-    person = people[person_index]
+            person = people[person_index]
 
-    // $('#container').append('<table class="table table-striped" id="table_' + person_index + '"> \
+            $('#container').append('<table class="table table-striped" id=' + month_index + '_' + person_index + '> \
+        <caption>' + month + ': ' + person + '</caption><thead><tr><th>Person</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
+        <tbody></tbody></table>');
 
-    
 
-
-    if (!(Object.keys(overall_dict[month][person]).length === 0 && overall_dict[month][person].constructor === Object)){
-        for (var i in overall_dict[month][person]){
-            length = Object.keys(overall_dict[month][person]).length
-            for (var j in overall_dict[month][person][i]){
-                skill = overall_dict[month][person][i][j][0];
-                FTE = overall_dict[month][person][i][j][1];
-                project = Object.keys(overall_dict[month][person])[j]
-                $('#table tr:last').after('<tr><td>' + month + '</td><td>' + person + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
+            if (!(Object.keys(overall_dict[month][person]).length === 0 && overall_dict[month][person].constructor === Object)) {
+                for (var i in overall_dict[month][person]) {
+                    length = Object.keys(overall_dict[month][person]).length
+                    for (var j in overall_dict[month][person][i]) {
+                        skill = overall_dict[month][person][i][j][0];
+                        FTE = overall_dict[month][person][i][j][1];
+                        project = Object.keys(overall_dict[month][person])[j]
+                        $('#' + month_index + '_' + person_index + ' tr:last').after('<tr><td>' + person + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
+                    }
+                }
+            } else {
+                $('#' + month_index + '_' + person_index + ' tr:last').after('<tr><td>' + person + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
             }
+
         }
-        $('#table tr:last').after('<tr><td></td><td></td><td></td><td></td><td></td></tr>')
     }
-    else{
-        $('#table tr:last').after('<tr><td>' + month + '</td><td>' + person + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
-        $('#table tr:last').after('<tr><td></td><td></td><td></td><td></td><td></td></tr>')
-    }
-    // $.each(people, function(index, value){
-    //     console.log(value);
-        // $("#table_" + month + '_' + people[person_index]).append("<tr><td>" + )
-    // });
-    
 
 };
 
 
+
+// Dropdown for People
+$('#people-dropdown-menu a').on('click', function(event) {
+    var $target = $(event.currentTarget),
+        val = $target.attr('data-value'),
+        $inp = $target.find('input'),
+        idx;
+
+    if (val != undefined) {
+        if ((idx = people.indexOf(val)) > -1) {
+            people.splice(idx, 1);
+            setTimeout(function() { $inp.prop('checked', false) }, 0);
+        } else {
+            people.splice(people_list.indexOf(val), 0, val);
+            setTimeout(function() { $inp.prop('checked', true) }, 0);
+        }
+    }
+
+    $(event.target).blur();
+
+    console.log(people);
+
+    $('#container').html('');
+
+    create_table(people, months);
+
+    return false;
+});
 
 
 // Dropdown for Months
@@ -239,9 +291,40 @@ $('#months-dropdown-menu a').on('click', function(event) {
 
     $('#container').html('');
 
-    for (var i = 0; i < projects.length; i++) {
-        create_chart(projects[i], skills, months);
-    }
+    // for (var i = 0; i < projects.length; i++) {
+    create_table(people, months);
+    // }
 
     return false;
+});
+
+
+
+// Projects
+$("#checkAllPeople").on('click', function(event) {
+    if ($('#checkAllPeople:checked').length < 1) {
+        setTimeout(function() { $('#checkAllPeople').prop('checked', false) }, 0);
+        setTimeout(function() { $('.people').prop('checked', false) }, 0);
+
+        $('#container').html('');
+
+        for (var i = 0; i < people_list.length; i++) {
+            if ((idx = people.indexOf(people_list[i])) > -1) {
+                people.splice(idx, 1);
+            }
+        }
+
+        create_table(people, months);
+    } else {
+        setTimeout(function() { $('#checkAllPeople').prop('checked', true) }, 0);
+        setTimeout(function() { $('.people').prop('checked', true) }, 0);
+
+
+        $('#container').html('');
+
+        people = people.concat(people_list);
+
+        create_table(people, months);
+    }
+    console.log(people);
 });

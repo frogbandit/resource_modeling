@@ -13,3 +13,8 @@ a {
     max-width: 800px;
     margin: 0 auto;
 }
+
+/*.dropdown-menu {
+    width: 300px !important;
+    height: 400px !important;
+}*/
