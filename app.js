@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
 
 // view engine setup
 app.use(express.static(__dirname + '/public'));
@@ -52,16 +55,15 @@ app.use(function(err, req, res, next) {
 });
 
 
-var http = require('http').Server(app)
-var io = require('socket.io')(http);
 
-io.on('connection', function(socket) {
+
+
+server.listen(process.env.PORT || 3000);
+
+io.sockets.on('connection', function(socket) {
     console.log(req_id);
     io.emit('people_query', req_id);
 });
 
-http.listen(process.env.PORT || 3000, function() {
-    console.log('listening on localhost:3000');
-});
 
 module.exports = app;
