@@ -56,8 +56,6 @@ app.use(function(err, req, res, next) {
 
 
 
-
-
 server.listen(process.env.PORT || 3000);
 
 io.sockets.on('connection', function(socket) {

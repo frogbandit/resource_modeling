@@ -189,7 +189,7 @@ function listMajors() {
         console.log(months);
 
 
-        var socket = io();
+        var socket = io.connect();
 
         socket.on('people_query', function(msg) {
             if (msg != null) {
