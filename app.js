@@ -26,8 +26,12 @@ var req_id;
 
 app.get('/people', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/people.html'));
-    // res.send("tagId is set to " + req.query.tagId);
     req_id = req.query.people;
+});
+
+app.get('/projects', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/projects.html'));
+    req_id = req.query.projects;
 });
 
 

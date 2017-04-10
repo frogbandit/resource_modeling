@@ -1,7 +1,7 @@
 // Initial values
-var projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-// var real_projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var client_projects = ["Merck", "Amex", "Celgene"]
+var projects = ["Merck", "Amex", "Celgene", "Two Sigma", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
+var real_projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
+var client_projects = ["Merck", "Amex", "Celgene", "Two Sigma"]
 var internal_projects = ["Marketing Core", "General Admin Core"]
 var product_projects = ["Concourse Core", "Assembly Core", "Foundations Core"]
 
@@ -155,7 +155,6 @@ function getData() {
                         }
 
                         real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
 
                     } else {
                         var skill_dict = {};
@@ -167,7 +166,6 @@ function getData() {
                         }
 
                         real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
                     }
 
                     // add provided FTE and names of employees to a dictionary of skills within a dictionary of projects
@@ -199,7 +197,6 @@ function getData() {
                         }
 
                         real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
                     } else {
                         var skill_dict = {};
 
@@ -229,7 +226,6 @@ function getData() {
                         }
 
                         real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
                     }
                 }
 
@@ -334,17 +330,11 @@ function getData() {
         }
 
         // just to check which projects, skills, months the user selected
+        console.log(projects);
         console.log(skills);
         console.log(months);
 
         create_total_chart(projects, skills, months);
-
-        // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-        //     create_total_chart(projects, skills, months);
-        // }
-        // else{
-        //     create_total_chart(real_projects, skills, months);
-        // }   
 
     }, function(response) {
         alert('Error: ' + response.result.error.message);
@@ -371,8 +361,8 @@ function create_total_chart(projects, skills, months) {
             colors: colors_list.slice(0, skills.length)
         })
 
-        // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-            // console.log('Hypothetical On')
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            console.log('Hypothetical On')
 
             // Prepare total provided column data
             for (var i = 0; i < skills.length; i++) {
@@ -411,51 +401,51 @@ function create_total_chart(projects, skills, months) {
                     showInLegend: false
                 });
             }
-        // } else {
-        //     console.log('Hypothetical Off')
-        //         // Prepare total provided column data
-        //     for (var i = 0; i < skills.length; i++) {
-        //         data_list = []
+        } else {
+            console.log('Hypothetical Off')
+                // Prepare total provided column data
+            for (var i = 0; i < skills.length; i++) {
+                data_list = []
 
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_projects = 0
-        //             for (var k = 0; k < real_projects.length; k++) {
-        //                 sum_projects += real_prov_overall_dict[real_projects[k]][skills[i]][1][month_indices[j]]
-        //             }
-        //             data_list.push(sum_projects)
-        //         }
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_projects = 0
+                    for (var k = 0; k < real_projects.length; k++) {
+                        sum_projects += real_prov_overall_dict[real_projects[k]][skills[i]][1][month_indices[j]]
+                    }
+                    data_list.push(sum_projects)
+                }
 
-        //         series_list.push({
-        //             data: data_list,
-        //             name: skills[i],
-        //             stack: 0
-        //         });
-        //     }
+                series_list.push({
+                    data: data_list,
+                    name: skills[i],
+                    stack: 0
+                });
+            }
 
-        //     // Prepare total required column data
-        //     for (var i = 0; i < skills.length; i++) {
-        //         data_list = []
+            // Prepare total required column data
+            for (var i = 0; i < skills.length; i++) {
+                data_list = []
 
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_projects = 0
-        //             for (var k = 0; k < real_projects.length; k++) {
-        //                 sum_projects += real_req_overall_dict[real_projects[k]][skills[i]][month_indices[j]]
-        //             }
-        //             data_list.push(sum_projects)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: "Required " + skills[i],
-        //             stack: 1,
-        //             showInLegend: false
-        //         });
-        //     }
-        // }
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_projects = 0
+                    for (var k = 0; k < real_projects.length; k++) {
+                        sum_projects += real_req_overall_dict[real_projects[k]][skills[i]][month_indices[j]]
+                    }
+                    data_list.push(sum_projects)
+                }
+                series_list.push({
+                    data: data_list,
+                    name: "Required " + skills[i],
+                    stack: 1,
+                    showInLegend: false
+                });
+            }
+        }
     }
     // if breakdown projects is selected
     else {
-        // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-            // console.log("Hypothetical On")
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            console.log("Hypothetical On")
 
             Highcharts.setOptions({
                 colors: colors_list.slice(0, projects.length)
@@ -495,100 +485,56 @@ function create_total_chart(projects, skills, months) {
                     showInLegend: false
                 })
             }
-        // } else {
-        //     console.log("Hypothetical Off")
+        } else {
+            console.log("Hypothetical Off")
 
-        //     Highcharts.setOptions({
-        //             colors: colors_list.slice(0, real_projects.length)
-        //         })
-        //         // Prepare total provided column data
-        //     for (var i = 0; i < real_projects.length; i++) {
-        //         data_list = []
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_skills = 0
-        //             for (var k = 0; k < skills.length; k++) {
-        //                 sum_skills += real_prov_overall_dict[real_projects[i]][skills[k]][1][month_indices[j]]
-        //             }
-        //             data_list.push(sum_skills)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: real_projects[i],
-        //             stack: 0
-        //         })
-        //     }
+            Highcharts.setOptions({
+                    colors: colors_list.slice(0, real_projects.length)
+                })
+                // Prepare total provided column data
+            for (var i = 0; i < real_projects.length; i++) {
+                data_list = []
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_skills = 0
+                    for (var k = 0; k < skills.length; k++) {
+                        sum_skills += real_prov_overall_dict[real_projects[i]][skills[k]][1][month_indices[j]]
+                    }
+                    data_list.push(sum_skills)
+                }
+                series_list.push({
+                    data: data_list,
+                    name: real_projects[i],
+                    stack: 0
+                })
+            }
 
-        //     // Prepare total required column data
-        //     for (var i = 0; i < real_projects.length; i++) {
-        //         data_list = []
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_skills = 0
-        //             for (var k = 0; k < skills.length; k++) {
-        //                 sum_skills += real_req_overall_dict[real_projects[i]][skills[k]][month_indices[j]]
-        //             }
-        //             data_list.push(sum_skills)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: "Required " + real_projects[i],
-        //             stack: 1,
-        //             showInLegend: false
-        //         })
-        //     }
-        // }
-    }
+            // Prepare total required column data
+            for (var i = 0; i < real_projects.length; i++) {
+                data_list = []
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_skills = 0
+                    for (var k = 0; k < skills.length; k++) {
+                        sum_skills += real_req_overall_dict[real_projects[i]][skills[k]][month_indices[j]]
+                    }
+                    data_list.push(sum_skills)
+                }
+                series_list.push({
+                    data: data_list,
+                    name: "Required " + real_projects[i],
+                    stack: 1,
+                    showInLegend: false
+                })
+            }
+        }
+    }	
+
+    console.log('asdf');
 
     chart = Highcharts.chart("total_chart", {
-        chart: {
-            type: 'column',
-            options3d: {
-                enabled: true,
-                alpha: 30,
-                beta: 40,
-                depth: 110
-            },
-            events: {
-                load: function() {
-                    this.myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-                }
-            }
-        },
+
         plotOptions: {
-            column: {
-                depth: 40,
-                stacking: true,
-                grouping: false,
-                groupPadding: 0.2,
-                groupZPadding: 10,
-                pointPadding: 0.1,
-                borderWidth: 0,
-                events: {
-                    legendItemClick: function() {
-                        return false;
-                    }
-                },
-                softThreshold: false
-            },
             series: {
-                events: {
-                    click: function(evt) {
-                        tooltip_list = $('.highcharts-tooltip tspan').text().split(';');
-
-                        query_string = ''
-                        for (var i = 0; i < tooltip_list.length; i++) {
-                            if (tooltip_list[i].includes(',')) {
-                                name = tooltip_list[i].split(':').slice(0, 1)
-                                query_string += (name + ';');
-                            }
-                        }
-
-                        if (query_string != '') {
-                            location.href = '/people?people=' + query_string.substring(0, query_string.length - 1);
-                        }
-
-                    }
-                }
-
+                pointStart: 2010
             }
         },
         series: series_list,
@@ -599,17 +545,9 @@ function create_total_chart(projects, skills, months) {
             }
         },
         yAxis: {
-            min: 0,
-            minRange: 0.1
-
-        },
-        zAxis: {
-            min: 0,
-            max: 1,
-            labels: {
-                align: "center"
-            },
-            categories: ['Provided', 'Required'],
+            title: {
+            text: 'FTE'
+        	}
         },
         credits: {
             enabled: false
@@ -707,13 +645,11 @@ function create_total_chart(projects, skills, months) {
 
     });
 
-    if (chart.yAxis[0].axisTitle) {
-        chart.yAxis[0].axisTitle.attr({
-            text: 'FTE'
-        });
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        chart.setTitle({ text: "Total Projects: " + projects.join(', ') });
+    } else {
+        chart.setTitle({ text: "Total Projects: " + real_projects.join(', ') });
     }
-
-    chart.setTitle({ text: "Total Projects: " + projects.join(', ') });
 }
 
 
