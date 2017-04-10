@@ -234,7 +234,7 @@ function getData() {
                 }
 
                 //if the project is hypothetical
-                else { 
+                else {
                     // do the same thing with the hypothetical dictionaries instead
                     if (project in req_overall_dict) {
                         var skill_dict = req_overall_dict[project];
@@ -339,10 +339,9 @@ function getData() {
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, skills, months);
-        }
-        else{
+        } else {
             create_total_chart(real_projects, skills, months);
-        }   
+        }
 
     }, function(response) {
         alert('Error: ' + response.result.error.message);
@@ -370,45 +369,45 @@ function create_total_chart(projects, skills, months) {
         })
 
         // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-            // console.log('Hypothetical On')
+        // console.log('Hypothetical On')
 
-            // Prepare total provided column data
-            for (var i = 0; i < skills.length; i++) {
-                data_list = []
+        // Prepare total provided column data
+        for (var i = 0; i < skills.length; i++) {
+            data_list = []
 
-                for (var j = 0; j < month_indices.length; j++) {
-                    sum_projects = 0
-                    for (var k = 0; k < projects.length; k++) {
-                        sum_projects += prov_overall_dict[projects[k]][skills[i]][1][month_indices[j]]
-                    }
-                    data_list.push(sum_projects)
+            for (var j = 0; j < month_indices.length; j++) {
+                sum_projects = 0
+                for (var k = 0; k < projects.length; k++) {
+                    sum_projects += prov_overall_dict[projects[k]][skills[i]][1][month_indices[j]]
                 }
-
-                series_list.push({
-                    data: data_list,
-                    name: skills[i],
-                    stack: 0
-                });
+                data_list.push(sum_projects)
             }
 
-            // Prepare total required column data
-            for (var i = 0; i < skills.length; i++) {
-                data_list = []
+            series_list.push({
+                data: data_list,
+                name: skills[i],
+                stack: 0
+            });
+        }
 
-                for (var j = 0; j < month_indices.length; j++) {
-                    sum_projects = 0
-                    for (var k = 0; k < projects.length; k++) {
-                        sum_projects += req_overall_dict[projects[k]][skills[i]][month_indices[j]]
-                    }
-                    data_list.push(sum_projects)
+        // Prepare total required column data
+        for (var i = 0; i < skills.length; i++) {
+            data_list = []
+
+            for (var j = 0; j < month_indices.length; j++) {
+                sum_projects = 0
+                for (var k = 0; k < projects.length; k++) {
+                    sum_projects += req_overall_dict[projects[k]][skills[i]][month_indices[j]]
                 }
-                series_list.push({
-                    data: data_list,
-                    name: "Required " + skills[i],
-                    stack: 1,
-                    showInLegend: false
-                });
+                data_list.push(sum_projects)
             }
+            series_list.push({
+                data: data_list,
+                name: "Required " + skills[i],
+                stack: 1,
+                showInLegend: false
+            });
+        }
         // } else {
         //     console.log('Hypothetical Off')
         //         // Prepare total provided column data
@@ -453,46 +452,46 @@ function create_total_chart(projects, skills, months) {
     // if breakdown projects is selected
     else {
         // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-            // console.log("Hypothetical On")
+        // console.log("Hypothetical On")
 
-            Highcharts.setOptions({
-                colors: colors_list.slice(0, projects.length)
+        Highcharts.setOptions({
+            colors: colors_list.slice(0, projects.length)
+        })
+
+        // Prepare total provided column data
+        for (var i = 0; i < projects.length; i++) {
+            data_list = []
+            for (var j = 0; j < month_indices.length; j++) {
+                sum_skills = 0
+                for (var k = 0; k < skills.length; k++) {
+                    sum_skills += prov_overall_dict[projects[i]][skills[k]][1][month_indices[j]]
+                }
+                data_list.push(sum_skills)
+            }
+            series_list.push({
+                data: data_list,
+                name: projects[i],
+                stack: 0
             })
+        }
 
-            // Prepare total provided column data
-            for (var i = 0; i < projects.length; i++) {
-                data_list = []
-                for (var j = 0; j < month_indices.length; j++) {
-                    sum_skills = 0
-                    for (var k = 0; k < skills.length; k++) {
-                        sum_skills += prov_overall_dict[projects[i]][skills[k]][1][month_indices[j]]
-                    }
-                    data_list.push(sum_skills)
+        // Prepare total required column data
+        for (var i = 0; i < projects.length; i++) {
+            data_list = []
+            for (var j = 0; j < month_indices.length; j++) {
+                sum_skills = 0
+                for (var k = 0; k < skills.length; k++) {
+                    sum_skills += req_overall_dict[projects[i]][skills[k]][month_indices[j]]
                 }
-                series_list.push({
-                    data: data_list,
-                    name: projects[i],
-                    stack: 0
-                })
+                data_list.push(sum_skills)
             }
-
-            // Prepare total required column data
-            for (var i = 0; i < projects.length; i++) {
-                data_list = []
-                for (var j = 0; j < month_indices.length; j++) {
-                    sum_skills = 0
-                    for (var k = 0; k < skills.length; k++) {
-                        sum_skills += req_overall_dict[projects[i]][skills[k]][month_indices[j]]
-                    }
-                    data_list.push(sum_skills)
-                }
-                series_list.push({
-                    data: data_list,
-                    name: "Required " + projects[i],
-                    stack: 1,
-                    showInLegend: false
-                })
-            }
+            series_list.push({
+                data: data_list,
+                name: "Required " + projects[i],
+                stack: 1,
+                showInLegend: false
+            })
+        }
         // } else {
         //     console.log("Hypothetical Off")
 

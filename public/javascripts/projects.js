@@ -250,7 +250,7 @@ function listMajors() {
                 }
 
                 //if the project is hypothetical
-                else { 
+                else {
                     // do the same thing with the hypothetical dictionaries instead
                     if (project in req_overall_dict) {
                         var skill_dict = req_overall_dict[project];
@@ -356,6 +356,17 @@ function listMajors() {
 
         create_table(projects, skills, months)
 
+        $(function() {
+            $("[data-toggle='tooltip']").tooltip();
+        });
+
+
+        $('td').click(function() {
+            console.log('hi');
+            console.log(this);
+
+        });
+
 
     }, function(response) {
         alert('Error: ' + response.result.error.message);
@@ -367,13 +378,13 @@ function listMajors() {
 function create_table(projects, skills, months) {
 
 
-    for (project_index in projects){
+    for (project_index in projects) {
         project = projects[project_index]
 
         table_string = '<table class="table table-striped" id=' + project_index + '> \
-        <caption>'+ project + '</caption><thead><tr><th>Skills</th>'
+        <caption>' + project + '</caption><thead><tr><th>Skills</th>'
 
-        for (month_index in months){
+        for (month_index in months) {
             month = months[month_index]
             table_string += ('<th>' + month + '</th>')
         }
@@ -384,34 +395,37 @@ function create_table(projects, skills, months) {
 
 
 
-        for (var i = 0; i < skills.length; i ++){
+        for (var i = 0; i < skills.length; i++) {
             skill = skills[i]
 
-            if (skill in real_prov_overall_dict[project]){
+            if (skill in real_prov_overall_dict[project]) {
 
-                month_string = '<tr><td rowspan="2">' + skill + '</td>' 
-                for (month_index in months){
+                month_string = '<tr><td rowspan="2">' + skill + '</td>'
+                for (month_index in months) {
                     provided_FTE = real_prov_overall_dict[project][skill][1][month_index]
-                    month_string += ('<td>' + provided_FTE + '</td>')
+                    month_string += ('<td data-original-title="Provided" data-container="body" data-toggle="tooltip" data-placement="left">' + provided_FTE + '</td>')
                 }
                 month_string += '</tr>'
 
-                month_string += '<tr>' 
-                for (month_index in months){
+                month_string += '<tr>'
+                for (month_index in months) {
                     required_FTE = real_req_overall_dict[project][skill][month_index]
-                    month_string += ('<td>' + required_FTE + '</td>')
+                    month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + required_FTE + '</td>')
                 }
                 month_string += '</tr>'
 
 
                 $('#' + project_index + ' tr:last').after(month_string);
-                
+
             }
         }
 
     }
 
 };
+
+
+
 
 
 
@@ -444,7 +458,3 @@ $('#months-dropdown-menu a').on('click', function(event) {
 
     return false;
 });
-
-
-
-
