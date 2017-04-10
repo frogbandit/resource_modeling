@@ -34,6 +34,11 @@ app.get('/projects', function(req, res) {
     req_id = req.query.projects;
 });
 
+app.get('/linegraph', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/linegraph.html'));
+    req_id = req.query.projects;
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
