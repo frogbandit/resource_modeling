@@ -336,6 +336,7 @@ function getData() {
         // just to check which projects, skills, months the user selected
         console.log(skills);
         console.log(months);
+        $('#container').html('');
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, skills, months);
@@ -579,8 +580,23 @@ function create_total_chart(projects, skills, months) {
                             }
                         }
 
+                        
                         if (query_string != '') {
                             location.href = '/people?people=' + query_string.substring(0, query_string.length - 1);
+                        }
+                        else{
+                            console.log(evt.point.category);
+                            console.log(this.name);
+                            console.log(projects);
+
+                            if (containsObject(this.name, projects)){
+                                query_string = this.name + ';' +  evt.point.category
+
+                                if (query_string != '') {
+                                    location.href = '/projects?projects=' + query_string.substring(0, query_string.length);
+                                }
+                            }
+
                         }
 
                     }
@@ -984,20 +1000,35 @@ Array.prototype.unique = function() {
     return a;
 };
 
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 $("#axes li a").click(function() {
     $("#axes-selection").html($(this).text() + '<span class="caret"></span>');
     $("#axes-selection").val($(this).text());
+    $('#container').html('');
     create_total_chart(projects, skills, months);
 });
 
 $("#projectskill li a").click(function() {
     $("#projectskill-selection").html($(this).text() + '<span class="caret"></span>');
     $("#projectskill-selection").val($(this).text());
+    $('#container').html('');
     create_total_chart(projects, skills, months);
 });
 
 $("#hypothetical li a").click(function() {
     $("#hypothetical-selection").html($(this).text() + '<span class="caret"></span>');
     $("#hypothetical-selection").val($(this).text());
+    $('#container').html('');
     create_total_chart(projects, skills, months);
 });

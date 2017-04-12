@@ -137,11 +137,6 @@ function listMajors() {
         range: 'Sample master data cojo!A2:CB',
     }).then(function(response) {
 
-
-
-
-        console.log(people);
-
         console.log(response);
         var range = response.result;
         // Get the spreadsheet data into required and provided dictionaries
@@ -354,17 +349,18 @@ function listMajors() {
         console.log(months);
 
 
-        create_table(projects, skills, months)
+        var socket = io.connect();
 
-        $(function() {
-            $("[data-toggle='tooltip']").tooltip();
-        });
+        socket.on('query', function(msg) {
+            if (msg != null) {
+                projects = [msg.split(';')[0]];
+                months = [msg.split(';')[1]]
+            }
+            create_table(projects, skills, months)
 
-
-        $('td').click(function() {
-            console.log('hi');
-            console.log(this);
-
+            $(function() {
+                $("[data-toggle='tooltip']").tooltip();
+            });
         });
 
 
@@ -392,8 +388,6 @@ function create_table(projects, skills, months) {
         table_string += ('</tr></thead><tbody></tbody></table>')
 
         $('#container').append(table_string);
-
-
 
         for (var i = 0; i < skills.length; i++) {
             skill = skills[i]
@@ -426,10 +420,6 @@ function create_table(projects, skills, months) {
 
 
 
-
-
-
-
 // Dropdown for Months
 $('#months-dropdown-menu a').on('click', function(event) {
 
@@ -442,7 +432,7 @@ $('#months-dropdown-menu a').on('click', function(event) {
         months.splice(idx, 1);
         setTimeout(function() { $inp.prop('checked', false) }, 0);
     } else {
-        months.push(val);
+        months.splice(months_list.indexOf(val), 0, val);
         setTimeout(function() { $inp.prop('checked', true) }, 0);
     }
 

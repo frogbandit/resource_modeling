@@ -36,7 +36,7 @@ app.get('/projects', function(req, res) {
 
 app.get('/linegraph', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/linegraph.html'));
-    req_id = req.query.projects;
+    req_id = req.query.linegraph;
 });
 
 
@@ -66,7 +66,7 @@ var io = require('socket.io')(http);
 
 io.on('connection', function(socket) {
     console.log(req_id);
-    io.emit('people_query', req_id);
+    io.emit('query', req_id);
 });
 
 var port = process.env.PORT || 3000;

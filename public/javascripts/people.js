@@ -5,7 +5,6 @@ var months = ['April 2017', 'May 2017']
 var num_employees = 73
 var query = '?=';
 
-
 var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
     "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
     "KNUPP, JEFFREY C", "LEONE, MICHAEL A", "VARSHAVSKY, PETER", "PARKER, JARROD R", "WARDY, JASON I",
@@ -131,11 +130,6 @@ function listMajors() {
         range: 'Sample master data cojo!A2:CB',
     }).then(function(response) {
 
-
-
-
-        console.log(people);
-
         console.log(response);
         var range = response.result;
         // Get the spreadsheet data into required and provided dictionaries
@@ -191,12 +185,31 @@ function listMajors() {
 
         var socket = io.connect();
 
-        socket.on('people_query', function(msg) {
+        socket.on('query', function(msg) {
             if (msg != null) {
                 people = msg.split(';');
             }
-            console.log(people);
             create_table(people, months)
+        });
+
+
+        var $rows = $('#container');
+
+        $('#srch-term').keyup(function() {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            children = $rows.children()
+            for (var i = 0; i < children.length; i++) {
+                child = children[i]
+                caption = child.getElementsByTagName("caption")
+                table = document.getElementById(child.id);
+
+                if ((caption[0].innerHTML.toLowerCase()).indexOf(val) > -1) {
+                    table.style.display = "";
+                } else {
+                    table.style.display = "none";
+                }
+            }
         });
 
 
@@ -204,7 +217,6 @@ function listMajors() {
         alert('Error: ' + response.result.error.message);
     });
 }
-
 
 
 function create_table(people, months) {
@@ -235,9 +247,7 @@ function create_table(people, months) {
 
         }
     }
-
 };
-
 
 
 // Dropdown for People
@@ -281,7 +291,7 @@ $('#months-dropdown-menu a').on('click', function(event) {
         months.splice(idx, 1);
         setTimeout(function() { $inp.prop('checked', false) }, 0);
     } else {
-        months.push(val);
+        months.splice(months_list.indexOf(val), 0, val);
         setTimeout(function() { $inp.prop('checked', true) }, 0);
     }
 
@@ -291,9 +301,7 @@ $('#months-dropdown-menu a').on('click', function(event) {
 
     $('#container').html('');
 
-    // for (var i = 0; i < projects.length; i++) {
     create_table(people, months);
-    // }
 
     return false;
 });
