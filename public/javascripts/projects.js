@@ -363,6 +363,25 @@ function listMajors() {
             });
         });
 
+        var $rows = $('#container');
+
+        $('#srch-term').keyup(function() {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            children = $rows.children()
+            for (var i = 0; i < children.length; i++) {
+                child = children[i]
+                caption = child.getElementsByTagName("caption")
+                table = document.getElementById(child.id);
+
+                if ((caption[0].innerHTML.toLowerCase()).indexOf(val) > -1) {
+                    table.style.display = "";
+                } else {
+                    table.style.display = "none";
+                }
+            }
+        });
+
 
     }, function(response) {
         alert('Error: ' + response.result.error.message);
