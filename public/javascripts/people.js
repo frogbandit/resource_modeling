@@ -220,17 +220,17 @@ function listMajors() {
 
 
 function create_table(people, months) {
-    for (month_index in months) {
-        month = months[month_index]
-        for (person_index in people) {
-
-            person = people[person_index]
-
-            $('#container').append('<table class="table table-striped" id=' + month_index + '_' + person_index + '> \
-        <caption>' + month + ': ' + person + '</caption><thead><tr><th>Person</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
+    
+    for (person_index in people) {
+        
+        person = people[person_index]
+        $('#container').append('<table class="table table-striped" id=' + person_index + '> \
+        <caption>' + person + '</caption><thead><tr><th>Month</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
         <tbody></tbody></table>');
 
-
+        for (month_index in months) {
+            month = months[month_index]
+            
             if (!(Object.keys(overall_dict[month][person]).length === 0 && overall_dict[month][person].constructor === Object)) {
                 for (var i in overall_dict[month][person]) {
                     length = Object.keys(overall_dict[month][person]).length
@@ -238,11 +238,11 @@ function create_table(people, months) {
                         skill = overall_dict[month][person][i][j][0];
                         FTE = overall_dict[month][person][i][j][1];
                         project = Object.keys(overall_dict[month][person])[j]
-                        $('#' + month_index + '_' + person_index + ' tr:last').after('<tr><td>' + person + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
+                        $('#' + person_index + ' tr:last').after('<tr><td>' + month + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
                     }
                 }
             } else {
-                $('#' + month_index + '_' + person_index + ' tr:last').after('<tr><td>' + person + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
+                $('#' + person_index + ' tr:last').after('<tr><td>' + month + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
             }
 
         }
