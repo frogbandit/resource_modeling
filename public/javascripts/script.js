@@ -1,7 +1,7 @@
 // Initial values
 var projects = ["Merck", "Amex", "Celgene", "Two Sigma", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
 var real_projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var client_projects = ["Merck", "Amex", "Celgene", "Two Sigma"]
+var client_projects = ["Merck", "Amex", "Celgene"]
 var internal_projects = ["Marketing Core", "General Admin Core"]
 var product_projects = ["Concourse Core", "Assembly Core", "Foundations Core"]
 
@@ -339,9 +339,9 @@ function getData() {
         $('#container').html('');
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-            create_total_chart(projects, skills, months);
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
         } else {
-            create_total_chart(real_projects, skills, months);
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
         }
 
     }, function(response) {
@@ -349,7 +349,7 @@ function getData() {
     });
 }
 
-function create_total_chart(projects, skills, months) {
+function create_total_chart(p, prov, req, skills, months) {
     $('#container').append('<div style="height: 800px" id="total_chart"></div>');
 
     series_list = []
@@ -361,7 +361,6 @@ function create_total_chart(projects, skills, months) {
     }
 
 
-
     // if skills is selected:     
     if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
 
@@ -369,17 +368,14 @@ function create_total_chart(projects, skills, months) {
             colors: colors_list.slice(0, skills.length)
         })
 
-        // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-        // console.log('Hypothetical On')
-
         // Prepare total provided column data
         for (var i = 0; i < skills.length; i++) {
             data_list = []
 
             for (var j = 0; j < month_indices.length; j++) {
                 sum_projects = 0
-                for (var k = 0; k < projects.length; k++) {
-                    sum_projects += prov_overall_dict[projects[k]][skills[i]][1][month_indices[j]]
+                for (var k = 0; k < p.length; k++) {
+                    sum_projects += prov[p[k]][skills[i]][1][month_indices[j]]
                 }
                 data_list.push(sum_projects)
             }
@@ -397,8 +393,8 @@ function create_total_chart(projects, skills, months) {
 
             for (var j = 0; j < month_indices.length; j++) {
                 sum_projects = 0
-                for (var k = 0; k < projects.length; k++) {
-                    sum_projects += req_overall_dict[projects[k]][skills[i]][month_indices[j]]
+                for (var k = 0; k < p.length; k++) {
+                    sum_projects += req[p[k]][skills[i]][month_indices[j]]
                 }
                 data_list.push(sum_projects)
             }
@@ -409,131 +405,48 @@ function create_total_chart(projects, skills, months) {
                 showInLegend: false
             });
         }
-        // } else {
-        //     console.log('Hypothetical Off')
-        //         // Prepare total provided column data
-        //     for (var i = 0; i < skills.length; i++) {
-        //         data_list = []
-
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_projects = 0
-        //             for (var k = 0; k < real_projects.length; k++) {
-        //                 sum_projects += real_prov_overall_dict[real_projects[k]][skills[i]][1][month_indices[j]]
-        //             }
-        //             data_list.push(sum_projects)
-        //         }
-
-        //         series_list.push({
-        //             data: data_list,
-        //             name: skills[i],
-        //             stack: 0
-        //         });
-        //     }
-
-        //     // Prepare total required column data
-        //     for (var i = 0; i < skills.length; i++) {
-        //         data_list = []
-
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_projects = 0
-        //             for (var k = 0; k < real_projects.length; k++) {
-        //                 sum_projects += real_req_overall_dict[real_projects[k]][skills[i]][month_indices[j]]
-        //             }
-        //             data_list.push(sum_projects)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: "Required " + skills[i],
-        //             stack: 1,
-        //             showInLegend: false
-        //         });
-        //     }
-        // }
     }
     // if breakdown projects is selected
     else {
-        // if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
-        // console.log("Hypothetical On")
 
         Highcharts.setOptions({
-            colors: colors_list.slice(0, projects.length)
+            colors: colors_list.slice(0, p.length)
         })
 
         // Prepare total provided column data
-        for (var i = 0; i < projects.length; i++) {
+        for (var i = 0; i < p.length; i++) {
             data_list = []
             for (var j = 0; j < month_indices.length; j++) {
                 sum_skills = 0
                 for (var k = 0; k < skills.length; k++) {
-                    sum_skills += prov_overall_dict[projects[i]][skills[k]][1][month_indices[j]]
+                    sum_skills += prov[p[i]][skills[k]][1][month_indices[j]]
                 }
                 data_list.push(sum_skills)
             }
             series_list.push({
                 data: data_list,
-                name: projects[i],
+                name: p[i],
                 stack: 0
             })
         }
 
         // Prepare total required column data
-        for (var i = 0; i < projects.length; i++) {
+        for (var i = 0; i < p.length; i++) {
             data_list = []
             for (var j = 0; j < month_indices.length; j++) {
                 sum_skills = 0
                 for (var k = 0; k < skills.length; k++) {
-                    sum_skills += req_overall_dict[projects[i]][skills[k]][month_indices[j]]
+                    sum_skills += req[p[i]][skills[k]][month_indices[j]]
                 }
                 data_list.push(sum_skills)
             }
             series_list.push({
                 data: data_list,
-                name: "Required " + projects[i],
+                name: "Required " + p[i],
                 stack: 1,
                 showInLegend: false
             })
         }
-        // } else {
-        //     console.log("Hypothetical Off")
-
-        //     Highcharts.setOptions({
-        //             colors: colors_list.slice(0, real_projects.length)
-        //         })
-        //         // Prepare total provided column data
-        //     for (var i = 0; i < real_projects.length; i++) {
-        //         data_list = []
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_skills = 0
-        //             for (var k = 0; k < skills.length; k++) {
-        //                 sum_skills += real_prov_overall_dict[real_projects[i]][skills[k]][1][month_indices[j]]
-        //             }
-        //             data_list.push(sum_skills)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: real_projects[i],
-        //             stack: 0
-        //         })
-        //     }
-
-        //     // Prepare total required column data
-        //     for (var i = 0; i < real_projects.length; i++) {
-        //         data_list = []
-        //         for (var j = 0; j < month_indices.length; j++) {
-        //             sum_skills = 0
-        //             for (var k = 0; k < skills.length; k++) {
-        //                 sum_skills += real_req_overall_dict[real_projects[i]][skills[k]][month_indices[j]]
-        //             }
-        //             data_list.push(sum_skills)
-        //         }
-        //         series_list.push({
-        //             data: data_list,
-        //             name: "Required " + real_projects[i],
-        //             stack: 1,
-        //             showInLegend: false
-        //         })
-        //     }
-        // }
     }
 
     chart = Highcharts.chart("total_chart", {
@@ -587,9 +500,9 @@ function create_total_chart(projects, skills, months) {
                         else{
                             console.log(evt.point.category);
                             console.log(this.name);
-                            console.log(projects);
+                            console.log(p);
 
-                            if (containsObject(this.name, projects)){
+                            if (containsObject(this.name, p)){
                                 query_string = this.name + ';' +  evt.point.category
 
                                 if (query_string != '') {
@@ -644,9 +557,9 @@ function create_total_chart(projects, skills, months) {
                         month_index = months_list.indexOf(this.point.category);
                         listed_employees_dict = {}
                         required_total_FTE = 0
-                        for (var i = 0; i < projects.length; i++) {
-                            required_total_FTE += req_overall_dict[projects[i]][skill][month_index]
-                            employee_FTEs = prov_overall_dict[projects[i]][skill][0][month_index]
+                        for (var i = 0; i < p.length; i++) {
+                            required_total_FTE += req[p[i]][skill][month_index]
+                            employee_FTEs = prov[p[i]][skill][0][month_index]
                             for (var j = 0; j < employee_FTEs.length; j++) {
                                 employee_FTE = parseFloat(employee_FTEs[j][1])
                                 employee_name = employee_FTEs[j][0]
@@ -670,8 +583,8 @@ function create_total_chart(projects, skills, months) {
                         month_index = months_list.indexOf(this.point.category)
 
                         provided_total_FTE = 0
-                        for (var i = 0; i < projects.length; i++) {
-                            provided_total_FTE += prov_overall_dict[projects[i]][skill][1][month_index]
+                        for (var i = 0; i < p.length; i++) {
+                            provided_total_FTE += prov[p[i]][skill][1][month_index]
                         }
                         delta = provided_total_FTE - this.point.y
 
@@ -698,7 +611,7 @@ function create_total_chart(projects, skills, months) {
 
                         required_total_FTE = 0
                         for (var i = 0; i < skills.length; i++) {
-                            required_total_FTE += req_overall_dict[project][skills[i]][month_index]
+                            required_total_FTE += req[project][skills[i]][month_index]
                         }
                         delta = this.point.y - required_total_FTE
                     } else {
@@ -707,7 +620,7 @@ function create_total_chart(projects, skills, months) {
 
                         provided_total_FTE = 0
                         for (var i = 0; i < skills.length; i++) {
-                            provided_total_FTE += prov_overall_dict[project][skills[i]][1][month_index]
+                            provided_total_FTE += prov[project][skills[i]][1][month_index]
                         }
                         delta = provided_total_FTE - this.point.y
                     }
@@ -726,7 +639,7 @@ function create_total_chart(projects, skills, months) {
         });
     }
 
-    chart.setTitle({ text: "Total Projects: " + projects.join(', ') });
+    chart.setTitle({ text: "Total Projects: " + p.join(', ') });
 }
 
 
@@ -753,7 +666,11 @@ $('.client, .internal, .product').on('click', function(event) {
 
     $('#container').html('');
 
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 
     return false;
 });
@@ -781,7 +698,11 @@ $('.commercial, .analytics, .operations').on('click', function(event) {
 
     $('#container').html('');
 
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 
     return false;
 });
@@ -809,7 +730,11 @@ $('#months-dropdown-menu a').on('click', function(event) {
 
     $('#container').html('');
 
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 
     return false;
 });
@@ -829,7 +754,12 @@ $("#checkAllClient").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
+
     } else {
         setTimeout(function() { $('#checkAllClient').prop('checked', true) }, 0);
         setTimeout(function() { $('.client').prop('checked', true) }, 0);
@@ -839,7 +769,11 @@ $("#checkAllClient").on('click', function(event) {
 
         projects = projects.concat(client_projects).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(projects);
 });
@@ -857,7 +791,11 @@ $("#checkAllInternal").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     } else {
         setTimeout(function() { $('#checkAllInternal').prop('checked', true) }, 0);
         setTimeout(function() { $('.internal').prop('checked', true) }, 0);
@@ -867,7 +805,11 @@ $("#checkAllInternal").on('click', function(event) {
 
         projects = projects.concat(internal_projects).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(projects);
 });
@@ -885,7 +827,11 @@ $("#checkAllProduct").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     } else {
         setTimeout(function() { $('#checkAllProduct').prop('checked', true) }, 0);
         setTimeout(function() { $('.product').prop('checked', true) }, 0);
@@ -895,7 +841,11 @@ $("#checkAllProduct").on('click', function(event) {
 
         projects = projects.concat(product_projects).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(projects);
 });
@@ -915,7 +865,11 @@ $("#checkAllCommercial").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     } else {
         setTimeout(function() { $('#checkAllCommercial').prop('checked', true) }, 0);
         setTimeout(function() { $('.commercial').prop('checked', true) }, 0);
@@ -925,7 +879,11 @@ $("#checkAllCommercial").on('click', function(event) {
 
         skills = skills.concat(commercial_skills).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(skills);
 });
@@ -943,7 +901,11 @@ $("#checkAllAnalytics").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     } else {
         setTimeout(function() { $('#checkAllAnalytics').prop('checked', true) }, 0);
         setTimeout(function() { $('.analytics').prop('checked', true) }, 0);
@@ -953,7 +915,11 @@ $("#checkAllAnalytics").on('click', function(event) {
 
         skills = skills.concat(analytics_skills).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(skills);
 });
@@ -971,7 +937,11 @@ $("#checkAllOperations").on('click', function(event) {
             }
         }
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     } else {
         setTimeout(function() { $('#checkAllOperations').prop('checked', true) }, 0);
         setTimeout(function() { $('.operations').prop('checked', true) }, 0);
@@ -981,7 +951,11 @@ $("#checkAllOperations").on('click', function(event) {
 
         skills = skills.concat(operations_skills).unique();
 
-        create_total_chart(projects, skills, months);
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
     }
     console.log(skills);
 });
@@ -1016,19 +990,31 @@ $("#axes li a").click(function() {
     $("#axes-selection").html($(this).text() + '<span class="caret"></span>');
     $("#axes-selection").val($(this).text());
     $('#container').html('');
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 });
 
 $("#projectskill li a").click(function() {
     $("#projectskill-selection").html($(this).text() + '<span class="caret"></span>');
     $("#projectskill-selection").val($(this).text());
     $('#container').html('');
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 });
 
 $("#hypothetical li a").click(function() {
     $("#hypothetical-selection").html($(this).text() + '<span class="caret"></span>');
     $("#hypothetical-selection").val($(this).text());
     $('#container').html('');
-    create_total_chart(projects, skills, months);
+    if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+        create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+    } else {
+        create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+    }
 });
