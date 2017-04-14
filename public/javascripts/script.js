@@ -1,43 +1,70 @@
 // Initial values
-var projects = ["Merck", "Amex", "Celgene", "Two Sigma", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var real_projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var client_projects = ["Merck", "Amex", "Celgene"]
-var internal_projects = ["Marketing Core", "General Admin Core"]
-var product_projects = ["Concourse Core", "Assembly Core", "Foundations Core"]
+var projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC', 
+'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
+'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'];
 
-var skills = ['Project Mgmt / L1 Support', 'Senior Client Mgmt', 'Data Science', 'Engineering Mgmt'];
-var commercial_skills = ["Project Mgmt / L1 Support", "Senior Client Mgmt"]
-var analytics_skills = ["Data Science"]
-var operations_skills = ["Engineering Mgmt"]
+var real_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC', 
+'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
+'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'];
 
-var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017', 'October 2017']
+var client_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC']
+var internal_projects = ['Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
+'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General']
+var product_projects = ['Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development']
+
+var skills = ['Senior Client Management', 'Project Management / L1 Support', 'Engineering Management', 'Product Management',
+    'Data Science', 'Machine Learning Engineering', 'Data Engineering', 'Design', 'Front End Engineering', 'Backend Engineering',
+    'Systems Reliability Engineering', 'Quality Engineering', 'Solutions Architect', 'Client Management',
+    'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing', 
+    'Finance', 'Technical Writing'];
+var commercial_skills = ['Senior Client Management', 'Client Management', 'Sales', 'Support Engineering', 'Marketing']
+var general_admin_skills = ["Project Management / L1 Support", 'Leadership', 'Recruiting', 'Finance']
+var engineering_skills = ['Engineering Management', 'Data Science', 'Machine Learning Engineering', 'Data Engineering',
+    'Front End Engineering', 'Backend Engineering', 'Systems Reliability Engineering', 'Quality Engineering',
+    'Solutions Architect', 'Software Engineering General']
+var product_skills = ['Product Management', 'Design', 'Technical Writing']
+
+var months = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
+    'October 2017', 'November 2017', 'December 2017']
 
 var num_employees = 73
 
 // Colors are tol-rainbow
-var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
-    'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
-    'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
+var colors_list = ['rgb(120, 28, 129)', 'rgb(87, 25, 127)', 'rgb(87, 25, 127)', 'rgb(65, 57, 146)', 'rgb(63, 81, 163)',
+'rgb(64, 103, 179)', 'rgb(68, 124, 191)', 'rgb(73, 142, 193)', 'rgb(81, 156, 184)', 'rgb(91, 167, 166)',
+'rgb(103, 176, 146)', 'rgb(116, 182, 126)', 'rgb(131, 186, 109)', 'rgb(147, 189, 96)', 'rgb(164, 190, 85)',
+'rgb(180, 189, 76)', 'rgb(195, 186, 69)', 'rgb(209, 180, 64)', 'rgb(219, 171, 59)', 'rgb(226, 157, 55)',
+'rgb(230, 138, 51)', 'rgb(231, 115, 47)', 'rgb(228, 89, 42)', 'rgb(224, 60, 37)', 'rgb(217, 33, 32)'
 ]
 
-var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
-    'September 2017', 'October 2017'
-]
+var months_list = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
+    'October 2017', 'November 2017', 'December 2017']
 
-var people = ["BARKER, JOHN E", "DONATZ, MICHAEL G", "JOHNSON, COURTNEY A", "CHRISTENSEN, EMIL R",
-    "EASTBURN, BENJAMIN C", "MORAN, THOMAS C", "DELGADILLO, SUSANA C", "KELMANSKIY, YEFIM", "OMI, ALISA",
-    "KNUPP, JEFFREY C", "LEONE, MICHAEL A", "VARSHAVSKY, PETER", "PARKER, JARROD R", "WARDY, JASON I",
-    "DANTON, CRAIG A", "LEV, IGOR", "BOMAN, BLAINE", "KEITER, KENNETH S", "KIRCHER, ASHLEY W", "PRATER, RICHARD T",
-    "WELLS, THOMAS F", "WHITING, OWEN S", "YANG, YANG", "RUBENSTEIN, ABRAHAM E", "ATTAHRI, MOHAMED", "BERNARDIN, JAMES P",
-    "CREIGHTON, JENNIFER L", "GELB, BENJAMIN E", "HAMMER, MELODY A", "ROTH, ALEXANDER I", "MONK, CLINTON D",
-    "KREMLER, GREGORY J", "AHEARN, EVE G", "KERLE, INDIA H", "TEYSSIER, MAUREEN E", "ULMAN, JEREMY W", "WATT, CECILIA I",
-    "KRINSLEY, JEREMY A", "EDGAR, JAMES H", "OUDGHIRI, HICHAM", "PRICE, REBECCA L", "SESSER, BENJAMIN C", "CHAN, KELVIN K",
-    "HALLOCK, SAMANTHA L", "LI, ANN L", "NORTHINGTON, ALEXANDRA E", "SULLAM, JULIANA M", "ESTES, STEPHEN B", "FLOWERS, MICHAEL P",
-    "LEVIN, JONATHAN T", "HORAN, MATTHEW T", "KHALIFA, DONIA A", "SPIEGEL, STEPHANIE B", "AFROOZE, JALEH", "GUTMAN, LEE E",
-    "WHALEN, CAITLIN M", "BENOIT, MICHAEL G", "GONZALEZ, JUAN", "WILSON, JOSHUA B", "IANIUK, OLGA", "PARIKH, URVISH",
-    "WEBB, WILLIAM A", "MADDALA, BHASKAR", "CASAMONA, CARLA", "CHOLAS-WOOD, ALEX", "HENDERSON, PETER", "SHAO, BRYAN",
-    "STANLEY, MICHAEL", "PRAINITO, JOE", "MUKHERJEE, ISHANI", "MIKAELIAN, ALEXIS", "GAO, DAVID", "BECKER, NICK"
-]
+var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK', 
+'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
+'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
+'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
+'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
+'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
+'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
+'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
+'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
+'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
+'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
+'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
+'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
+'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
+'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'];
+    
+
 
 var req_overall_dict = {};
 var prov_overall_dict = {};
@@ -121,9 +148,14 @@ function handleSignoutClick(event) {
 function getData() {
     gapi.client.sheets.spreadsheets.values.get({
 
-        // Sample master data cojo
-        spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
-        range: 'Sample master data cojo!A2:CB',
+        // Draft DB: Sample master data cojo
+        // spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
+        // range: 'Sample master data cojo!A2:CB',
+
+        // Draft 3: Project Staffing
+        spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
+        range: 'Project Staffing!A2:AA'
+
     }).then(function(response) {
         console.log(response);
         var range = response.result;
@@ -132,192 +164,88 @@ function getData() {
         if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
-                var real = row[0]
-                var month = row[1]
-                var project = row[2]
-                var skill = row[3]
-                var staffing_status = parseFloat(row[4])
-                var required_FTE = parseFloat(row[5])
-                var provided_FTE = parseFloat(row[6])
+                var req_or_prov = row[0]
 
+                var real = row[2]
+                var project = row[3]
+                var project_category = row[5]
+                var project_owner = row[6]
+                var project_owner_skill = row[7]
+                var project_owner_skill_category = row[8]
+                var project_owner_team = row[9]
+                var project_owner_team_category = row[10]
+                var skill = row[11]
+                var skill_category = row[12]
+                var person = row[13]
+                var person_skill = row[14]
+                var person_skill_category = row[15]
+                var person_team = row[16]
+                var person_team_category = row[17]
 
-                // if the project is real
-                if (real == "1") {
-                    // add required FTE to a dictionary of skills within a dictionary of projects
-                    if (project in real_req_overall_dict) {
-                        var skill_dict = real_req_overall_dict[project];
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
-
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
+                var FTE_list = []
+                for (var j = 0; j < row.slice(18).length; j++){
+                    if (req_or_prov == 'Required'){
+                        FTE_list.push(parseFloat(-row.slice(18)[j]) || 0)
                     }
-
-                    // add provided FTE and names of employees to a dictionary of skills within a dictionary of projects
-                    if (project in real_prov_overall_dict) {
-                        var skill_dict = real_prov_overall_dict[project];
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
+                    else{
+                        FTE_list.push(parseFloat(row.slice(18)[j]) || 0)
                     }
                 }
 
-                //if the project is hypothetical
-                else {
-                    // do the same thing with the hypothetical dictionaries instead
-                    if (project in req_overall_dict) {
-                        var skill_dict = req_overall_dict[project];
+                if (real == '1') {
+                    // if Required
+                    if (req_or_prov == 'Required'){
+                        if (project in real_req_overall_dict) {
+                            var skill_dict = real_req_overall_dict[project];
 
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
+                            skill_dict[skill] = FTE_list
+
+                            real_req_overall_dict[project] = skill_dict;
+                            req_overall_dict[project] = skill_dict;
 
                         } else {
-                            skill_dict[skill] = [required_FTE];
+                            var skill_dict = {};
+
+                            skill_dict[skill] = FTE_list
+
+                            real_req_overall_dict[project] = skill_dict;
+                            req_overall_dict[project] = skill_dict;
                         }
-
-                        req_overall_dict[project] = skill_dict;
-
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        req_overall_dict[project] = skill_dict;
                     }
 
-                    // provided dictionary
-                    if (project in prov_overall_dict) {
-                        var skill_dict = prov_overall_dict[project];
+                    /// if Provided
+                    else{
+                        if (project in real_prov_overall_dict) {
+                            var skill_dict = real_prov_overall_dict[project];
 
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
+                            if (skill in skill_dict) {
 
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
+                                skill_dict[skill][0].push(person)
+                                skill_dict[skill][1].push(FTE_list)
+
+                            } else {
+
+                                skill_dict[skill] = [[person], [FTE_list]]
                             }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
+
+                            real_prov_overall_dict[project] = skill_dict;
+                            prov_overall_dict[project] = skill_dict;
                         } else {
-                            employee_FTE_list = []
+                            var skill_dict = {};
 
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
+                            if (skill in skill_dict) {
+
+                                skill_dict[skill][0].push(person)
+                                skill_dict[skill][1].push(FTE_list)
+
+                            } else {
+
+                                skill_dict[skill] = [[person], [FTE_list]]
                             }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
+
+                            real_prov_overall_dict[project] = skill_dict;
+                            prov_overall_dict[project] = skill_dict;
                         }
-
-                        prov_overall_dict[project] = skill_dict;
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        prov_overall_dict[project] = skill_dict;
                     }
                 }
 
@@ -326,8 +254,8 @@ function getData() {
             // just to make sure the dictionaries are correct
             console.log(real_prov_overall_dict)
             console.log(real_req_overall_dict)
-            console.log(prov_overall_dict)
-            console.log(req_overall_dict)
+            // console.log(prov_overall_dict)
+            // console.log(req_overall_dict)
 
         } else {
             alert('No data found.');
@@ -370,14 +298,25 @@ function create_total_chart(p, prov, req, skills, months) {
 
         // Prepare total provided column data
         for (var i = 0; i < skills.length; i++) {
-            data_list = []
+            data_list = [0, 0, 0]
+            
+            for (var k = 0; k < p.length; k++) {
+                if (prov[p[k]] != undefined){
+                    if (prov[p[k]][skills[i]] != undefined){
 
-            for (var j = 0; j < month_indices.length; j++) {
-                sum_projects = 0
-                for (var k = 0; k < p.length; k++) {
-                    sum_projects += prov[p[k]][skills[i]][1][month_indices[j]]
+                        // for each of the people for this given skill
+                        for (var l = 0; l < prov[p[k]][skills[i]][1].length; l++){
+                            person_FTE_list = prov[p[k]][skills[i]][1][l]
+
+                            var sum_list = data_list.map(function (num, idx) {
+                              return num + person_FTE_list[idx];
+                            })
+
+                            data_list = sum_list;
+                        }
+                        
+                    }
                 }
-                data_list.push(sum_projects)
             }
 
             series_list.push({
@@ -394,10 +333,14 @@ function create_total_chart(p, prov, req, skills, months) {
             for (var j = 0; j < month_indices.length; j++) {
                 sum_projects = 0
                 for (var k = 0; k < p.length; k++) {
-                    sum_projects += req[p[k]][skills[i]][month_indices[j]]
+                    if (req[p[k]][skills[i]] != undefined){
+                        sum_projects += req[p[k]][skills[i]][month_indices[j]]
+                    }
                 }
                 data_list.push(sum_projects)
             }
+
+
             series_list.push({
                 data: data_list,
                 name: "Required " + skills[i],
@@ -415,13 +358,24 @@ function create_total_chart(p, prov, req, skills, months) {
 
         // Prepare total provided column data
         for (var i = 0; i < p.length; i++) {
-            data_list = []
-            for (var j = 0; j < month_indices.length; j++) {
-                sum_skills = 0
-                for (var k = 0; k < skills.length; k++) {
-                    sum_skills += prov[p[i]][skills[k]][1][month_indices[j]]
+            data_list = [0, 0, 0]
+            
+            for (var k = 0; k < skills.length; k++) {
+                if (prov[p[i]] != undefined){
+                    if (prov[p[i]][skills[k]] != undefined){
+
+                        // for each of the people for this given skill
+                        for (var l = 0; l < prov[p[i]][skills[k]][1].length; l++){
+                            person_FTE_list = prov[p[i]][skills[k]][1][l]
+
+                            var sum_list = data_list.map(function (num, idx) {
+                              return num + person_FTE_list[idx];
+                            })
+
+                            data_list = sum_list;
+                        }   
+                    }
                 }
-                data_list.push(sum_skills)
             }
             series_list.push({
                 data: data_list,
@@ -436,7 +390,9 @@ function create_total_chart(p, prov, req, skills, months) {
             for (var j = 0; j < month_indices.length; j++) {
                 sum_skills = 0
                 for (var k = 0; k < skills.length; k++) {
-                    sum_skills += req[p[i]][skills[k]][month_indices[j]]
+                    if (req[p[i]][skills[k]] != undefined){
+                        sum_skills += req[p[i]][skills[k]][month_indices[j]]
+                    }
                 }
                 data_list.push(sum_skills)
             }
@@ -556,19 +512,22 @@ function create_total_chart(p, prov, req, skills, months) {
                         skill = this.point.series.name;
                         month_index = months_list.indexOf(this.point.category);
                         listed_employees_dict = {}
-                        required_total_FTE = 0
                         for (var i = 0; i < p.length; i++) {
-                            required_total_FTE += req[p[i]][skill][month_index]
-                            employee_FTEs = prov[p[i]][skill][0][month_index]
-                            for (var j = 0; j < employee_FTEs.length; j++) {
-                                employee_FTE = parseFloat(employee_FTEs[j][1])
-                                employee_name = employee_FTEs[j][0]
-                                if (employee_FTE > 0) {
-                                    if (employee_name in listed_employees_dict) {
-                                        listed_employees_dict[employee_name] += employee_FTE;
-                                    } else {
-                                        listed_employees_dict[employee_name] = employee_FTE;
+                            if (prov[p[i]] != undefined){
+                                if (prov[p[i]][skill] != undefined){
+                                    employees = prov[p[i]][skill][0]
+                                    employees_FTEs = prov[p[i]][skill][1]
+                                    for (var j = 0; j < employees.length; j++){
+                                        employee_name = employees[j]
+                                        employee_FTE = employees_FTEs[j][month_index]
+
+                                        if (employee_name in listed_employees_dict) {
+                                            listed_employees_dict[employee_name] += employee_FTE;
+                                        } else {
+                                            listed_employees_dict[employee_name] = employee_FTE;
+                                        }
                                     }
+                                    
                                 }
                             }
                         }
@@ -577,14 +536,37 @@ function create_total_chart(p, prov, req, skills, months) {
                             listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2) + ';')
                         }
 
+                        required_total_FTE = 0
+                        for (var i = 0; i < p.length; i++) {
+                            if (req[p[i]][skill] != undefined){
+                                required_total_FTE += req[p[i]][skill][month_index]
+                            }
+                        }
+
                         delta = this.point.y - required_total_FTE
                     } else {
                         skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
                         month_index = months_list.indexOf(this.point.category)
 
                         provided_total_FTE = 0
+                        data_list = [0, 0, 0]
                         for (var i = 0; i < p.length; i++) {
-                            provided_total_FTE += prov[p[i]][skill][1][month_index]
+                            if (prov[p[i]] != undefined){
+                                if (prov[p[i]][skill] != undefined){
+
+                                    // for each of the people for this given skill
+                                    for (var l = 0; l < prov[p[i]][skill][1].length; l++){
+                                        person_FTE_list = prov[p[i]][skill][1][l]
+
+                                        var sum_list = data_list.map(function (num, idx) {
+                                          return num + person_FTE_list[idx];
+                                        })
+
+                                        data_list = sum_list;
+                                    }
+                                    provided_total_FTE = data_list[month_index]
+                                }
+                            }
                         }
                         delta = provided_total_FTE - this.point.y
 
@@ -611,16 +593,36 @@ function create_total_chart(p, prov, req, skills, months) {
 
                         required_total_FTE = 0
                         for (var i = 0; i < skills.length; i++) {
-                            required_total_FTE += req[project][skills[i]][month_index]
+                            if (req[project][skills[i]] != undefined){
+                                required_total_FTE += req[project][skills[i]][month_index]
+                            }
                         }
+
                         delta = this.point.y - required_total_FTE
                     } else {
                         project = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
                         month_index = months_list.indexOf(this.point.category)
 
                         provided_total_FTE = 0
+                        data_list = [0, 0, 0]
                         for (var i = 0; i < skills.length; i++) {
-                            provided_total_FTE += prov[project][skills[i]][1][month_index]
+                            if (prov[project] != undefined){
+                                if (prov[project][skills[i]] != undefined){
+
+                                    // for each of the people for this given skill
+                                    for (var l = 0; l < prov[project][skills[i]][1].length; l++){
+                                        person_FTE_list = prov[project][skills[i]][1][l]
+
+                                        var sum_list = data_list.map(function (num, idx) {
+                                          return num + person_FTE_list[idx];
+                                        })
+
+                                        data_list = sum_list;
+                                    }
+                                    provided_total_FTE = data_list[month_index]
+                                }
+                            }
+
                         }
                         delta = provided_total_FTE - this.point.y
                     }
@@ -644,32 +646,33 @@ function create_total_chart(p, prov, req, skills, months) {
 
 
 // Dropdown for Projects
-$('.client, .internal, .product').on('click', function(event) {
+$('.client, .internal, .productDevelopment').on('click', function(event) {
     var $target = $(event.currentTarget).parent('a'),
         val = $target.attr('data-value'),
         $inp = $target.find('input'),
         idx;
 
-    console.log(projects);
 
     if ((idx = projects.indexOf(val)) > -1) {
         projects.splice(idx, 1);
+        real_projects.splice(idx, 1);
         setTimeout(function() { $inp.prop('checked', false) }, 0);
     } else {
         projects.push(val);
+        real_projects.push(val);
         setTimeout(function() { $inp.prop('checked', true) }, 0);
     }
 
     $(event.target).blur();
 
-    console.log(projects);
-
     $('#container').html('');
 
     if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
         create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        console.log(projects);
     } else {
         create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        console.log(real_projects);
     }
 
     return false;
@@ -677,7 +680,7 @@ $('.client, .internal, .product').on('click', function(event) {
 
 
 // Dropdown for Skills
-$('.commercial, .analytics, .operations').on('click', function(event) {
+$('.commercial, .generalAdmin, .engineering, .product').on('click', function(event) {
 
     var $target = $(event.currentTarget).parent('a'),
         val = $target.attr('data-value'),
@@ -752,6 +755,9 @@ $("#checkAllClient").on('click', function(event) {
             if ((idx = projects.indexOf(client_projects[i])) > -1) {
                 projects.splice(idx, 1);
             }
+            if ((idx = real_projects.indexOf(client_projects[i])) > -1) {
+                real_projects.splice(idx, 1);
+            }
         }
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
@@ -768,14 +774,16 @@ $("#checkAllClient").on('click', function(event) {
         $('#container').html('');
 
         projects = projects.concat(client_projects).unique();
+        real_projects = real_projects.concat(client_projects).unique();
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+            console.log(projects);
         } else {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+            console.log(real_projects);
         }
     }
-    console.log(projects);
 });
 
 $("#checkAllInternal").on('click', function(event) {
@@ -788,6 +796,9 @@ $("#checkAllInternal").on('click', function(event) {
         for (var i = 0; i < internal_projects.length; i++) {
             if ((idx = projects.indexOf(internal_projects[i])) > -1) {
                 projects.splice(idx, 1);
+            }
+            if ((idx = real_projects.indexOf(internal_projects[i])) > -1) {
+                real_projects.splice(idx, 1);
             }
         }
 
@@ -804,26 +815,31 @@ $("#checkAllInternal").on('click', function(event) {
         $('#container').html('');
 
         projects = projects.concat(internal_projects).unique();
+        real_projects = real_projects.concat(internal_projects).unique();
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+            console.log(projects);
         } else {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+            console.log(real_projects);
         }
     }
-    console.log(projects);
 });
 
-$("#checkAllProduct").on('click', function(event) {
-    if ($('#checkAllProduct:checked').length < 1) {
-        setTimeout(function() { $('#checkAllProduct').prop('checked', false) }, 0);
-        setTimeout(function() { $('.product').prop('checked', false) }, 0);
+$("#checkAllProductDevelopment").on('click', function(event) {
+    if ($('#checkAllProductDevelopment:checked').length < 1) {
+        setTimeout(function() { $('#checkAllProductDevelopment').prop('checked', false) }, 0);
+        setTimeout(function() { $('.productDevelopment').prop('checked', false) }, 0);
 
         $('#container').html('');
 
         for (var i = 0; i < product_projects.length; i++) {
             if ((idx = projects.indexOf(product_projects[i])) > -1) {
                 projects.splice(idx, 1);
+            }
+            if ((idx = real_projects.indexOf(product_projects[i])) > -1) {
+                real_projects.splice(idx, 1);
             }
         }
 
@@ -833,21 +849,23 @@ $("#checkAllProduct").on('click', function(event) {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
         }
     } else {
-        setTimeout(function() { $('#checkAllProduct').prop('checked', true) }, 0);
-        setTimeout(function() { $('.product').prop('checked', true) }, 0);
+        setTimeout(function() { $('#checkAllProductDevelopment').prop('checked', true) }, 0);
+        setTimeout(function() { $('.productDevelopment').prop('checked', true) }, 0);
 
 
         $('#container').html('');
 
         projects = projects.concat(product_projects).unique();
+        real_projects = real_projects.concat(product_projects).unique();
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+            console.log(projects);
         } else {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+            console.log(real_projects);
         }
     }
-    console.log(projects);
 });
 
 
@@ -888,15 +906,15 @@ $("#checkAllCommercial").on('click', function(event) {
     console.log(skills);
 });
 
-$("#checkAllAnalytics").on('click', function(event) {
-    if ($('#checkAllAnalytics:checked').length < 1) {
-        setTimeout(function() { $('#checkAllAnalytics').prop('checked', false) }, 0);
-        setTimeout(function() { $('.analytics').prop('checked', false) }, 0);
+$("#checkAllGeneralAdmin").on('click', function(event) {
+    if ($('#checkAllGeneralAdmin:checked').length < 1) {
+        setTimeout(function() { $('#checkAllGeneralAdmin').prop('checked', false) }, 0);
+        setTimeout(function() { $('.generalAdmin').prop('checked', false) }, 0);
 
         $('#container').html('');
 
-        for (var i = 0; i < analytics_skills.length; i++) {
-            if ((idx = skills.indexOf(analytics_skills[i])) > -1) {
+        for (var i = 0; i < general_admin_skills.length; i++) {
+            if ((idx = skills.indexOf(general_admin_skills[i])) > -1) {
                 skills.splice(idx, 1);
             }
         }
@@ -907,13 +925,13 @@ $("#checkAllAnalytics").on('click', function(event) {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
         }
     } else {
-        setTimeout(function() { $('#checkAllAnalytics').prop('checked', true) }, 0);
-        setTimeout(function() { $('.analytics').prop('checked', true) }, 0);
+        setTimeout(function() { $('#checkAllGeneralAdmin').prop('checked', true) }, 0);
+        setTimeout(function() { $('.generalAdmin').prop('checked', true) }, 0);
 
 
         $('#container').html('');
 
-        skills = skills.concat(analytics_skills).unique();
+        skills = skills.concat(general_admin_skills).unique();
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -924,15 +942,15 @@ $("#checkAllAnalytics").on('click', function(event) {
     console.log(skills);
 });
 
-$("#checkAllOperations").on('click', function(event) {
-    if ($('#checkAllOperations:checked').length < 1) {
-        setTimeout(function() { $('#checkAllOperations').prop('checked', false) }, 0);
-        setTimeout(function() { $('.operations').prop('checked', false) }, 0);
+$("#checkAllEngineering").on('click', function(event) {
+    if ($('#checkAllEngineering:checked').length < 1) {
+        setTimeout(function() { $('#checkAllEngineering').prop('checked', false) }, 0);
+        setTimeout(function() { $('.engineering').prop('checked', false) }, 0);
 
         $('#container').html('');
 
-        for (var i = 0; i < operations_skills.length; i++) {
-            if ((idx = skills.indexOf(operations_skills[i])) > -1) {
+        for (var i = 0; i < engineering_skills.length; i++) {
+            if ((idx = skills.indexOf(engineering_skills[i])) > -1) {
                 skills.splice(idx, 1);
             }
         }
@@ -943,13 +961,49 @@ $("#checkAllOperations").on('click', function(event) {
             create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
         }
     } else {
-        setTimeout(function() { $('#checkAllOperations').prop('checked', true) }, 0);
-        setTimeout(function() { $('.operations').prop('checked', true) }, 0);
+        setTimeout(function() { $('#checkAllEngineering').prop('checked', true) }, 0);
+        setTimeout(function() { $('.engineering').prop('checked', true) }, 0);
 
 
         $('#container').html('');
 
-        skills = skills.concat(operations_skills).unique();
+        skills = skills.concat(engineering_skills).unique();
+
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
+    }
+    console.log(skills);
+});
+
+$("#checkAllProduct").on('click', function(event) {
+    if ($('#checkAllProduct:checked').length < 1) {
+        setTimeout(function() { $('#checkAllProduct').prop('checked', false) }, 0);
+        setTimeout(function() { $('.product').prop('checked', false) }, 0);
+
+        $('#container').html('');
+
+        for (var i = 0; i < product_skills.length; i++) {
+            if ((idx = skills.indexOf(product_skills[i])) > -1) {
+                skills.splice(idx, 1);
+            }
+        }
+
+        if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
+            create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
+        } else {
+            create_total_chart(real_projects, real_prov_overall_dict, real_req_overall_dict, skills, months);
+        }
+    } else {
+        setTimeout(function() { $('#checkAllProduct').prop('checked', true) }, 0);
+        setTimeout(function() { $('.product').prop('checked', true) }, 0);
+
+
+        $('#container').html('');
+
+        skills = skills.concat(product_skills).unique();
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
