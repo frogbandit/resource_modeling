@@ -44,11 +44,13 @@ var months = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
 var num_employees = 73
 
 // Colors are tol-rainbow
-var colors_list = ['rgb(120, 28, 129)', 'rgb(87, 25, 127)', 'rgb(87, 25, 127)', 'rgb(65, 57, 146)', 'rgb(63, 81, 163)',
-    'rgb(64, 103, 179)', 'rgb(68, 124, 191)', 'rgb(73, 142, 193)', 'rgb(81, 156, 184)', 'rgb(91, 167, 166)',
-    'rgb(103, 176, 146)', 'rgb(116, 182, 126)', 'rgb(131, 186, 109)', 'rgb(147, 189, 96)', 'rgb(164, 190, 85)',
-    'rgb(180, 189, 76)', 'rgb(195, 186, 69)', 'rgb(209, 180, 64)', 'rgb(219, 171, 59)', 'rgb(226, 157, 55)',
-    'rgb(230, 138, 51)', 'rgb(231, 115, 47)', 'rgb(228, 89, 42)', 'rgb(224, 60, 37)', 'rgb(217, 33, 32)'
+// http://google.github.io/palette.js/
+var colors_list = ['rgb(120, 28, 129)', 'rgb(91, 24, 126)', 'rgb(76, 32, 130)', 'rgb(68, 46, 139)', 'rgb(64, 65, 151)',
+    'rgb(63, 84, 165)', 'rgb(64, 103, 179)', 'rgb(67, 120, 190)', 'rgb(71, 135, 194)', 'rgb(77, 149, 190)',
+    'rgb(84, 159, 180)', 'rgb(92, 168, 164)', 'rgb(102, 175, 147)', 'rgb(113, 180, 131)', 'rgb(125, 184, 116)',
+    'rgb(138, 187, 103)', 'rgb(151, 189, 93)', 'rgb(165, 190, 84)', 'rgb(179, 189, 77)', 'rgb(191, 187, 71)',
+    'rgb(203, 183, 66)', 'rgb(213, 177, 62)', 'rgb(221, 168, 58)', 'rgb(227, 156, 55)', 'rgb(230, 141, 52)',
+    'rgb(231, 123, 48)', 'rgb(230, 102, 45)', 'rgb(227, 79, 41)', 'rgb(223, 55, 36)', 'rgb(217, 33, 32)'
 ]
 
 var months_list = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
@@ -291,7 +293,7 @@ function getData() {
 }
 
 function create_total_chart(p, prov, req, skills, months) {
-    $('#container').append('<div style="height: 800px" id="total_chart"></div>');
+    $('#container').append('<div style="height: 750px;" id="total_chart"></div>');
 
     series_list = []
 
@@ -334,6 +336,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
             series_list.push({
                 data: data_list,
+                id: skills[i],
                 name: skills[i],
                 stack: 0
             });
@@ -356,6 +359,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
             series_list.push({
                 data: data_list,
+                id: "Required " + skills[i],
                 name: "Required " + skills[i],
                 stack: 1,
                 showInLegend: false
@@ -392,6 +396,7 @@ function create_total_chart(p, prov, req, skills, months) {
             }
             series_list.push({
                 data: data_list,
+                id: p[i],
                 name: p[i],
                 stack: 0
             })
@@ -411,6 +416,7 @@ function create_total_chart(p, prov, req, skills, months) {
             }
             series_list.push({
                 data: data_list,
+                id: "Required " + p[i],
                 name: "Required " + p[i],
                 stack: 1,
                 showInLegend: false
@@ -423,7 +429,7 @@ function create_total_chart(p, prov, req, skills, months) {
             type: 'column',
             options3d: {
                 enabled: true,
-                alpha: 30,
+                alpha: 15,
                 beta: 40,
                 depth: 110
             },
@@ -438,7 +444,7 @@ function create_total_chart(p, prov, req, skills, months) {
                 depth: 40,
                 stacking: true,
                 grouping: false,
-                groupPadding: 0.2,
+                groupPadding: 0.3,
                 groupZPadding: 10,
                 pointPadding: 0.1,
                 borderWidth: 0,
@@ -482,6 +488,16 @@ function create_total_chart(p, prov, req, skills, months) {
 
             }
         },
+        title: {
+            style: { "fontSize": "14px" }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'middle',
+            // floating: true
+            backgroundColor: '#FFFFFF'
+        },
         series: series_list,
         xAxis: {
             categories: months,
@@ -519,7 +535,15 @@ function create_total_chart(p, prov, req, skills, months) {
 
                     if (req_or_prov != 'Required') {
                         skill = this.point.series.name;
+                        series = chart.get("Required " + skill);
+                        stack_total = this.point.stackTotal;
                         month_index = months_list.indexOf(this.point.category);
+
+                        required_stack_total = 0
+                        if (month_index > -1){
+                            required_stack_total = series.points[month_index].stackTotal
+                        }
+                        
                         listed_employees_dict = {}
                         for (var i = 0; i < p.length; i++) {
                             if (prov[p[i]] != undefined) {
@@ -553,12 +577,23 @@ function create_total_chart(p, prov, req, skills, months) {
                         }
 
                         delta = this.point.y - required_total_FTE
+
+                        total_delta = stack_total - required_stack_total
                     } else {
+                    
                         skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
+                        series = chart.get(skill);
                         month_index = months_list.indexOf(this.point.category)
+                        required_stack_total = this.point.stackTotal;
+
+                        stack_total = 0;
+                        if (series.points[month_index] != undefined){
+                            stack_total = series.points[month_index].stackTotal
+                        }                        
 
                         provided_total_FTE = 0
                         data_list = [0, 0, 0]
+
                         for (var i = 0; i < p.length; i++) {
                             if (prov[p[i]] != undefined) {
                                 if (prov[p[i]][skill] != undefined) {
@@ -577,17 +612,28 @@ function create_total_chart(p, prov, req, skills, months) {
                                 }
                             }
                         }
-                        delta = provided_total_FTE - this.point.y
 
+                        if (provided_total_FTE == undefined){
+                            provided_total_FTE = 0;
+                        }
+
+                        delta = provided_total_FTE - this.point.y
+                        total_delta = stack_total - required_stack_total
                     }
 
                     listed_employees_string = ''
                     for (var i = 0; i < listed_employees.length; i++) {
                         listed_employees_string += listed_employees[i]
                     }
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) + ';' +
-                        listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2);
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + 
+                        this.point.y.toFixed(2) + ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) 
+                        + '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) 
+                        + '<br/>' + '<b>Total Required: </b>' + required_stack_total.toFixed(2) 
+                        + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
                 }
+
+
+
 
                 // for project
                 else {

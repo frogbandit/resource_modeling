@@ -8,13 +8,21 @@ a {
 }
 
 #container {
-    height: 400px;
-    min-width: 310px;
-    max-width: 800px;
-    margin: 0 auto;
+    /*height: 400px;*/
+    /*min-width: 310px;*/
+    /*max-width: 800px;*/
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 /*.dropdown-menu {
     width: 300px !important;
     height: 400px !important;
 }*/
+
+.chart-wrapper {
+    /*float: left;*/
+    /*padding-bottom: 40%;*/
+    /*position: relative;*/
+    /*width: 100%;*/
+}
