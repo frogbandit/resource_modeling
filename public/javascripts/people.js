@@ -245,10 +245,11 @@ function create_table(people, months) {
             
         if (!(Object.keys(overall_dict[person]).length === 0 && overall_dict[person].constructor === Object)) {
             projects = overall_dict[person]
+            console.log(projects);
             for (var i in projects) {
 
                 project = projects[i];
-                project_name = project[0][0]
+                project_name = i
 
                 for (var k in project){
                     skill = project[k][0]
