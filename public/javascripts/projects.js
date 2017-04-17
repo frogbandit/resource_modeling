@@ -1,55 +1,73 @@
 // Initial values
-var projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var real_projects = ["Merck", "Amex", "Celgene", "Marketing Core", "General Admin Core", "Concourse Core", "Assembly Core", "Foundations Core"];
-var skills = ['Project Mgmt / L1 Support', 'Senior Client Mgmt', 'Engineering Mgmt', 'Data Science', 'Design', 'Backend'];
+var projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
+    'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+    'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'
+];
 
+var real_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
+    'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+    'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'
+];
 
-var months = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017']
+var client_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC']
+var internal_projects = ['Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General'
+]
+var product_projects = ['Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development']
+
+var skills = ['Senior Client Management', 'Project Management / L1 Support', 'Engineering Management', 'Product Management',
+    'Data Science', 'Machine Learning Engineering', 'Data Engineering', 'Design', 'Front End Engineering', 'Backend Engineering',
+    'Systems Reliability Engineering', 'Quality Engineering', 'Solutions Architect', 'Client Management',
+    'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing',
+    'Finance', 'Technical Writing'
+];
+var commercial_skills = ['Senior Client Management', 'Client Management', 'Sales', 'Support Engineering', 'Marketing']
+var general_admin_skills = ["Project Management / L1 Support", 'Leadership', 'Recruiting', 'Finance']
+var engineering_skills = ['Engineering Management', 'Data Science', 'Machine Learning Engineering', 'Data Engineering',
+    'Front End Engineering', 'Backend Engineering', 'Systems Reliability Engineering', 'Quality Engineering',
+    'Solutions Architect', 'Software Engineering General'
+]
+var product_skills = ['Product Management', 'Design', 'Technical Writing']
+
+var months = ['April 2017', 'May 2017', 'June 2017']
+
+var months_list = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
+    'October 2017', 'November 2017', 'December 2017'
+]
+
 var num_employees = 73
 var query = '?=';
 
-
-var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK', 
-'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
-'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
-'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
-'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
-'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
-'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
-'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
-'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
-'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
-'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
-'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
-'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
-'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
-'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'];
+var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK',
+    'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
+    'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
+    'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
+    'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
+    'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
+    'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
+    'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
+    'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
+    'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
+    'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
+    'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
+    'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
+    'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
+    'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'
+];
 
 // Colors are tol-rainbow
 var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(68,124,191)', 'rgb(81,156,184)',
     'rgb(103,176,146)', 'rgb(131,186,109)', 'rgb(164,190,85)', 'rgb(195,186,69)', 'rgb(219,171,59)',
     'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
 ]
-
-var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
-    'September 2017', 'October 2017'
-]
-
-var people_list = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK', 
-'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
-'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
-'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
-'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
-'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
-'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
-'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
-'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
-'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
-'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
-'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
-'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
-'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
-'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'];
 
 var req_overall_dict = {};
 var prov_overall_dict = {};
@@ -131,12 +149,13 @@ function handleSignoutClick(event) {
  */
 function listMajors() {
     gapi.client.sheets.spreadsheets.values.get({
-        // example spreadsheet
-        // spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+        // Draft DB: Sample master data cojo
+        // spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
+        // range: 'Sample master data cojo!A2:CB',
 
-        // my spreadsheet
-        spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
-        range: 'Sample master data cojo!A2:CB',
+        // Draft 3: Project Staffing
+        spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
+        range: 'Project Staffing!A2:AA'
     }).then(function(response) {
 
         console.log(response);
@@ -145,192 +164,93 @@ function listMajors() {
         if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
-                var real = row[0]
-                var month = row[1]
-                var project = row[2]
-                var skill = row[3]
-                var staffing_status = parseFloat(row[4])
-                var required_FTE = parseFloat(row[5])
-                var provided_FTE = parseFloat(row[6])
+                var req_or_prov = row[0]
 
+                var real = row[2]
+                var project = row[3]
+                var project_category = row[5]
+                var project_owner = row[6]
+                var project_owner_skill = row[7]
+                var project_owner_skill_category = row[8]
+                var project_owner_team = row[9]
+                var project_owner_team_category = row[10]
+                var skill = row[11]
+                var skill_category = row[12]
+                var person = row[13]
+                var person_skill = row[14]
+                var person_skill_category = row[15]
+                var person_team = row[16]
+                var person_team_category = row[17]
 
-                // if the project is real
-                if (real == "1") {
-                    // add required FTE to a dictionary of skills within a dictionary of projects
-                    if (project in real_req_overall_dict) {
-                        var skill_dict = real_req_overall_dict[project];
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
-
+                var FTE_list = []
+                for (var j = 0; j < row.slice(18).length; j++) {
+                    if (req_or_prov == 'Required') {
+                        FTE_list.push(parseFloat(-row.slice(18)[j]) || 0)
                     } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        real_req_overall_dict[project] = skill_dict;
-                        req_overall_dict[project] = skill_dict;
-                    }
-
-                    // add provided FTE and names of employees to a dictionary of skills within a dictionary of projects
-                    if (project in real_prov_overall_dict) {
-                        var skill_dict = real_prov_overall_dict[project];
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        real_prov_overall_dict[project] = skill_dict;
-                        prov_overall_dict[project] = skill_dict;
+                        FTE_list.push(parseFloat(row.slice(18)[j]) || 0)
                     }
                 }
 
-                //if the project is hypothetical
-                else {
-                    // do the same thing with the hypothetical dictionaries instead
-                    if (project in req_overall_dict) {
-                        var skill_dict = req_overall_dict[project];
+                if (real == '1') {
+                    // if Required
+                    if (req_or_prov == 'Required') {
+                        if (project in real_req_overall_dict) {
+                            var skill_dict = real_req_overall_dict[project];
 
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
+                            skill_dict[skill] = FTE_list
+
+                            real_req_overall_dict[project] = skill_dict;
+                            req_overall_dict[project] = skill_dict;
 
                         } else {
-                            skill_dict[skill] = [required_FTE];
+                            var skill_dict = {};
+
+                            skill_dict[skill] = FTE_list
+
+                            real_req_overall_dict[project] = skill_dict;
+                            req_overall_dict[project] = skill_dict;
                         }
-
-                        req_overall_dict[project] = skill_dict;
-
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            skill_dict[skill].push(required_FTE);
-                        } else {
-                            skill_dict[skill] = [required_FTE];
-                        }
-
-                        req_overall_dict[project] = skill_dict;
                     }
 
-                    // provided dictionary
-                    if (project in prov_overall_dict) {
-                        var skill_dict = prov_overall_dict[project];
+                    /// if Provided
+                    else {
+                        if (project in real_prov_overall_dict) {
+                            var skill_dict = real_prov_overall_dict[project];
 
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
+                            if (skill in skill_dict) {
 
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
+                                skill_dict[skill][0].push(person)
+                                skill_dict[skill][1].push(FTE_list)
+
+                            } else {
+
+                                skill_dict[skill] = [
+                                    [person],
+                                    [FTE_list]
+                                ]
                             }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
+
+                            real_prov_overall_dict[project] = skill_dict;
+                            prov_overall_dict[project] = skill_dict;
                         } else {
-                            employee_FTE_list = []
+                            var skill_dict = {};
 
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
+                            if (skill in skill_dict) {
+
+                                skill_dict[skill][0].push(person)
+                                skill_dict[skill][1].push(FTE_list)
+
+                            } else {
+
+                                skill_dict[skill] = [
+                                    [person],
+                                    [FTE_list]
+                                ]
                             }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
+
+                            real_prov_overall_dict[project] = skill_dict;
+                            prov_overall_dict[project] = skill_dict;
                         }
-
-                        prov_overall_dict[project] = skill_dict;
-                    } else {
-                        var skill_dict = {};
-
-                        if (skill in skill_dict) {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill][0].push(employee_FTE_list);
-                            skill_dict[skill][1].push(provided_FTE);
-
-                        } else {
-                            employee_FTE_list = []
-
-                            for (var j = 7; j < row.length; j++) {
-                                var employee_FTE = row[j]
-                                var employee_name = people[j - 7]
-                                employee_FTE_list.push([employee_name, employee_FTE])
-                            }
-                            skill_dict[skill] = [
-                                [employee_FTE_list],
-                                [provided_FTE]
-                            ];
-                        }
-
-                        prov_overall_dict[project] = skill_dict;
                     }
                 }
 
@@ -339,8 +259,8 @@ function listMajors() {
             // just to make sure the dictionaries are correct
             console.log(real_prov_overall_dict)
             console.log(real_req_overall_dict)
-            console.log(prov_overall_dict)
-            console.log(req_overall_dict)
+                // console.log(prov_overall_dict)
+                // console.log(req_overall_dict)
 
         } else {
             alert('No data found.');
@@ -413,25 +333,54 @@ function create_table(projects, skills, months) {
         for (var i = 0; i < skills.length; i++) {
             skill = skills[i]
 
-            if (skill in real_prov_overall_dict[project]) {
+            if (real_prov_overall_dict[project] != undefined) {
+                if (skill in real_prov_overall_dict[project]) {
 
-                month_string = '<tr><td rowspan="2">' + skill + '</td>'
-                for (month_index in months) {
-                    provided_FTE = real_prov_overall_dict[project][skill][1][month_index]
-                    month_string += ('<td data-original-title="Provided" data-container="body" data-toggle="tooltip" data-placement="left">' + provided_FTE + '</td>')
+                    month_string = '<tr><td rowspan="2">' + skill + '</td>'
+
+
+                    // console.log(real_prov_overall_dict[project][skill])
+
+                    people_list = real_prov_overall_dict[project][skill]
+
+                    data_list = [0, 0, 0]
+
+                    // for each of the people for this given skill
+                    for (var l = 0; l < people_list[1].length; l++) {
+                        person_FTE_list = people_list[1][l]
+
+                        var sum_list = data_list.map(function(num, idx) {
+                            return num + person_FTE_list[idx];
+                        })
+
+                        data_list = sum_list;
+                    }
+
+                    for (month_index in data_list) {
+                        month = months_list[month_index]
+                        if (containsObject(month, months)) {
+                            month_string += ('<td data-original-title="Provided" data-container="body" \
+                                data-toggle="tooltip" data-placement="left">' + data_list[month_index] + '</td>')
+                        }
+                    }
+
+
+                    month_string += '</tr>'
+                    month_string += '<tr>'
+
+
+                    for (month_index in months) {
+
+                        if (real_req_overall_dict[project][skill] != undefined) {
+                            required_FTE = real_req_overall_dict[project][skill][month_index]
+                            month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + required_FTE + '</td>')
+                        }
+                    }
+                    month_string += '</tr>'
+
+                    $('#' + project_index + ' tr:last').after(month_string);
+
                 }
-                month_string += '</tr>'
-
-                month_string += '<tr>'
-                for (month_index in months) {
-                    required_FTE = real_req_overall_dict[project][skill][month_index]
-                    month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + required_FTE + '</td>')
-                }
-                month_string += '</tr>'
-
-
-                $('#' + project_index + ' tr:last').after(month_string);
-
             }
         }
 
@@ -469,3 +418,14 @@ $('#months-dropdown-menu a').on('click', function(event) {
 
     return false;
 });
+
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}

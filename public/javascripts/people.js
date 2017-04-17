@@ -27,9 +27,8 @@ var colors_list = ['rgb(120,28,129)', 'rgb(72,37,133)', 'rgb(63,81,163)', 'rgb(6
     'rgb(230,138,51)', 'rgb(228,89,42)', 'rgb(217,33,32)'
 ]
 
-var months_list = ['March 2017', 'April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017',
-    'September 2017', 'October 2017'
-]
+var months_list = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
+    'October 2017', 'November 2017', 'December 2017']
 
 var people_list = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK', 
 'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
@@ -128,51 +127,65 @@ function listMajors() {
         // spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
 
         // my spreadsheet
-        spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
-        range: 'Sample master data cojo!A2:CB',
+        // spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
+        // range: 'Sample master data cojo!A2:CB',
+
+        // Draft 3: Project Staffing
+        spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
+        range: 'Project Staffing!A2:AA',
     }).then(function(response) {
 
         console.log(response);
         var range = response.result;
         // Get the spreadsheet data into required and provided dictionaries
+
         if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
-                var real = row[0]
-                var month = row[1]
-                var project = row[2]
-                var skill = row[3]
-                var staffing_status = parseFloat(row[4])
-                var required_FTE = parseFloat(row[5])
-                var provided_FTE = parseFloat(row[6])
+                var req_or_prov = row[0]
+
+                var real = row[2]
+                var project = row[3]
+                var project_category = row[5]
+                var project_owner = row[6]
+                var project_owner_skill = row[7]
+                var project_owner_skill_category = row[8]
+                var project_owner_team = row[9]
+                var project_owner_team_category = row[10]
+                var skill = row[11]
+                var skill_category = row[12]
+                var employee_name = row[13]
+                var person_skill = row[14]
+                var person_skill_category = row[15]
+                var person_team = row[16]
+                var person_team_category = row[17]
+
+                
+                var FTE_list = []
+                for (var j = 0; j < row.slice(18).length; j++){
+                    if (req_or_prov == 'Required'){
+                        FTE_list.push(parseFloat(-row.slice(18)[j]) || 0)
+                    }
+                    else{
+                        FTE_list.push(parseFloat(row.slice(18)[j]) || 0)
+                    }
+                }
 
 
-
-                if (!(month in overall_dict)) {
-                    overall_dict[month] = {}
+                if (!(employee_name in overall_dict)) {
+                    overall_dict[employee_name] = {}
                 }
 
 
-                for (var j = 7; j < row.length; j++) {
-                    var employee_FTE = row[j]
-                    var employee_name = people_list[j - 7]
-
-                    if (!(employee_name in overall_dict[month])) {
-                        overall_dict[month][employee_name] = {}
-                    }
-
-                    if (employee_FTE > 0) {
-
-                        if (project in overall_dict[month][employee_name]) {
-                            overall_dict[month][employee_name][project].push([skill, employee_FTE])
-                        } else {
-                            overall_dict[month][employee_name][project] = [
-                                [skill, employee_FTE]
-                            ]
-                        }
-
-                    }
+                if (project in overall_dict[employee_name]) {
+                    overall_dict[employee_name][project].push([skill, FTE_list])
+                } else {
+                    overall_dict[employee_name][project] = [
+                        [skill, FTE_list]
+                    ]
                 }
+
+
             }
             console.log(overall_dict)
 
@@ -229,26 +242,30 @@ function create_table(people, months) {
         $('#container').append('<table class="table table-striped" id=' + person_index + '> \
         <caption>' + person + '</caption><thead><tr><th>Month</th><th>Project</th><th>Skill</th><th>FTE</th></tr></thead> \
         <tbody></tbody></table>');
-
-        for (month_index in months) {
-            month = months[month_index]
             
-            console.log(overall_dict);
-            if (!(Object.keys(overall_dict[month][person]).length === 0 && overall_dict[month][person].constructor === Object)) {
-                for (var i in overall_dict[month][person]) {
-                    length = Object.keys(overall_dict[month][person]).length
-                    for (var j in overall_dict[month][person][i]) {
-                        skill = overall_dict[month][person][i][j][0];
-                        FTE = overall_dict[month][person][i][j][1];
-                        project = Object.keys(overall_dict[month][person])[j]
-                        $('#' + person_index + ' tr:last').after('<tr><td>' + month + '</td><td>' + project + '</td><td>' + skill + '</td><td>' + FTE + '</td></tr>')
+        if (!(Object.keys(overall_dict[person]).length === 0 && overall_dict[person].constructor === Object)) {
+            projects = overall_dict[person]
+            for (var i in projects) {
+
+                project = projects[i];
+                project_name = project[0][0]
+
+                for (var k in project){
+                    skill = project[k][0]
+                    FTE_list = project[k][1]
+                    for (var l in FTE_list){
+                        month = months_list[l]
+                        if (containsObject(month, months)){
+                            $('#' + person_index + ' tr:last').after('<tr><td>' + month + '</td><td>' + project_name + '</td><td>' + skill + '</td><td>' + FTE_list[l] + '</td></tr>')
+                        }
                     }
                 }
-            } else {
-                $('#' + person_index + ' tr:last').after('<tr><td>' + month + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
             }
-
+        } else {
+            $('#' + person_index + ' tr:last').after('<tr><td>' + '' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td><td>' + ' ' + '</td></tr>')
         }
+
+        
     }
 };
 
@@ -339,3 +356,14 @@ $("#checkAllPeople").on('click', function(event) {
     }
     console.log(people);
 });
+
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}

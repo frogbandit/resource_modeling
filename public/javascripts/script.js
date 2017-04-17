@@ -1,69 +1,77 @@
 // Initial values
-var projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC', 
-'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
-'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
-'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
-'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
-'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'];
+var projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
+    'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+    'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'
+];
 
-var real_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC', 
-'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
-'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
-'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
-'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
-'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'];
+var real_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
+    'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+    'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'
+];
 
 var client_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC']
 var internal_projects = ['Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
-'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
-'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General', 
-'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General']
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General'
+]
 var product_projects = ['Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development']
 
 var skills = ['Senior Client Management', 'Project Management / L1 Support', 'Engineering Management', 'Product Management',
     'Data Science', 'Machine Learning Engineering', 'Data Engineering', 'Design', 'Front End Engineering', 'Backend Engineering',
     'Systems Reliability Engineering', 'Quality Engineering', 'Solutions Architect', 'Client Management',
-    'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing', 
-    'Finance', 'Technical Writing'];
+    'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing',
+    'Finance', 'Technical Writing'
+];
 var commercial_skills = ['Senior Client Management', 'Client Management', 'Sales', 'Support Engineering', 'Marketing']
 var general_admin_skills = ["Project Management / L1 Support", 'Leadership', 'Recruiting', 'Finance']
 var engineering_skills = ['Engineering Management', 'Data Science', 'Machine Learning Engineering', 'Data Engineering',
     'Front End Engineering', 'Backend Engineering', 'Systems Reliability Engineering', 'Quality Engineering',
-    'Solutions Architect', 'Software Engineering General']
+    'Solutions Architect', 'Software Engineering General'
+]
 var product_skills = ['Product Management', 'Design', 'Technical Writing']
 
 var months = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
-    'October 2017', 'November 2017', 'December 2017']
+    'October 2017', 'November 2017', 'December 2017'
+]
 
 var num_employees = 73
 
 // Colors are tol-rainbow
 var colors_list = ['rgb(120, 28, 129)', 'rgb(87, 25, 127)', 'rgb(87, 25, 127)', 'rgb(65, 57, 146)', 'rgb(63, 81, 163)',
-'rgb(64, 103, 179)', 'rgb(68, 124, 191)', 'rgb(73, 142, 193)', 'rgb(81, 156, 184)', 'rgb(91, 167, 166)',
-'rgb(103, 176, 146)', 'rgb(116, 182, 126)', 'rgb(131, 186, 109)', 'rgb(147, 189, 96)', 'rgb(164, 190, 85)',
-'rgb(180, 189, 76)', 'rgb(195, 186, 69)', 'rgb(209, 180, 64)', 'rgb(219, 171, 59)', 'rgb(226, 157, 55)',
-'rgb(230, 138, 51)', 'rgb(231, 115, 47)', 'rgb(228, 89, 42)', 'rgb(224, 60, 37)', 'rgb(217, 33, 32)'
+    'rgb(64, 103, 179)', 'rgb(68, 124, 191)', 'rgb(73, 142, 193)', 'rgb(81, 156, 184)', 'rgb(91, 167, 166)',
+    'rgb(103, 176, 146)', 'rgb(116, 182, 126)', 'rgb(131, 186, 109)', 'rgb(147, 189, 96)', 'rgb(164, 190, 85)',
+    'rgb(180, 189, 76)', 'rgb(195, 186, 69)', 'rgb(209, 180, 64)', 'rgb(219, 171, 59)', 'rgb(226, 157, 55)',
+    'rgb(230, 138, 51)', 'rgb(231, 115, 47)', 'rgb(228, 89, 42)', 'rgb(224, 60, 37)', 'rgb(217, 33, 32)'
 ]
 
 var months_list = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
-    'October 2017', 'November 2017', 'December 2017']
+    'October 2017', 'November 2017', 'December 2017'
+]
 
-var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK', 
-'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
-'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
-'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
-'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
-'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
-'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
-'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
-'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
-'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
-'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
-'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
-'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
-'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
-'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'];
-    
+var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN', 'BECKER, NICK',
+    'BENOIT, MICHAEL', 'BOMAN, BLAINE', 'CHAN, KELVIN', 'CHOLAS-WOOD, ALEX', 'CHRISTENSEN, EMIL',
+    'CREIGHTON, JENNIFER', 'DACOSTA, MARC', 'DANTON, CRAIG', 'DELGADILLO, SUSANA', 'DONATZ, MICHAEL',
+    'EASTBURN, BENJAMIN', 'EDGAR, JAMES', 'ESTES, STEPHEN', 'FLOWERS, MICHAEL', 'GAO, DAVID',
+    'GELB, BENJAMIN', 'GONZALEZ, JUAN', 'GUTMAN, LEE', 'HALLOCK, SAMANTHA', 'HAMMER, MELODY',
+    'HENDERSON, PETER', 'HILEWICZ, RONEN', 'HORAN, MATTHEW', 'IANIUK, OLGA', 'JOHNSON, COURTNEY',
+    'KEITER, KENNETH', 'KELMANSKIY, YEFIM', 'KERLE, INDIA', 'KHALIFA, DONIA', 'KIRCHER, ASHLEY',
+    'KNUPP, JEFFREY', 'KREMLER, GREGORY', 'KRINSLEY, JEREMY', 'LEONE, MICHAEL', 'LEV, IGOR',
+    'LEVIN, JONATHAN', 'LI, ANN', 'MADDALA, BHASKAR', 'MELEMED, DANIEL', 'MIKAELIAN, ALEXIS',
+    'MONK, CLINTON', 'MORAN, THOMAS', 'MUKHERJEE, ISHANI', 'NORTHINGTON, ALEXANDRA', 'OMI, ALISA',
+    'OUDGHIRI, HICHAM', 'PARIKH, URVISH', 'PARKER, JARROD', 'PRAINITO, JOE', 'PRATER, RICHARD',
+    'PRICE, REBECCA', 'ROTH, ALEXANDER', 'RUBENSTEIN, ABRAHAM', 'RUBINSTEIN, DAVID', 'SESSER, BENJAMIN',
+    'SHAO, BRYAN', 'SPIEGEL, STEPHANIE', 'STANLEY, MICHAEL', 'SULLAM, JULIANA', 'TEYSSIER, MAUREEN',
+    'ULMAN, JEREMY', 'VARSHAVSKY, PETER', 'WARDY, JASON', 'WATT, CECILIA', 'WEBB, WILLIAM', 'WEINBERG, JEFF',
+    'WELLS, THOMAS', 'WHALEN, CAITLIN', 'WHITING, OWEN', 'WILSON, JOSHUA', 'WRISINGER, ANDREW', 'YANG, YANG'
+];
+
 
 
 var req_overall_dict = {};
@@ -183,18 +191,17 @@ function getData() {
                 var person_team_category = row[17]
 
                 var FTE_list = []
-                for (var j = 0; j < row.slice(18).length; j++){
-                    if (req_or_prov == 'Required'){
+                for (var j = 0; j < row.slice(18).length; j++) {
+                    if (req_or_prov == 'Required') {
                         FTE_list.push(parseFloat(-row.slice(18)[j]) || 0)
-                    }
-                    else{
+                    } else {
                         FTE_list.push(parseFloat(row.slice(18)[j]) || 0)
                     }
                 }
 
                 if (real == '1') {
                     // if Required
-                    if (req_or_prov == 'Required'){
+                    if (req_or_prov == 'Required') {
                         if (project in real_req_overall_dict) {
                             var skill_dict = real_req_overall_dict[project];
 
@@ -214,7 +221,7 @@ function getData() {
                     }
 
                     /// if Provided
-                    else{
+                    else {
                         if (project in real_prov_overall_dict) {
                             var skill_dict = real_prov_overall_dict[project];
 
@@ -225,7 +232,10 @@ function getData() {
 
                             } else {
 
-                                skill_dict[skill] = [[person], [FTE_list]]
+                                skill_dict[skill] = [
+                                    [person],
+                                    [FTE_list]
+                                ]
                             }
 
                             real_prov_overall_dict[project] = skill_dict;
@@ -240,7 +250,10 @@ function getData() {
 
                             } else {
 
-                                skill_dict[skill] = [[person], [FTE_list]]
+                                skill_dict[skill] = [
+                                    [person],
+                                    [FTE_list]
+                                ]
                             }
 
                             real_prov_overall_dict[project] = skill_dict;
@@ -254,8 +267,8 @@ function getData() {
             // just to make sure the dictionaries are correct
             console.log(real_prov_overall_dict)
             console.log(real_req_overall_dict)
-            // console.log(prov_overall_dict)
-            // console.log(req_overall_dict)
+                // console.log(prov_overall_dict)
+                // console.log(req_overall_dict)
 
         } else {
             alert('No data found.');
@@ -299,22 +312,22 @@ function create_total_chart(p, prov, req, skills, months) {
         // Prepare total provided column data
         for (var i = 0; i < skills.length; i++) {
             data_list = [0, 0, 0]
-            
+
             for (var k = 0; k < p.length; k++) {
-                if (prov[p[k]] != undefined){
-                    if (prov[p[k]][skills[i]] != undefined){
+                if (prov[p[k]] != undefined) {
+                    if (prov[p[k]][skills[i]] != undefined) {
 
                         // for each of the people for this given skill
-                        for (var l = 0; l < prov[p[k]][skills[i]][1].length; l++){
+                        for (var l = 0; l < prov[p[k]][skills[i]][1].length; l++) {
                             person_FTE_list = prov[p[k]][skills[i]][1][l]
 
-                            var sum_list = data_list.map(function (num, idx) {
-                              return num + person_FTE_list[idx];
+                            var sum_list = data_list.map(function(num, idx) {
+                                return num + person_FTE_list[idx];
                             })
 
                             data_list = sum_list;
                         }
-                        
+
                     }
                 }
             }
@@ -333,7 +346,7 @@ function create_total_chart(p, prov, req, skills, months) {
             for (var j = 0; j < month_indices.length; j++) {
                 sum_projects = 0
                 for (var k = 0; k < p.length; k++) {
-                    if (req[p[k]][skills[i]] != undefined){
+                    if (req[p[k]][skills[i]] != undefined) {
                         sum_projects += req[p[k]][skills[i]][month_indices[j]]
                     }
                 }
@@ -359,21 +372,21 @@ function create_total_chart(p, prov, req, skills, months) {
         // Prepare total provided column data
         for (var i = 0; i < p.length; i++) {
             data_list = [0, 0, 0]
-            
+
             for (var k = 0; k < skills.length; k++) {
-                if (prov[p[i]] != undefined){
-                    if (prov[p[i]][skills[k]] != undefined){
+                if (prov[p[i]] != undefined) {
+                    if (prov[p[i]][skills[k]] != undefined) {
 
                         // for each of the people for this given skill
-                        for (var l = 0; l < prov[p[i]][skills[k]][1].length; l++){
+                        for (var l = 0; l < prov[p[i]][skills[k]][1].length; l++) {
                             person_FTE_list = prov[p[i]][skills[k]][1][l]
 
-                            var sum_list = data_list.map(function (num, idx) {
-                              return num + person_FTE_list[idx];
+                            var sum_list = data_list.map(function(num, idx) {
+                                return num + person_FTE_list[idx];
                             })
 
                             data_list = sum_list;
-                        }   
+                        }
                     }
                 }
             }
@@ -390,7 +403,7 @@ function create_total_chart(p, prov, req, skills, months) {
             for (var j = 0; j < month_indices.length; j++) {
                 sum_skills = 0
                 for (var k = 0; k < skills.length; k++) {
-                    if (req[p[i]][skills[k]] != undefined){
+                    if (req[p[i]][skills[k]] != undefined) {
                         sum_skills += req[p[i]][skills[k]][month_indices[j]]
                     }
                 }
@@ -449,17 +462,13 @@ function create_total_chart(p, prov, req, skills, months) {
                             }
                         }
 
-                        
+
                         if (query_string != '') {
                             location.href = '/people?people=' + query_string.substring(0, query_string.length - 1);
-                        }
-                        else{
-                            console.log(evt.point.category);
-                            console.log(this.name);
-                            console.log(p);
+                        } else {
 
-                            if (containsObject(this.name, p)){
-                                query_string = this.name + ';' +  evt.point.category
+                            if (containsObject(this.name, p)) {
+                                query_string = this.name + ';' + evt.point.category
 
                                 if (query_string != '') {
                                     location.href = '/projects?projects=' + query_string.substring(0, query_string.length);
@@ -513,11 +522,11 @@ function create_total_chart(p, prov, req, skills, months) {
                         month_index = months_list.indexOf(this.point.category);
                         listed_employees_dict = {}
                         for (var i = 0; i < p.length; i++) {
-                            if (prov[p[i]] != undefined){
-                                if (prov[p[i]][skill] != undefined){
+                            if (prov[p[i]] != undefined) {
+                                if (prov[p[i]][skill] != undefined) {
                                     employees = prov[p[i]][skill][0]
                                     employees_FTEs = prov[p[i]][skill][1]
-                                    for (var j = 0; j < employees.length; j++){
+                                    for (var j = 0; j < employees.length; j++) {
                                         employee_name = employees[j]
                                         employee_FTE = employees_FTEs[j][month_index]
 
@@ -527,7 +536,7 @@ function create_total_chart(p, prov, req, skills, months) {
                                             listed_employees_dict[employee_name] = employee_FTE;
                                         }
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -538,7 +547,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
                         required_total_FTE = 0
                         for (var i = 0; i < p.length; i++) {
-                            if (req[p[i]][skill] != undefined){
+                            if (req[p[i]][skill] != undefined) {
                                 required_total_FTE += req[p[i]][skill][month_index]
                             }
                         }
@@ -551,15 +560,15 @@ function create_total_chart(p, prov, req, skills, months) {
                         provided_total_FTE = 0
                         data_list = [0, 0, 0]
                         for (var i = 0; i < p.length; i++) {
-                            if (prov[p[i]] != undefined){
-                                if (prov[p[i]][skill] != undefined){
+                            if (prov[p[i]] != undefined) {
+                                if (prov[p[i]][skill] != undefined) {
 
                                     // for each of the people for this given skill
-                                    for (var l = 0; l < prov[p[i]][skill][1].length; l++){
+                                    for (var l = 0; l < prov[p[i]][skill][1].length; l++) {
                                         person_FTE_list = prov[p[i]][skill][1][l]
 
-                                        var sum_list = data_list.map(function (num, idx) {
-                                          return num + person_FTE_list[idx];
+                                        var sum_list = data_list.map(function(num, idx) {
+                                            return num + person_FTE_list[idx];
                                         })
 
                                         data_list = sum_list;
@@ -593,7 +602,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
                         required_total_FTE = 0
                         for (var i = 0; i < skills.length; i++) {
-                            if (req[project][skills[i]] != undefined){
+                            if (req[project][skills[i]] != undefined) {
                                 required_total_FTE += req[project][skills[i]][month_index]
                             }
                         }
@@ -606,15 +615,15 @@ function create_total_chart(p, prov, req, skills, months) {
                         provided_total_FTE = 0
                         data_list = [0, 0, 0]
                         for (var i = 0; i < skills.length; i++) {
-                            if (prov[project] != undefined){
-                                if (prov[project][skills[i]] != undefined){
+                            if (prov[project] != undefined) {
+                                if (prov[project][skills[i]] != undefined) {
 
                                     // for each of the people for this given skill
-                                    for (var l = 0; l < prov[project][skills[i]][1].length; l++){
+                                    for (var l = 0; l < prov[project][skills[i]][1].length; l++) {
                                         person_FTE_list = prov[project][skills[i]][1][l]
 
-                                        var sum_list = data_list.map(function (num, idx) {
-                                          return num + person_FTE_list[idx];
+                                        var sum_list = data_list.map(function(num, idx) {
+                                            return num + person_FTE_list[idx];
                                         })
 
                                         data_list = sum_list;
