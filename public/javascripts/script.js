@@ -702,7 +702,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
 // Dropdown for Projects
 $('.client, .internal, .productDevelopment').on('click', function(event) {
-    var $target = $(event.currentTarget).parent('a'),
+    var $target = $(event.currentTarget).parent().parent('a'),
         val = $target.attr('data-value'),
         $inp = $target.find('input'),
         idx;
@@ -737,7 +737,7 @@ $('.client, .internal, .productDevelopment').on('click', function(event) {
 // Dropdown for Skills
 $('.commercial, .generalAdmin, .engineering, .product').on('click', function(event) {
 
-    var $target = $(event.currentTarget).parent('a'),
+    var $target = $(event.currentTarget).parent().parent('a'),
         val = $target.attr('data-value'),
         $inp = $target.find('input'),
         idx;
