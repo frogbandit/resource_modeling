@@ -156,7 +156,7 @@ function handleSignoutClick(event) {
  * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  */
 function getData() {
-    gapi.client.sheets.spreadsheets.values.get({
+    gapi.client.sheets.spreadsheets.values.batchGet({
 
         // Draft DB: Sample master data cojo
         // spreadsheetId: '1eOyTdGjSxrEs4AMnoX8VO-Y8cWZ46c-9wvz877zR_8w',
@@ -164,16 +164,21 @@ function getData() {
 
         // Draft 3: Project Staffing
         spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
-        range: 'Project Staffing!A2:AA'
+        ranges: ['Project Staffing!A2:AA', 'People Directory!A2:K'],
+        // range: 'Project Staffing!A2:AA',
+
 
     }).then(function(response) {
         console.log(response);
-        var range = response.result;
+        var range = response.result.valueRanges;
+
+        main_range = range[0]
+        people_range = range[1]
 
         // Get the spreadsheet data into required and provided dictionaries
-        if (range.values.length > 0) {
-            for (i = 0; i < range.values.length; i++) {
-                var row = range.values[i];
+        if (main_range.values.length > 0) {
+            for (i = 0; i < main_range.values.length; i++) {
+                var row = main_range.values[i];
                 var req_or_prov = row[0]
 
                 var real = row[2]
@@ -187,19 +192,32 @@ function getData() {
                 var skill = row[11]
                 var skill_category = row[12]
                 var person = row[13]
-                var person_skill = row[14]
-                var person_skill_category = row[15]
-                var person_team = row[16]
-                var person_team_category = row[17]
+                var person_id = row[14]
+                var person_skill = row[15]
+                var person_skill_category = row[16]
+                var person_team = row[17]
+                var person_team_category = row[18]
 
                 var FTE_list = []
-                for (var j = 0; j < row.slice(18).length; j++) {
+                for (var j = 0; j < row.slice(19).length; j++) {
                     if (req_or_prov == 'Required') {
-                        FTE_list.push(parseFloat(-row.slice(18)[j]) || 0)
+                        FTE_list.push(parseFloat(-row.slice(19)[j]) || 0)
                     } else {
-                        FTE_list.push(parseFloat(row.slice(18)[j]) || 0)
+                        FTE_list.push(parseFloat(row.slice(19)[j]) || 0)
                     }
                 }
+
+
+                var salary_list = []
+                row_num = parseInt(person_id.slice(-2))
+                person_row = people_range.values[row_num]
+
+                if (person_row != undefined) {
+                    for (var j = 0; j < person_row.slice(8).length; j++) {
+                        salary_list.push(parseFloat(person_row.slice(8)[j].substring(1)) || 0)
+                    }
+                }
+
 
                 if (real == '1') {
                     // if Required
@@ -231,12 +249,14 @@ function getData() {
 
                                 skill_dict[skill][0].push(person)
                                 skill_dict[skill][1].push(FTE_list)
+                                skill_dict[skill][2].push(salary_list)
 
                             } else {
 
                                 skill_dict[skill] = [
                                     [person],
-                                    [FTE_list]
+                                    [FTE_list],
+                                    [salary_list]
                                 ]
                             }
 
@@ -249,12 +269,14 @@ function getData() {
 
                                 skill_dict[skill][0].push(person)
                                 skill_dict[skill][1].push(FTE_list)
+                                skill_dict[skill][2].push(salary_list)
 
                             } else {
 
                                 skill_dict[skill] = [
                                     [person],
-                                    [FTE_list]
+                                    [FTE_list],
+                                    [salary_list]
                                 ]
                             }
 
@@ -263,6 +285,7 @@ function getData() {
                         }
                     }
                 }
+
 
             }
 
@@ -305,6 +328,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
 
     // if skills is selected:     
+
     if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
 
         Highcharts.setOptions({
@@ -313,23 +337,47 @@ function create_total_chart(p, prov, req, skills, months) {
 
         // Prepare total provided column data
         for (var i = 0; i < skills.length; i++) {
-            data_list = [0, 0, 0]
+            data_list = new Array(months.length).fill(0);
+
 
             for (var k = 0; k < p.length; k++) {
                 if (prov[p[k]] != undefined) {
                     if (prov[p[k]][skills[i]] != undefined) {
 
-                        // for each of the people for this given skill
-                        for (var l = 0; l < prov[p[k]][skills[i]][1].length; l++) {
-                            person_FTE_list = prov[p[k]][skills[i]][1][l]
 
-                            var sum_list = data_list.map(function(num, idx) {
-                                return num + person_FTE_list[idx];
-                            })
+                        // if FTE is selected
+                        if ($("#axes-selection").text().trim() == "Axes: FTE") {
 
-                            data_list = sum_list;
+                            // for each of the people for this given skill
+                            for (var l = 0; l < prov[p[k]][skills[i]][1].length; l++) {
+
+                                person_FTE_list = prov[p[k]][skills[i]][1][l]
+
+                                var sum_list = data_list.map(function(num, idx) {
+                                    return num + person_FTE_list[idx];
+                                })
+
+                                data_list = sum_list;
+                            }
                         }
 
+
+                        // if dollars is selected
+                        else {
+
+                            // for each of the people for this given skill
+                            for (var l = 0; l < prov[p[k]][skills[i]][2].length; l++) {
+
+                                person_salary_list = prov[p[k]][skills[i]][2][l]
+
+                                var sum_list = data_list.map(function(num, idx) {
+                                    return num + person_salary_list[idx];
+                                })
+
+                                data_list = sum_list;
+                            }
+
+                        }
                     }
                 }
             }
@@ -343,27 +391,30 @@ function create_total_chart(p, prov, req, skills, months) {
         }
 
         // Prepare total required column data
-        for (var i = 0; i < skills.length; i++) {
-            data_list = []
 
-            for (var j = 0; j < month_indices.length; j++) {
-                sum_projects = 0
-                for (var k = 0; k < p.length; k++) {
-                    if (req[p[k]][skills[i]] != undefined) {
-                        sum_projects += req[p[k]][skills[i]][month_indices[j]]
+        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+            for (var i = 0; i < skills.length; i++) {
+                data_list = []
+
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_projects = 0
+                    for (var k = 0; k < p.length; k++) {
+                        if (req[p[k]][skills[i]] != undefined) {
+                            sum_projects += req[p[k]][skills[i]][month_indices[j]]
+                        }
                     }
+                    data_list.push(sum_projects)
                 }
-                data_list.push(sum_projects)
+
+
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + skills[i],
+                    name: "Required " + skills[i],
+                    stack: 1,
+                    showInLegend: false
+                });
             }
-
-
-            series_list.push({
-                data: data_list,
-                id: "Required " + skills[i],
-                name: "Required " + skills[i],
-                stack: 1,
-                showInLegend: false
-            });
         }
     }
     // if breakdown projects is selected
@@ -375,21 +426,37 @@ function create_total_chart(p, prov, req, skills, months) {
 
         // Prepare total provided column data
         for (var i = 0; i < p.length; i++) {
-            data_list = [0, 0, 0]
+            data_list = new Array(months.length).fill(0);
 
             for (var k = 0; k < skills.length; k++) {
                 if (prov[p[i]] != undefined) {
                     if (prov[p[i]][skills[k]] != undefined) {
 
-                        // for each of the people for this given skill
-                        for (var l = 0; l < prov[p[i]][skills[k]][1].length; l++) {
-                            person_FTE_list = prov[p[i]][skills[k]][1][l]
+                        if ($("#axes-selection").text().trim() == "Axes: FTE") {
 
-                            var sum_list = data_list.map(function(num, idx) {
-                                return num + person_FTE_list[idx];
-                            })
+                            // for each of the people for this given skill
+                            for (var l = 0; l < prov[p[i]][skills[k]][1].length; l++) {
+                                person_FTE_list = prov[p[i]][skills[k]][1][l]
 
-                            data_list = sum_list;
+                                var sum_list = data_list.map(function(num, idx) {
+                                    return num + person_FTE_list[idx];
+                                })
+
+                                data_list = sum_list;
+                            }
+                        } else {
+
+                            // for each of the people for this given skill
+                            for (var l = 0; l < prov[p[i]][skills[k]][2].length; l++) {
+                                person_salary_list = prov[p[i]][skills[k]][2][l]
+
+                                var sum_list = data_list.map(function(num, idx) {
+                                    return num + person_salary_list[idx];
+                                })
+
+                                data_list = sum_list;
+                            }
+
                         }
                     }
                 }
@@ -402,25 +469,27 @@ function create_total_chart(p, prov, req, skills, months) {
             })
         }
 
-        // Prepare total required column data
-        for (var i = 0; i < p.length; i++) {
-            data_list = []
-            for (var j = 0; j < month_indices.length; j++) {
-                sum_skills = 0
-                for (var k = 0; k < skills.length; k++) {
-                    if (req[p[i]][skills[k]] != undefined) {
-                        sum_skills += req[p[i]][skills[k]][month_indices[j]]
+        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+            // Prepare total required column data
+            for (var i = 0; i < p.length; i++) {
+                data_list = []
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_skills = 0
+                    for (var k = 0; k < skills.length; k++) {
+                        if (req[p[i]][skills[k]] != undefined) {
+                            sum_skills += req[p[i]][skills[k]][month_indices[j]]
+                        }
                     }
+                    data_list.push(sum_skills)
                 }
-                data_list.push(sum_skills)
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + p[i],
+                    name: "Required " + p[i],
+                    stack: 1,
+                    showInLegend: false
+                })
             }
-            series_list.push({
-                data: data_list,
-                id: "Required " + p[i],
-                name: "Required " + p[i],
-                stack: 1,
-                showInLegend: false
-            })
         }
     }
 
@@ -530,34 +599,57 @@ function create_total_chart(p, prov, req, skills, months) {
                 if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
                     req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
 
-                    var delta;
+                    var delta = 0;
+                    var total_delta = 0;
+                    var stack_total = 0;
                     listed_employees = []
 
                     if (req_or_prov != 'Required') {
+
+
                         skill = this.point.series.name;
                         series = chart.get("Required " + skill);
                         stack_total = this.point.stackTotal;
                         month_index = months_list.indexOf(this.point.category);
 
                         required_stack_total = 0
-                        if (month_index > -1){
-                            required_stack_total = series.points[month_index].stackTotal
+                        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+
+                            if (month_index > -1) {
+                                required_stack_total = series.points[month_index].stackTotal
+                            }
                         }
-                        
+
                         listed_employees_dict = {}
                         for (var i = 0; i < p.length; i++) {
                             if (prov[p[i]] != undefined) {
                                 if (prov[p[i]][skill] != undefined) {
                                     employees = prov[p[i]][skill][0]
-                                    employees_FTEs = prov[p[i]][skill][1]
-                                    for (var j = 0; j < employees.length; j++) {
-                                        employee_name = employees[j]
-                                        employee_FTE = employees_FTEs[j][month_index]
 
-                                        if (employee_name in listed_employees_dict) {
-                                            listed_employees_dict[employee_name] += employee_FTE;
-                                        } else {
-                                            listed_employees_dict[employee_name] = employee_FTE;
+
+                                    if ($("#axes-selection").text().trim() == "Axes: FTE") {
+                                        employees_FTEs = prov[p[i]][skill][1]
+                                        for (var j = 0; j < employees.length; j++) {
+                                            employee_name = employees[j]
+                                            employee_FTE = employees_FTEs[j][month_index]
+
+                                            if (employee_name in listed_employees_dict) {
+                                                listed_employees_dict[employee_name] += employee_FTE;
+                                            } else {
+                                                listed_employees_dict[employee_name] = employee_FTE;
+                                            }
+                                        }
+                                    } else {
+                                        employees_salaries = prov[p[i]][skill][2]
+                                        for (var j = 0; j < employees.length; j++) {
+                                            employee_name = employees[j]
+                                            employee_salary = employees_salaries[j][month_index]
+
+                                            if (employee_name in listed_employees_dict) {
+                                                listed_employees_dict[employee_name] += employee_salary;
+                                            } else {
+                                                listed_employees_dict[employee_name] = employee_salary;
+                                            }
                                         }
                                     }
 
@@ -570,9 +662,12 @@ function create_total_chart(p, prov, req, skills, months) {
                         }
 
                         required_total_FTE = 0
-                        for (var i = 0; i < p.length; i++) {
-                            if (req[p[i]][skill] != undefined) {
-                                required_total_FTE += req[p[i]][skill][month_index]
+
+                        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+                            for (var i = 0; i < p.length; i++) {
+                                if (req[p[i]][skill] != undefined) {
+                                    required_total_FTE += req[p[i]][skill][month_index]
+                                }
                             }
                         }
 
@@ -580,16 +675,16 @@ function create_total_chart(p, prov, req, skills, months) {
 
                         total_delta = stack_total - required_stack_total
                     } else {
-                    
+
                         skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
                         series = chart.get(skill);
                         month_index = months_list.indexOf(this.point.category)
                         required_stack_total = this.point.stackTotal;
 
                         stack_total = 0;
-                        if (series.points[month_index] != undefined){
+                        if (series.points[month_index] != undefined) {
                             stack_total = series.points[month_index].stackTotal
-                        }                        
+                        }
 
                         provided_total_FTE = 0
                         data_list = [0, 0, 0]
@@ -613,7 +708,7 @@ function create_total_chart(p, prov, req, skills, months) {
                             }
                         }
 
-                        if (provided_total_FTE == undefined){
+                        if (provided_total_FTE == undefined) {
                             provided_total_FTE = 0;
                         }
 
@@ -625,14 +720,22 @@ function create_total_chart(p, prov, req, skills, months) {
                     for (var i = 0; i < listed_employees.length; i++) {
                         listed_employees_string += listed_employees[i]
                     }
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + 
-                        this.point.y.toFixed(2) + ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) 
-                        + '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) 
-                        + '<br/>' + '<b>Total Required: </b>' + required_stack_total.toFixed(2) 
-                        + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
+
+
+                    if (stack_total != undefined) {
+                        return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " +
+                            this.point.y.toFixed(2) + ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) +
+                            '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) + '<br/>' + '<b>Total Required: </b>' +
+                            required_stack_total.toFixed(2) + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
+                    } else {
+                        total_delta = -required_stack_total;
+                        stack_total = 0;
+                        return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " +
+                            ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) +
+                            '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) + '<br/>' + '<b>Total Required: </b>' +
+                            required_stack_total.toFixed(2) + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
+                    }
                 }
-
-
 
 
                 // for project
@@ -647,9 +750,11 @@ function create_total_chart(p, prov, req, skills, months) {
                         month_index = months_list.indexOf(this.point.category);
 
                         required_total_FTE = 0
-                        for (var i = 0; i < skills.length; i++) {
-                            if (req[project][skills[i]] != undefined) {
-                                required_total_FTE += req[project][skills[i]][month_index]
+                        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+                            for (var i = 0; i < skills.length; i++) {
+                                if (req[project][skills[i]] != undefined) {
+                                    required_total_FTE += req[project][skills[i]][month_index]
+                                }
                             }
                         }
 
@@ -690,10 +795,17 @@ function create_total_chart(p, prov, req, skills, months) {
 
     });
 
+
     if (chart.yAxis[0].axisTitle) {
-        chart.yAxis[0].axisTitle.attr({
-            text: 'FTE'
-        });
+        if ($("#axes-selection").text().trim() == "Axes: FTE") {
+            chart.yAxis[0].axisTitle.attr({
+                text: 'FTE'
+            });
+        } else {
+            chart.yAxis[0].axisTitle.attr({
+                text: 'Dollars'
+            });
+        }
     }
 
     chart.setTitle({ text: "Total Projects: " + p.join(', ') });
