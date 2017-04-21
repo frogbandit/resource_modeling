@@ -164,7 +164,7 @@ function getData() {
 
         // Draft 3: Project Staffing
         spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
-        ranges: ['Project Staffing!A2:AA', 'People Directory!A2:K'],
+        ranges: ['Project Staffing!A2:AA', 'People Directory!A2:P', 'Project Directory!A2:P'],
         // range: 'Project Staffing!A2:AA',
 
 
@@ -174,6 +174,7 @@ function getData() {
 
         main_range = range[0]
         people_range = range[1]
+        project_range = range[2]
 
         // Get the spreadsheet data into required and provided dictionaries
         if (main_range.values.length > 0) {
@@ -183,6 +184,7 @@ function getData() {
 
                 var real = row[2]
                 var project = row[3]
+                var project_id = row[4]
                 var project_category = row[5]
                 var project_owner = row[6]
                 var project_owner_skill = row[7]
@@ -219,13 +221,30 @@ function getData() {
                 }
 
 
+                var contract_list = []
+                row_num = parseInt(project_id.slice(-2)) - 1
+                project_row = project_range.values[row_num]
+
+                if (project_row != undefined) {
+                    for (var j = 0; j < project_row.slice(9).length; j++) {
+                        contract_list.push(parseFloat(project_row.slice(9)[j]) || 0)
+                    }
+                }
+
                 if (real == '1') {
                     // if Required
                     if (req_or_prov == 'Required') {
                         if (project in real_req_overall_dict) {
                             var skill_dict = real_req_overall_dict[project];
 
-                            skill_dict[skill] = FTE_list
+                            if (skill in skill_dict) {
+                                skill_dict[skill][0].push(FTE_list)
+                                skill_dict[skill][1].push(contract_list)
+                            }
+
+                            else{
+                                skill_dict[skill] = [FTE_list, contract_list]
+                            }
 
                             real_req_overall_dict[project] = skill_dict;
                             req_overall_dict[project] = skill_dict;
@@ -233,8 +252,14 @@ function getData() {
                         } else {
                             var skill_dict = {};
 
-                            skill_dict[skill] = FTE_list
+                            if (skill in skill_dict) {
+                                skill_dict[skill][0].push(FTE_list)
+                                skill_dict[skill][1].push(contract_list)
+                            }
 
+                            else{
+                                skill_dict[skill] = [FTE_list, contract_list]
+                            }
                             real_req_overall_dict[project] = skill_dict;
                             req_overall_dict[project] = skill_dict;
                         }
@@ -400,7 +425,7 @@ function create_total_chart(p, prov, req, skills, months) {
                     sum_projects = 0
                     for (var k = 0; k < p.length; k++) {
                         if (req[p[k]][skills[i]] != undefined) {
-                            sum_projects += req[p[k]][skills[i]][month_indices[j]]
+                            sum_projects += req[p[k]][skills[i]][0][month_indices[j]]
                         }
                     }
                     data_list.push(sum_projects)
@@ -416,6 +441,36 @@ function create_total_chart(p, prov, req, skills, months) {
                 });
             }
         }
+
+        // required column data for dollars
+        else{
+            for (var i = 0; i < skills.length; i++) {
+                data_list = []
+
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_projects = 0
+                    for (var k = 0; k < p.length; k++) {
+
+                        if (req[p[k]][skills[i]] != undefined) {
+                            sum_projects += req[p[k]][skills[i]][1][month_indices[j]]
+                        }
+                    }
+                    data_list.push(sum_projects)
+                }
+
+
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + skills[i],
+                    name: "Required " + skills[i],
+                    stack: 1,
+                    showInLegend: false
+                });
+            }
+        }
+        
+
+
     }
     // if breakdown projects is selected
     else {
@@ -477,7 +532,7 @@ function create_total_chart(p, prov, req, skills, months) {
                     sum_skills = 0
                     for (var k = 0; k < skills.length; k++) {
                         if (req[p[i]][skills[k]] != undefined) {
-                            sum_skills += req[p[i]][skills[k]][month_indices[j]]
+                            sum_skills += req[p[i]][skills[k]][0][month_indices[j]]
                         }
                     }
                     data_list.push(sum_skills)
@@ -489,6 +544,33 @@ function create_total_chart(p, prov, req, skills, months) {
                     stack: 1,
                     showInLegend: false
                 })
+            }
+        }
+
+        // required column data for dollars
+        else{
+            for (var i = 0; i < p.length; i++) {
+                data_list = []
+
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_skills = 0
+                    for (var k = 0; k < skills.length; k++) {
+
+                        if (req[p[i]][skills[k]] != undefined) {
+                            sum_skills = req[p[i]][skills[k]][1][month_indices[j]]
+                        }
+                    }
+                    data_list.push(sum_skills)
+                }
+
+
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + p[i],
+                    name: "Required " + p[i],
+                    stack: 1,
+                    showInLegend: false
+                });
             }
         }
     }
