@@ -319,6 +319,11 @@ function create_table(projects, skills, months) {
         project = projects[project_index]
 
         table_string = '<table class="table table-striped" id=' + project_index + '> \
+        <colgroup><col class="col-xs-3"></col> \
+        <col class="col-xs-1"></col><col class="col-xs-1"></col> \
+        <col class="col-xs-1"></col><col class="col-xs-1"></col> \
+        <col class="col-xs-1"></col><col class="col-xs-1"></col> \
+        <col class="col-xs-1"></col></colgroup> \
         <caption>' + project + '</caption><thead><tr><th>Skills</th>'
 
         for (month_index in months) {
@@ -329,8 +334,11 @@ function create_table(projects, skills, months) {
         table_string += ('</tr></thead><tbody></tbody></table>')
 
         $('#container').append(table_string);
+        sum_provided_list = new Array(months.length).fill(0);
+        sum_required_list = new Array(months.length).fill(0);
 
         for (var i = 0; i < skills.length; i++) {
+
             skill = skills[i]
 
             if (real_prov_overall_dict[project] != undefined) {
@@ -338,12 +346,9 @@ function create_table(projects, skills, months) {
 
                     month_string = '<tr><td rowspan="2">' + skill + '</td>'
 
-
-                    // console.log(real_prov_overall_dict[project][skill])
-
                     people_list = real_prov_overall_dict[project][skill]
 
-                    data_list = [0, 0, 0]
+                    data_list = new Array(months.length).fill(0);
 
                     // for each of the people for this given skill
                     for (var l = 0; l < people_list[1].length; l++) {
@@ -356,14 +361,18 @@ function create_table(projects, skills, months) {
                         data_list = sum_list;
                     }
 
+
                     for (month_index in data_list) {
+
                         month = months_list[month_index]
+                        sum_provided = 0
                         if (containsObject(month, months)) {
                             month_string += ('<td data-original-title="Provided" data-container="body" \
-                                data-toggle="tooltip" data-placement="left">' + data_list[month_index] + '</td>')
+                                data-toggle="tooltip" data-placement="left">' + data_list[month_index].toFixed(2) + '</td>')
+                            sum_provided += data_list[month_index]
                         }
+                        sum_provided_list[month_index] += sum_provided
                     }
-
 
                     month_string += '</tr>'
                     month_string += '<tr>'
@@ -371,19 +380,40 @@ function create_table(projects, skills, months) {
 
                     for (month_index in months) {
 
+                        sum_required = 0
                         if (real_req_overall_dict[project][skill] != undefined) {
                             required_FTE = real_req_overall_dict[project][skill][month_index]
-                            month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + required_FTE + '</td>')
+                            month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + required_FTE.toFixed(2) + '</td>')
+                            sum_required += required_FTE
+                        } else {
+                            month_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + 'N/A' + '</td>')
                         }
+                        sum_required_list[month_index] += sum_required
+
                     }
                     month_string += '</tr>'
 
                     $('#' + project_index + ' tr:last').after(month_string);
-
                 }
+
+
             }
+
         }
 
+        sum_string = '<tr><td rowspan="2">Sum</td>'
+        for (sum_index in sum_provided_list) {
+            sum_string += ('<td data-original-title="Provided" data-container="body" data-toggle="tooltip" data-placement="left">' + sum_provided_list[sum_index].toFixed(2) + '</td>')
+        }
+        sum_string += '</tr>'
+
+        sum_string += '<tr>'
+        for (sum_index in sum_required_list) {
+            sum_string += ('<td data-original-title="Required" data-container="body" data-toggle="tooltip" data-placement="left">' + sum_required_list[sum_index].toFixed(2) + '</td>')
+        }
+        sum_string += '</tr>'
+
+        $('#' + project_index + ' tr:last').after(sum_string);
     }
 
 };
@@ -415,6 +445,10 @@ $('#months-dropdown-menu a').on('click', function(event) {
     // for (var i = 0; i < projects.length; i++) {
     create_table(projects, skills, months);
     // }
+
+    $(function() {
+        $("[data-toggle='tooltip']").tooltip();
+    });
 
     return false;
 });

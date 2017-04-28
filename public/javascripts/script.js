@@ -327,8 +327,11 @@ function create_total_chart(p, prov, req, skills, months) {
     }
 
 
-    // if skills is selected:     
+    if (skills.length == 0) {
+        skills = ['No Skills Selected']
+    }
 
+    // if skills is selected:     
     if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
 
         Highcharts.setOptions({
@@ -658,7 +661,7 @@ function create_total_chart(p, prov, req, skills, months) {
                         }
 
                         for (key in listed_employees_dict) {
-                            listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + listed_employees_dict[key].toFixed(2) + ';')
+                            listed_employees.push('<br/>' + '<b>' + key + '</b>: ' + parseFloat(listed_employees_dict[key].toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ';')
                         }
 
                         required_total_FTE = 0
@@ -674,7 +677,10 @@ function create_total_chart(p, prov, req, skills, months) {
                         delta = this.point.y - required_total_FTE
 
                         total_delta = stack_total - required_stack_total
-                    } else {
+                    }
+
+                    // Provided
+                    else {
 
                         skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
                         series = chart.get(skill);
@@ -724,16 +730,18 @@ function create_total_chart(p, prov, req, skills, months) {
 
                     if (stack_total != undefined) {
                         return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " +
-                            this.point.y.toFixed(2) + ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) +
-                            '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) + '<br/>' + '<b>Total Required: </b>' +
-                            required_stack_total.toFixed(2) + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
+                            parseFloat(this.point.y.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + ';' +
+                            listed_employees_string + '<br/>' + '<b>Delta: </b>' + parseFloat(delta.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) +
+                            '<br/>' + '<b>Total Provided: </b>' + parseFloat(stack_total.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '<br/>' +
+                            '<b>Total Required: </b>' + parseFloat(required_stack_total.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '<br/>' +
+                            '<b>Total Delta: </b>' + parseFloat(total_delta.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 });
                     } else {
                         total_delta = -required_stack_total;
                         stack_total = 0;
-                        return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " +
-                            ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + delta.toFixed(2) +
-                            '<br/>' + '<b>Total Provided: </b>' + stack_total.toFixed(2) + '<br/>' + '<b>Total Required: </b>' +
-                            required_stack_total.toFixed(2) + '<br/>' + '<b>Total Delta: </b>' + total_delta.toFixed(2);
+                        return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + parseFloat(this.point.y.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) +
+                            ';' + listed_employees_string + '<br/>' + '<b>Delta: </b>' + parseFloat(delta.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) +
+                            '<br/>' + '<b>Total Provided: </b>' + parseFloat(stack_total.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '<br/>' + '<b>Total Required: </b>' +
+                            parseFloat(required_stack_total.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '<br/>' + '<b>Total Delta: </b>' + parseFloat(total_delta.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 });
                     }
                 }
 
@@ -787,8 +795,8 @@ function create_total_chart(p, prov, req, skills, months) {
                         delta = provided_total_FTE - this.point.y
                     }
 
-                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + this.point.y.toFixed(2) +
-                        '<br/>' + '<b>Delta: </b>' + delta.toFixed(2);
+                    return '<span style="color:' + this.series.color + ';">' + this.point.series.name + "</span>: " + parseFloat(this.point.y.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 }) +
+                        '<br/>' + '<b>Delta: </b>' + parseFloat(delta.toFixed(2)).toLocaleString(undefined, { minimumFractionDigits: 2 });
                 }
             }
         }
@@ -808,7 +816,40 @@ function create_total_chart(p, prov, req, skills, months) {
         }
     }
 
-    chart.setTitle({ text: "Total Projects: " + p.join(', ') });
+    title_projects = []
+    if (arrayContainsAnotherArray(client_projects, p)) {
+        title_projects.push('All Client Projects')
+    } else {
+        for (var p_index in p) {
+            var proj = p[p_index];
+            if (containsObject(proj, client_projects)) {
+                title_projects.push(proj)
+            }
+        }
+    }
+
+    if (arrayContainsAnotherArray(internal_projects, p)) {
+        title_projects.push('All Internal Projects')
+    } else {
+        for (var p_index in p) {
+            var proj = p[p_index];
+            if (containsObject(proj, internal_projects)) {
+                title_projects.push(proj)
+            }
+        }
+    }
+    if (arrayContainsAnotherArray(product_projects, p)) {
+        title_projects.push('All Product Projects')
+    } else {
+        for (var p_index in p) {
+            var proj = p[p_index];
+            if (containsObject(proj, product_projects)) {
+                title_projects.push(proj)
+            }
+        }
+    }
+
+    chart.setTitle({ text: "<b>Total Projects: </b><br/>" + title_projects.join(', ') });
 }
 
 
@@ -1206,6 +1247,13 @@ function containsObject(obj, list) {
     return false;
 }
 
+function arrayContainsAnotherArray(subarray, array) {
+    for (var i = 0; i < subarray.length; i++) {
+        if (array.indexOf(subarray[i]) === -1)
+            return false;
+    }
+    return true;
+}
 
 $("#axes li a").click(function() {
     $("#axes-selection").html($(this).text() + '<span class="caret"></span>');

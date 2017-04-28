@@ -26,3 +26,8 @@ a {
     /*position: relative;*/
     /*width: 100%;*/
 }
+
+
+table {
+    border: 1px solid grey;
+}
