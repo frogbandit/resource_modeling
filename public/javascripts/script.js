@@ -75,7 +75,7 @@ var people = ['AFROOZE, JALEH', 'AHEARN, EVE', 'ATTAHRI, MOHAMED', 'BARKER, JOHN
 ];
 
 
-
+// dictionaries for provided and required, real and not real
 var req_overall_dict = {};
 var prov_overall_dict = {};
 
@@ -164,7 +164,7 @@ function getData() {
 
         // Draft 3: Project Staffing
         spreadsheetId: '1Lx6p5J-p419zeFP3cwNJWRP_neDcBDibPal2xpyIBy4',
-        ranges: ['Project Staffing!A2:AA', 'People Directory!A2:K'],
+        ranges: ['Project Staffing!A2:AA', 'People Directory!A2:P', 'Project Directory!A2:P'],
         // range: 'Project Staffing!A2:AA',
 
 
@@ -174,6 +174,7 @@ function getData() {
 
         main_range = range[0]
         people_range = range[1]
+        project_range = range[2]
 
         // Get the spreadsheet data into required and provided dictionaries
         if (main_range.values.length > 0) {
@@ -183,6 +184,7 @@ function getData() {
 
                 var real = row[2]
                 var project = row[3]
+                var project_id = row[4]
                 var project_category = row[5]
                 var project_owner = row[6]
                 var project_owner_skill = row[7]
@@ -219,13 +221,32 @@ function getData() {
                 }
 
 
+                var contract_list = []
+                row_num = parseInt(project_id.slice(-2)) - 1
+                project_row = project_range.values[row_num]
+
+                if (project_row != undefined) {
+                    for (var j = 0; j < project_row.slice(9).length; j++) {
+                        contract_list.push(parseFloat(project_row.slice(9)[j]) || 0)
+                    }
+                }
+
+                // if real
                 if (real == '1') {
-                    // if Required
+
+                    // if Required, add lists for FTE required and contract (price) for each skill
                     if (req_or_prov == 'Required') {
                         if (project in real_req_overall_dict) {
                             var skill_dict = real_req_overall_dict[project];
 
-                            skill_dict[skill] = FTE_list
+                            if (skill in skill_dict) {
+                                skill_dict[skill][0].push(FTE_list)
+                                skill_dict[skill][1].push(contract_list)
+                            }
+
+                            else{
+                                skill_dict[skill] = [FTE_list, contract_list]
+                            }
 
                             real_req_overall_dict[project] = skill_dict;
                             req_overall_dict[project] = skill_dict;
@@ -233,14 +254,20 @@ function getData() {
                         } else {
                             var skill_dict = {};
 
-                            skill_dict[skill] = FTE_list
+                            if (skill in skill_dict) {
+                                skill_dict[skill][0].push(FTE_list)
+                                skill_dict[skill][1].push(contract_list)
+                            }
 
+                            else{
+                                skill_dict[skill] = [FTE_list, contract_list]
+                            }
                             real_req_overall_dict[project] = skill_dict;
                             req_overall_dict[project] = skill_dict;
                         }
                     }
 
-                    /// if Provided
+                    /// if Provided, add lists for person, FTE provided, and salary for each skill
                     else {
                         if (project in real_prov_overall_dict) {
                             var skill_dict = real_prov_overall_dict[project];
@@ -315,6 +342,9 @@ function getData() {
     });
 }
 
+
+
+// creates the chart each time
 function create_total_chart(p, prov, req, skills, months) {
     $('#container').append('<div style="height: 750px;" id="total_chart"></div>');
 
@@ -364,7 +394,6 @@ function create_total_chart(p, prov, req, skills, months) {
                             }
                         }
 
-
                         // if dollars is selected
                         else {
 
@@ -394,7 +423,6 @@ function create_total_chart(p, prov, req, skills, months) {
         }
 
         // Prepare total required column data
-
         if ($("#axes-selection").text().trim() == "Axes: FTE") {
             for (var i = 0; i < skills.length; i++) {
                 data_list = []
@@ -403,7 +431,7 @@ function create_total_chart(p, prov, req, skills, months) {
                     sum_projects = 0
                     for (var k = 0; k < p.length; k++) {
                         if (req[p[k]][skills[i]] != undefined) {
-                            sum_projects += req[p[k]][skills[i]][month_indices[j]]
+                            sum_projects += req[p[k]][skills[i]][0][month_indices[j]]
                         }
                     }
                     data_list.push(sum_projects)
@@ -419,6 +447,36 @@ function create_total_chart(p, prov, req, skills, months) {
                 });
             }
         }
+
+        // required column data for dollars
+        else{
+            for (var i = 0; i < skills.length; i++) {
+                data_list = []
+
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_projects = 0
+                    for (var k = 0; k < p.length; k++) {
+
+                        if (req[p[k]][skills[i]] != undefined) {
+                            sum_projects += req[p[k]][skills[i]][1][month_indices[j]]
+                        }
+                    }
+                    data_list.push(sum_projects)
+                }
+
+
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + skills[i],
+                    name: "Required " + skills[i],
+                    stack: 1,
+                    showInLegend: false
+                });
+            }
+        }
+        
+
+
     }
     // if breakdown projects is selected
     else {
@@ -480,7 +538,7 @@ function create_total_chart(p, prov, req, skills, months) {
                     sum_skills = 0
                     for (var k = 0; k < skills.length; k++) {
                         if (req[p[i]][skills[k]] != undefined) {
-                            sum_skills += req[p[i]][skills[k]][month_indices[j]]
+                            sum_skills += req[p[i]][skills[k]][0][month_indices[j]]
                         }
                     }
                     data_list.push(sum_skills)
@@ -492,6 +550,33 @@ function create_total_chart(p, prov, req, skills, months) {
                     stack: 1,
                     showInLegend: false
                 })
+            }
+        }
+
+        // required column data for dollars
+        else{
+            for (var i = 0; i < p.length; i++) {
+                data_list = []
+
+                for (var j = 0; j < month_indices.length; j++) {
+                    sum_skills = 0
+                    for (var k = 0; k < skills.length; k++) {
+
+                        if (req[p[i]][skills[k]] != undefined) {
+                            sum_skills = req[p[i]][skills[k]][1][month_indices[j]]
+                        }
+                    }
+                    data_list.push(sum_skills)
+                }
+
+
+                series_list.push({
+                    data: data_list,
+                    id: "Required " + p[i],
+                    name: "Required " + p[i],
+                    stack: 1,
+                    showInLegend: false
+                });
             }
         }
     }
@@ -594,8 +679,8 @@ function create_total_chart(p, prov, req, skills, months) {
             enabled: false
         },
         tooltip: {
-            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.series}</b> ({point.percentage:.0f}%)<br/>',
 
+            // for the tooltip
             formatter: function() {
 
                 // for skill breakdown
@@ -607,9 +692,8 @@ function create_total_chart(p, prov, req, skills, months) {
                     var stack_total = 0;
                     listed_employees = []
 
+                    // if Required is selected
                     if (req_or_prov != 'Required') {
-
-
                         skill = this.point.series.name;
                         series = chart.get("Required " + skill);
                         stack_total = this.point.stackTotal;
@@ -629,7 +713,7 @@ function create_total_chart(p, prov, req, skills, months) {
                                 if (prov[p[i]][skill] != undefined) {
                                     employees = prov[p[i]][skill][0]
 
-
+                                    // if FTE is selected
                                     if ($("#axes-selection").text().trim() == "Axes: FTE") {
                                         employees_FTEs = prov[p[i]][skill][1]
                                         for (var j = 0; j < employees.length; j++) {
@@ -642,7 +726,10 @@ function create_total_chart(p, prov, req, skills, months) {
                                                 listed_employees_dict[employee_name] = employee_FTE;
                                             }
                                         }
-                                    } else {
+                                    } 
+
+                                    // if dollars is selected
+                                    else {
                                         employees_salaries = prov[p[i]][skill][2]
                                         for (var j = 0; j < employees.length; j++) {
                                             employee_name = employees[j]
@@ -679,9 +766,9 @@ function create_total_chart(p, prov, req, skills, months) {
                         total_delta = stack_total - required_stack_total
                     }
 
-                    // Provided
+         
+                    // if Provided is selected
                     else {
-
                         skill = this.point.series.name.substr(this.point.series.name.indexOf(' ') + 1);
                         series = chart.get(skill);
                         month_index = months_list.indexOf(this.point.category)
@@ -746,7 +833,7 @@ function create_total_chart(p, prov, req, skills, months) {
                 }
 
 
-                // for project
+                // for project breakdown
                 else {
                     req_or_prov = this.point.series.name.substr(0, this.point.series.name.indexOf(' '));
 
