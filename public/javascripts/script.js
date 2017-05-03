@@ -1,5 +1,15 @@
+// use require to bring in static files
+
 // Initial values
 var projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
+    'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
+    'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
+    'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
+    'Envoy Team General', 'Ingest Team General', 'Management and Administration Team General',
+    'Assembly Product Development', 'Concourse Product Development', 'Data Product Development', 'Solutions Product Development'
+];
+
+var total_projects = ["Merck", "Amex", "Celgene", 'Citadel', 'EMD', 'Two Sigma', 'BB&T', 'PayPal', 'GIC',
     'Design Team General', 'Product Management Team General', 'Foundations Team General', 'SRE Team General',
     'Assembly Team General', 'Concourse Team General', 'Analytics Team General', 'Operations Team General',
     'People Team General', 'Commercial Team General', 'Data Team General', 'Marketing Team General',
@@ -29,6 +39,14 @@ var skills = ['Senior Client Management', 'Project Management / L1 Support', 'En
     'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing',
     'Finance', 'Technical Writing'
 ];
+
+var total_skills = ['Senior Client Management', 'Project Management / L1 Support', 'Engineering Management', 'Product Management',
+    'Data Science', 'Machine Learning Engineering', 'Data Engineering', 'Design', 'Front End Engineering', 'Backend Engineering',
+    'Systems Reliability Engineering', 'Quality Engineering', 'Solutions Architect', 'Client Management',
+    'Software Engineering General', 'Sales', 'Leadership', 'Support Engineering', 'Recruiting', 'Marketing',
+    'Finance', 'Technical Writing'
+];
+
 var commercial_skills = ['Senior Client Management', 'Client Management', 'Sales', 'Support Engineering', 'Marketing']
 var general_admin_skills = ["Project Management / L1 Support", 'Leadership', 'Recruiting', 'Finance']
 var engineering_skills = ['Engineering Management', 'Data Science', 'Machine Learning Engineering', 'Data Engineering',
@@ -40,8 +58,6 @@ var product_skills = ['Product Management', 'Design', 'Technical Writing']
 var months = ['April 2017', 'May 2017', 'June 2017', 'July 2017', 'August 2017', 'September 2017',
     'October 2017', 'November 2017', 'December 2017'
 ]
-
-var num_employees = 73
 
 // Colors are tol-rainbow
 // http://google.github.io/palette.js/
@@ -352,6 +368,7 @@ function create_total_chart(p, prov, req, skills, months) {
 
     month_indices = []
 
+    // months: don't hardcode
     for (var i = 0; i < months.length; i++) {
         month_indices.push(months_list.indexOf(months[i]))
     }
@@ -364,8 +381,16 @@ function create_total_chart(p, prov, req, skills, months) {
     // if skills is selected:     
     if ($("#projectskill-selection").text().trim() == "Breakdown: Skill") {
 
+        colors = []
+        for (skill_index in skills){
+            skill = skills[skill_index]
+            colors.push(colors_list[total_skills.indexOf(skill)])
+        }
+
+
         Highcharts.setOptions({
-            colors: colors_list.slice(0, skills.length)
+            colors: colors
+
         })
 
         // Prepare total provided column data
@@ -481,8 +506,14 @@ function create_total_chart(p, prov, req, skills, months) {
     // if breakdown projects is selected
     else {
 
+        colors = []
+        for (p_index in p){
+            project = p[p_index]
+            colors.push(colors_list[total_projects.indexOf(project)])
+        }
+
         Highcharts.setOptions({
-            colors: colors_list.slice(0, p.length)
+            colors: colors
         })
 
         // Prepare total provided column data
@@ -939,7 +970,7 @@ function create_total_chart(p, prov, req, skills, months) {
     chart.setTitle({ text: "<b>Total Projects: </b><br/>" + title_projects.join(', ') });
 }
 
-
+// consolidate into one function
 // Dropdown for Projects
 $('.client, .internal, .productDevelopment').on('click', function(event) {
     var $target = $(event.currentTarget).parent().parent('a'),
@@ -951,10 +982,11 @@ $('.client, .internal, .productDevelopment').on('click', function(event) {
     if ((idx = projects.indexOf(val)) > -1) {
         projects.splice(idx, 1);
         real_projects.splice(idx, 1);
+        //check this out
         setTimeout(function() { $inp.prop('checked', false) }, 0);
     } else {
-        projects.push(val);
-        real_projects.push(val);
+        projects.splice(total_projects.indexOf(val), 0, val);
+        real_projects.splice(total_projects.indexOf(val), 0, val);
         setTimeout(function() { $inp.prop('checked', true) }, 0);
     }
 
@@ -986,7 +1018,7 @@ $('.commercial, .generalAdmin, .engineering, .product').on('click', function(eve
         skills.splice(idx, 1);
         setTimeout(function() { $inp.prop('checked', false) }, 0);
     } else {
-        skills.push(val);
+        skills.splice(total_skills.indexOf(val), 0, val);
         setTimeout(function() { $inp.prop('checked', true) }, 0);
     }
 
@@ -1065,11 +1097,28 @@ $("#checkAllClient").on('click', function(event) {
         setTimeout(function() { $('#checkAllClient').prop('checked', true) }, 0);
         setTimeout(function() { $('.client').prop('checked', true) }, 0);
 
-
         $('#container').html('');
 
         projects = projects.concat(client_projects).unique();
         real_projects = real_projects.concat(client_projects).unique();
+        added_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, projects)){
+                added_projects.push(total_project)
+            }
+        }
+
+        added_real_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, real_projects)){
+                added_real_projects.push(total_project)
+            }
+        }
+
+        projects = added_projects
+        real_projects = added_real_projects
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1111,6 +1160,22 @@ $("#checkAllInternal").on('click', function(event) {
 
         projects = projects.concat(internal_projects).unique();
         real_projects = real_projects.concat(internal_projects).unique();
+        added_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, projects)){
+                added_projects.push(total_project)
+            }
+        }
+        added_real_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, real_projects)){
+                added_real_projects.push(total_project)
+            }
+        }
+        projects = added_projects
+        real_projects = added_real_projects
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1152,6 +1217,22 @@ $("#checkAllProductDevelopment").on('click', function(event) {
 
         projects = projects.concat(product_projects).unique();
         real_projects = real_projects.concat(product_projects).unique();
+        added_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, projects)){
+                added_projects.push(total_project)
+            }
+        }
+        added_real_projects = []
+        for (total_project_index in total_projects){
+            total_project = total_projects[total_project_index]
+            if (containsObject(total_project, real_projects)){
+                added_real_projects.push(total_project)
+            }
+        }
+        projects = added_projects
+        real_projects = added_real_projects
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1191,6 +1272,14 @@ $("#checkAllCommercial").on('click', function(event) {
         $('#container').html('');
 
         skills = skills.concat(commercial_skills).unique();
+        added_skills = []
+        for (total_skill_index in total_skills){
+            total_skill = total_skills[total_skill_index]
+            if (containsObject(total_skill, skills)){
+                added_skills.push(total_skill)
+            }
+        }
+        skills = added_skills
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1227,6 +1316,15 @@ $("#checkAllGeneralAdmin").on('click', function(event) {
         $('#container').html('');
 
         skills = skills.concat(general_admin_skills).unique();
+        added_skills = []
+        for (total_skill_index in total_skills){
+            total_skill = total_skills[total_skill_index]
+            if (containsObject(total_skill, skills)){
+                added_skills.push(total_skill)
+            }
+        }
+        skills = added_skills
+
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1263,6 +1361,14 @@ $("#checkAllEngineering").on('click', function(event) {
         $('#container').html('');
 
         skills = skills.concat(engineering_skills).unique();
+        added_skills = []
+        for (total_skill_index in total_skills){
+            total_skill = total_skills[total_skill_index]
+            if (containsObject(total_skill, skills)){
+                added_skills.push(total_skill)
+            }
+        }
+        skills = added_skills
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
@@ -1299,6 +1405,14 @@ $("#checkAllProduct").on('click', function(event) {
         $('#container').html('');
 
         skills = skills.concat(product_skills).unique();
+        added_skills = []
+        for (total_skill_index in total_skills){
+            total_skill = total_skills[total_skill_index]
+            if (containsObject(total_skill, skills)){
+                added_skills.push(total_skill)
+            }
+        }
+        skills = added_skills
 
         if ($("#hypothetical-selection").text().trim() == "Hypothetical On") {
             create_total_chart(projects, prov_overall_dict, req_overall_dict, skills, months);
